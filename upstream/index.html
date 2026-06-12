@@ -735,6 +735,7 @@ table tr:hover { background: var(--sf-highlight); }
       <div class="nav-section-title">Overview <span class="chevron">▼</span></div>
       <div class="nav-items">
         <a href="#executive-summary" class="active">Executive Summary</a>
+        <a href="#history">Historical Timeline</a>
         <a href="#key-metrics">Key Metrics</a>
       </div>
     </div>
@@ -849,6 +850,96 @@ table tr:hover { background: var(--sf-highlight); }
   <div class="callout callout-info">
     <strong>Sources</strong>
     ANP Presentation to IMF (May 2026) · EPE Brazilian Oil & Gas Report 2024/2025 · IBP Industry Outlook 2025-2029
+  </div>
+</div>
+
+<!-- ============ SECTION: HISTORICAL TIMELINE ============ -->
+<div class="section" id="history">
+  <div class="section-hero">
+    <h2>Historical Timeline</h2>
+    <p>From the creation of Petrobras in 1953 to becoming a global deepwater powerhouse — seven decades of E&P evolution that shaped Brazil into one of the world's top oil producers.</p>
+  </div>
+
+  <div class="card">
+    <h3>The Journey to 4+ Million Barrels Per Day</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">1953</div>
+        <div class="desc"><strong>Petrobras founded</strong> — "O Petróleo é Nosso" campaign leads to Law 2,004 creating a state monopoly on oil exploration. First onshore wells in Bahia's Recôncavo basin.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1968</div>
+        <div class="desc"><strong>First offshore discovery</strong> — Guaricema field in Sergipe marks Brazil's entry into offshore E&P, still in shallow waters.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1974</div>
+        <div class="desc"><strong>Campos Basin discovered</strong> — The Garoupa field discovery opens what would become Brazil's main producing province for three decades.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1984</div>
+        <div class="desc"><strong>Deep-water pioneer</strong> — Petrobras develops Albacora field (>400m water depth), beginning the technological push that would define Brazilian E&P.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">1997</div>
+        <div class="desc"><strong>Market opening</strong> — Lei do Petróleo (Law 9,478) ends the state monopoly. ANP created as regulator. Concession regime established, opening the sector to international players.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2000</div>
+        <div class="desc"><strong>1 MMbpd milestone</strong> — Brazil reaches 1 million barrels per day, establishing itself as a significant producer. Campos Basin dominates output.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2006</div>
+        <div class="desc"><strong>Pre-Salt discovery</strong> — Tupi (later Lula) field confirmed in the Santos Basin. Massive carbonate reservoirs beneath 2km of salt at 5-7km depth. Game-changing moment for global E&P.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2010</div>
+        <div class="desc"><strong>Production Sharing regime</strong> — Law 12,351 creates PSA framework for pre-salt strategic areas. PPSA established to manage government interests. Petrobras capitalization raises $70B (largest equity offering in history at the time).</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2013</div>
+        <div class="desc"><strong>Libra auction</strong> — Transfer-of-Rights surplus area (later Búzios) becomes the first PSA block. Consortium includes Shell, Total, CNOOC, and CNPC alongside Petrobras.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2016</div>
+        <div class="desc"><strong>2 MMbpd milestone</strong> — Pre-salt production ramps up rapidly. Petrobras achieves world records in deepwater productivity. International operators return via open acreage rounds.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2019</div>
+        <div class="desc"><strong>Open Acreage system</strong> — ANP launches permanent offer mechanism, replacing periodic bidding rounds. Provides continuous investment opportunities for operators.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2020</div>
+        <div class="desc"><strong>Pre-Salt surpasses post-salt</strong> — For the first time, pre-salt layer produces more than all other formations combined. Production reaches ~3 MMbpd despite pandemic.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2022</div>
+        <div class="desc"><strong>3 MMbpd milestone</strong> — Búzios becomes the country's largest producing field. Brazil rises to 8th among global oil producers.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2024</div>
+        <div class="desc"><strong>Fuel of the Future Law</strong> — Law 14,993/2024 establishes world's largest transport decarbonization program. CCUS and hydrogen regulatory frameworks formalized. FDI reaches US$70B (2nd globally).</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2025</div>
+        <div class="desc"><strong>Record production</strong> — June 2025: 3.75 MMbpd oil. Multiple new FPSOs online (Alexandre de Gusmão in Mero, Maria Quitéria). Pre-salt reaches 78.8% of output. Petrobras US$111B plan approved.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">2026</div>
+        <div class="desc"><strong>4+ MMbpd era begins</strong> — March 2026: 4.25 MMbpd oil + 204 MMm³/d gas. New licensing cycles (OPC6/OPP4). Digital bidding platform with B3. Path to 5 MMbpd by 2029-2031 confirmed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Production Evolution (1980–2026)</h3>
+    <div class="chart-container">
+      <canvas id="chartHistory"></canvas>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>70+ Years of Innovation</strong>
+    From zero to 4.25 MMbpd in just over seven decades. Brazil's E&P story is defined by bold deepwater bets, world-class engineering, and a regulatory framework that evolved to attract global capital while maintaining national strategic control.
   </div>
 </div>
 
@@ -1829,6 +1920,40 @@ function getChartColors() {
     text: isLight ? '#706E6B' : 'rgba(255,255,255,0.6)'
   };
 }
+
+// Historical Production (1980-2026)
+new Chart(document.getElementById('chartHistory'), {
+  type: 'line',
+  data: {
+    labels: ['1980','1985','1990','1995','2000','2005','2006','2010','2013','2016','2019','2020','2022','2024','2025','2026'],
+    datasets: [{
+      label: 'Oil Production (MMbpd)',
+      data: [0.18, 0.56, 0.65, 0.84, 1.27, 1.72, 1.81, 2.06, 2.02, 2.52, 2.88, 2.94, 3.11, 3.36, 3.64, 4.25],
+      borderColor: sfGold,
+      backgroundColor: 'rgba(245,166,35,0.08)',
+      fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: sfGold,
+      pointBorderColor: '#fff', pointBorderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => `${ctx.raw} MMbpd` } }
+    },
+    scales: {
+      y: { beginAtZero: true, title: { display: true, text: 'MMbpd', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { color: getChartColors().text } },
+      x: { grid: { display: false }, ticks: { color: getChartColors().text, maxRotation: 45 } }
+    },
+    annotation: {
+      annotations: {
+        preSalt: { type: 'line', xMin: '2006', xMax: '2006', borderColor: sfBlue, borderWidth: 2, borderDash: [4,4],
+          label: { content: 'Pre-Salt Discovery', display: true, position: 'start', font: { size: 10 } }
+        }
+      }
+    }
+  }
+});
 
 // Production Growth
 new Chart(document.getElementById('chartProductionGrowth'), {
