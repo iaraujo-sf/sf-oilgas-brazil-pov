@@ -38,11 +38,12 @@ html {
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--surface);
+  background: #0176D3;
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background 0.05s linear;
 }
 
 /* NAVIGATION */
@@ -104,6 +105,7 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+
 /* SECTIONS */
 section {
   scroll-snap-align: start;
@@ -117,7 +119,7 @@ section {
 
 /* HERO SECTION */
 .hero {
-  background: linear-gradient(170deg, var(--sf-navy) 0%, var(--surface) 40%, #0d1525 100%);
+  background: transparent;
   position: relative;
   flex-direction: column;
   padding: 110px 40px 50px;
@@ -227,21 +229,22 @@ section {
 }
 
 .hero-logo img {
-  height: 40px;
+  height: 64px;
   width: auto;
-  filter: brightness(1.1);
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.2));
 }
 
 .hero-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 4px;
   text-transform: uppercase;
-  color: var(--sf-light-blue);
+  color: #ffffff;
   margin-bottom: 12px;
   opacity: 0;
   transform: translateY(20px);
   animation: revealUp 0.8s ease forwards 0.4s;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .version-badge {
@@ -309,7 +312,7 @@ section {
   animation: revealUp 0.8s ease forwards 1.3s;
 }
 
-/* Wave fill effect */
+/* Wave fill effect — oil tank */
 .stats-wave-container {
   position: absolute;
   inset: 0;
@@ -321,28 +324,50 @@ section {
 .stats-wave {
   position: absolute;
   bottom: -100%;
-  left: -5%;
-  width: 110%;
+  left: 0;
+  width: 100%;
   height: 200%;
   transition: none;
 }
 
 .stats-wave.filling {
-  animation: waveFill 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: waveFill 3.2s cubic-bezier(0.2, 0.6, 0.4, 1) forwards;
 }
 
 @keyframes waveFill {
   0% { bottom: -100%; }
-  100% { bottom: -10%; }
+  60% { bottom: -18%; }
+  80% { bottom: -12%; }
+  100% { bottom: -5%; }
 }
 
-.stats-wave svg {
+.stats-wave .wave-surface {
   position: absolute;
-  bottom: 48%;
-  left: 0;
+  top: 0;
+  left: -50%;
   width: 200%;
-  height: 60px;
-  animation: waveShift 3s linear infinite;
+  height: 30px;
+}
+
+.stats-wave .wave-surface svg {
+  width: 100%;
+  height: 100%;
+  animation: waveShift 4s linear infinite;
+}
+
+.stats-wave .wave-surface-2 {
+  position: absolute;
+  top: 4px;
+  left: -50%;
+  width: 200%;
+  height: 24px;
+  opacity: 0.5;
+}
+
+.stats-wave .wave-surface-2 svg {
+  width: 100%;
+  height: 100%;
+  animation: waveShift2 6s linear infinite;
 }
 
 @keyframes waveShift {
@@ -350,13 +375,90 @@ section {
   100% { transform: translateX(-50%); }
 }
 
+@keyframes waveShift2 {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
 .stats-wave .wave-body {
   position: absolute;
-  bottom: 0;
+  top: 18px;
   left: 0;
   right: 0;
-  top: 52%;
-  background: linear-gradient(180deg, rgba(245,166,35,0.1) 0%, rgba(180,120,20,0.05) 100%);
+  bottom: 0;
+  background: linear-gradient(180deg,
+    rgba(40,30,10,0.55) 0%,
+    rgba(30,20,5,0.7) 40%,
+    rgba(20,15,5,0.8) 100%
+  );
+}
+
+/* Bubbles */
+.stats-bubbles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease 3s;
+}
+
+.stats-wave.filling ~ .stats-bubbles {
+  opacity: 1;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(245,166,35,0.3), rgba(245,166,35,0.05));
+  border: 1px solid rgba(245,166,35,0.15);
+  animation: bubbleRise linear infinite;
+}
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateX(0) scale(0.8);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  100% {
+    transform: translateX(20px) scale(1.1);
+    opacity: 0;
+    bottom: 100%;
+  }
+}
+
+/* Oil sheen shimmer on surface */
+.oil-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.5s ease 3.5s;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(245,166,35,0.04) 30%,
+    rgba(100,60,200,0.03) 40%,
+    rgba(0,161,224,0.03) 50%,
+    rgba(245,166,35,0.04) 60%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: sheenShift 8s ease-in-out infinite;
+}
+
+.stats-wave.filling ~ .oil-sheen {
+  opacity: 1;
+}
+
+@keyframes sheenShift {
+  0%, 100% { background-position: -100% 0; }
+  50% { background-position: 200% 0; }
 }
 
 .hero-stat {
@@ -467,7 +569,7 @@ section {
 
 /* VALUE CHAIN SECTION */
 .chain-section {
-  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-elevated) 100%);
+  background: transparent;
   flex-direction: column;
   gap: 56px;
   padding: 100px 40px 80px;
@@ -714,7 +816,7 @@ section {
 
 /* VISION & AUTHORS SECTION */
 .vision-section {
-  background: var(--surface);
+  background: transparent;
   flex-direction: column;
   gap: 60px;
   padding: 100px 40px 80px;
@@ -866,7 +968,7 @@ section {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--surface);
+  background: transparent;
 }
 
 .footer img {
@@ -1140,7 +1242,7 @@ section {
       <img src="assets/salesforce-logo.png" alt="Salesforce">
     </div>
     <p class="hero-eyebrow">Oil & Gas — Point of View — Brazil 2026</p>
-    <span class="version-badge">v2.2 · June 2026</span>
+    <span class="version-badge">v2.3 · June 2026</span>
     <h1 class="hero-title">
       <span class="line">Powering <span class="gold">Energy</span></span>
       <span class="line">with <span class="sf-blue">Intelligence</span></span>
@@ -1152,12 +1254,20 @@ section {
   <div class="hero-stats" id="heroStats">
     <div class="stats-wave-container">
       <div class="stats-wave" id="statsWave">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 60" preserveAspectRatio="none">
-          <path d="M0,30 C200,10 400,50 600,30 C800,10 1000,50 1200,30 C1400,10 1600,50 1800,30 C2000,10 2200,50 2400,30" fill="none" stroke="rgba(245,166,35,0.4)" stroke-width="2"/>
-          <path d="M0,35 C200,55 400,15 600,35 C800,55 1000,15 1200,35 C1400,55 1600,15 1800,35 C2000,55 2200,15 2400,35" fill="none" stroke="rgba(200,130,20,0.25)" stroke-width="1.5"/>
-        </svg>
+        <div class="wave-surface">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 30" preserveAspectRatio="none">
+            <path d="M0,15 C150,5 300,25 450,15 C600,5 750,25 900,15 C1050,5 1200,25 1350,15 C1500,5 1650,25 1800,15 C1950,5 2100,25 2400,15" fill="none" stroke="rgba(245,166,35,0.5)" stroke-width="2.5"/>
+          </svg>
+        </div>
+        <div class="wave-surface-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 24" preserveAspectRatio="none">
+            <path d="M0,12 C200,4 400,20 600,12 C800,4 1000,20 1200,12 C1400,4 1600,20 1800,12 C2000,4 2200,20 2400,12" fill="none" stroke="rgba(180,120,20,0.3)" stroke-width="1.5"/>
+          </svg>
+        </div>
         <div class="wave-body"></div>
       </div>
+      <div class="stats-bubbles" id="statsBubbles"></div>
+      <div class="oil-sheen"></div>
     </div>
     <div class="hero-stat">
       <div class="stat-value" data-target="4.25" data-suffix="M bpd">0</div>
@@ -1265,9 +1375,9 @@ section {
   <div class="vision-content">
     <div class="section-label">The Vision</div>
     <blockquote class="vision-quote">
-      "The energy industry doesn't need <span class="highlight">more systems</span> — it needs <span class="highlight">one platform</span> that connects the entire value chain with intelligence."
+      "Brazil will invest <span class="highlight">US$120 billion</span> in E&P by 2030 — the companies that turn <span class="highlight">operational data into decisions faster</span> will capture disproportionate value."
     </blockquote>
-    <p class="vision-attribution">Salesforce Industry Vision</p>
+    <p class="vision-attribution">Based on ANP/EPE projections, May 2026</p>
     <a href="#sec-chain" class="vision-cta">Explore the Value Chain →</a>
   </div>
   <div class="authors-block">
@@ -1323,7 +1433,7 @@ section {
 <!-- FOOTER -->
 <div class="footer">
   <img src="assets/salesforce-logo.png" alt="Salesforce">
-  <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.2 | June 2026</span>
+  <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.3 | June 2026</span>
   <span class="footer-separator">·</span>
   <span class="view-counter" id="viewCounter"></span>
 </div>
@@ -1378,6 +1488,28 @@ function animateCounters() {
 setTimeout(() => {
   animateCounters();
   document.getElementById('statsWave').classList.add('filling');
+
+  // Generate bubbles after fill starts
+  setTimeout(() => {
+    const container = document.getElementById('statsBubbles');
+    function createBubble() {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      const size = 3 + Math.random() * 8;
+      bubble.style.width = size + 'px';
+      bubble.style.height = size + 'px';
+      bubble.style.left = (10 + Math.random() * 80) + '%';
+      bubble.style.animationDuration = (3 + Math.random() * 4) + 's';
+      bubble.style.animationDelay = (Math.random() * 0.5) + 's';
+      container.appendChild(bubble);
+      bubble.addEventListener('animationiteration', () => {
+        bubble.style.left = (10 + Math.random() * 80) + '%';
+      });
+    }
+    for (let i = 0; i < 12; i++) {
+      setTimeout(() => createBubble(), i * 300);
+    }
+  }, 2800);
 }, 1800);
 
 // Video on hover for chain cards
@@ -1500,6 +1632,42 @@ dots.forEach(dot => {
       menu.classList.remove('open');
     }
   });
+})();
+
+// Depth Scroll Effect — light (surface) to deep dark (bottom of well)
+(function() {
+  const body = document.body;
+  const surfaceColors = [
+    { r: 1, g: 118, b: 211 },   // top: SF Blue #0176D3
+    { r: 3, g: 45, b: 96 },     // mid: SF Dark #032D60
+    { r: 11, g: 18, b: 34 }     // bottom: Deep #0B1222
+  ];
+
+  function interpolateColor(c1, c2, t) {
+    return {
+      r: Math.round(c1.r + (c2.r - c1.r) * t),
+      g: Math.round(c1.g + (c2.g - c1.g) * t),
+      b: Math.round(c1.b + (c2.b - c1.b) * t)
+    };
+  }
+
+  function updateDepth() {
+    const scrollY = window.scrollY;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = Math.min(scrollY / maxScroll, 1);
+
+    let color;
+    if (progress < 0.5) {
+      color = interpolateColor(surfaceColors[0], surfaceColors[1], progress * 2);
+    } else {
+      color = interpolateColor(surfaceColors[1], surfaceColors[2], (progress - 0.5) * 2);
+    }
+
+    body.style.background = `rgb(${color.r},${color.g},${color.b})`;
+  }
+
+  window.addEventListener('scroll', updateDepth, { passive: true });
+  updateDepth();
 })();
 </script>
 </body>

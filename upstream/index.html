@@ -765,7 +765,7 @@ table tr:hover { background: var(--sf-highlight); }
       <img src="../assets/salesforce-logo.png" alt="Salesforce" class="logo-img">
     </div>
     <h1>Upstream Oil & Gas Brazil</h1>
-    <div class="subtitle">Exploration & Production — v2.2 · June 2026</div>
+    <div class="subtitle">Exploration & Production — v2.3 · June 2026</div>
   </div>
 
   <nav class="sidebar-nav">
@@ -813,6 +813,7 @@ table tr:hover { background: var(--sf-highlight); }
         <a href="#challenges">Industry Challenges</a>
         <a href="#use-cases">Use Cases & Processes</a>
         <a href="#agentforce">Agentforce Scenarios</a>
+        <a href="#architecture">Enterprise Architecture</a>
         <a href="#salesforce">Platform Mapping</a>
         <a href="#discovery">Discovery & Qualification</a>
       </div>
@@ -824,7 +825,7 @@ table tr:hover { background: var(--sf-highlight); }
       <img src="../assets/agentforce-avatar.png" width="20" height="20" style="border-radius:50%;object-fit:cover;" alt="Agentforce">
       🤖 Talk to our Agent (coming soon)
     </a>
-    <a href="../assets/podcast.m4a" id="podcastLink" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:12px;transition:color 0.15s;">
+    <a href="../assets/podcast-upstream.m4a" id="podcastLink" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:12px;transition:color 0.15s;">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       🎧 Listen as Podcast
     </a>
@@ -843,7 +844,7 @@ table tr:hover { background: var(--sf-highlight); }
     <input type="text" id="searchInput" placeholder="Search upstream content...">
     <div class="search-results" id="searchResults"></div>
   </div>
-  <span class="topbar-meta">v2.2 · June 2026</span>
+  <span class="topbar-meta">v2.3 · June 2026</span>
   <div class="topbar-actions">
     <button id="ttsBtn" title="Read aloud">🔊</button>
     <button id="qrBtn" title="QR Code">⊞</button>
@@ -2109,6 +2110,284 @@ table tr:hover { background: var(--sf-highlight); }
   </div>
 </div>
 
+<!-- ============ SECTION: ENTERPRISE ARCHITECTURE ============ -->
+<div class="section" id="architecture">
+  <div class="section-hero">
+    <div class="hero-kpi">
+      <span class="kpi-number">EA</span>
+      <span class="kpi-context">projected architecture for upstream digital transformation</span>
+    </div>
+    <h2>Enterprise Architecture Vision</h2>
+    <p>Reference architecture showing how Salesforce integrates with the upstream E&P technology ecosystem — from subsea sensors to boardroom dashboards.</p>
+  </div>
+
+  <!-- Architecture Diagram - Layered View -->
+  <div class="card">
+    <h3>Layered Architecture — Upstream Digital Platform</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:20px;">Five-layer reference architecture positioning Salesforce as the engagement, intelligence, and orchestration layer on top of existing operational technology (OT) and enterprise systems.</p>
+    <div style="overflow-x:auto;">
+      <div style="min-width:700px;font-family:Inter,system-ui,sans-serif;font-size:12px;">
+        <!-- Layer 1: Experience -->
+        <div style="background:linear-gradient(135deg,#0176D3,#1B96FF);color:#fff;border-radius:10px 10px 0 0;padding:18px 24px;border:1px solid rgba(1,118,211,0.3);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:0.7;margin-bottom:8px;">Layer 5 — Experience & Engagement</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+            <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Partner Portal</div>
+              <div style="font-size:10px;opacity:0.8;">JV / Supplier</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Ops Dashboard</div>
+              <div style="font-size:10px;opacity:0.8;">Tableau + CRM Analytics</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Mobile Offshore</div>
+              <div style="font-size:10px;opacity:0.8;">Field Service App</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Regulatory Hub</div>
+              <div style="font-size:10px;opacity:0.8;">OmniStudio Flows</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.15);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Gas Customer</div>
+              <div style="font-size:10px;opacity:0.8;">Experience Cloud</div>
+            </div>
+          </div>
+        </div>
+        <!-- Layer 2: Intelligence -->
+        <div style="background:linear-gradient(135deg,#032D60,#0a3d6b);color:#fff;padding:18px 24px;border-left:1px solid rgba(1,118,211,0.2);border-right:1px solid rgba(1,118,211,0.2);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:0.7;margin-bottom:8px;">Layer 4 — Intelligence & Automation</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+            <div style="background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;color:#f5a623;">Agentforce</div>
+              <div style="font-size:10px;opacity:0.8;">Autonomous Agents</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Einstein AI</div>
+              <div style="font-size:10px;opacity:0.8;">Predictions & Copilot</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Flow Orchestration</div>
+              <div style="font-size:10px;opacity:0.8;">Process Automation</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;">Einstein Analytics</div>
+              <div style="font-size:10px;opacity:0.8;">Embedded Insights</div>
+            </div>
+          </div>
+        </div>
+        <!-- Layer 3: Core Platform -->
+        <div style="background:linear-gradient(135deg,#0B1222,#162032);color:#fff;padding:18px 24px;border-left:1px solid rgba(1,118,211,0.2);border-right:1px solid rgba(1,118,211,0.2);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:0.7;margin-bottom:8px;">Layer 3 — Salesforce Core Platform</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;">
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:11px;">Sales Cloud</div>
+              <div style="font-size:9px;opacity:0.6;">Gas Sales & Partners</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:11px;">Service Cloud</div>
+              <div style="font-size:9px;opacity:0.6;">HSE & Asset Cases</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:11px;">Field Service</div>
+              <div style="font-size:9px;opacity:0.6;">Offshore Ops</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:11px;">Revenue Cloud</div>
+              <div style="font-size:9px;opacity:0.6;">Gas CPQ & Billing</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:11px;">Net Zero</div>
+              <div style="font-size:9px;opacity:0.6;">ESG & Emissions</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:11px;">Mfg Cloud</div>
+              <div style="font-size:9px;opacity:0.6;">Supply Chain</div>
+            </div>
+          </div>
+        </div>
+        <!-- Layer 4: Data & Integration -->
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:18px 24px;border-left:1px solid rgba(1,118,211,0.2);border-right:1px solid rgba(1,118,211,0.2);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:0.7;margin-bottom:8px;">Layer 2 — Data & Integration</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <div style="background:rgba(106,13,173,0.15);border:1px solid rgba(106,13,173,0.3);border-radius:6px;padding:12px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;color:#b388ff;">Data Cloud</div>
+              <div style="font-size:10px;opacity:0.8;">Unified Data Layer — real-time ingestion, identity resolution, calculated insights</div>
+            </div>
+            <div style="background:rgba(255,75,75,0.1);border:1px solid rgba(255,75,75,0.3);border-radius:6px;padding:12px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;color:#ff6b6b;">MuleSoft</div>
+              <div style="font-size:10px;opacity:0.8;">API-led connectivity — SAP, Oracle, SCADA, historians, gov systems</div>
+            </div>
+            <div style="background:rgba(46,184,79,0.1);border:1px solid rgba(46,184,79,0.3);border-radius:6px;padding:12px;text-align:center;">
+              <div style="font-weight:700;font-size:12px;color:#69db7c;">Slack</div>
+              <div style="font-size:10px;opacity:0.8;">Collaboration fabric — alerts, workflows, cross-team coordination</div>
+            </div>
+          </div>
+        </div>
+        <!-- Layer 5: Source Systems -->
+        <div style="background:linear-gradient(135deg,#2d2d2d,#3d3d3d);color:#fff;border-radius:0 0 10px 10px;padding:18px 24px;border:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:0.7;margin-bottom:8px;">Layer 1 — Source Systems & Operational Technology</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;">
+            <div style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:10px;">SCADA / DCS</div>
+              <div style="font-size:9px;opacity:0.5;">Emerson, Honeywell</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:10px;">Historians</div>
+              <div style="font-size:9px;opacity:0.5;">OSIsoft PI, AVEVA</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:10px;">ERP</div>
+              <div style="font-size:9px;opacity:0.5;">SAP S/4, Oracle</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:10px;">Reservoir</div>
+              <div style="font-size:9px;opacity:0.5;">Petrel, OFM, Eclipse</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:10px;">CMMS</div>
+              <div style="font-size:9px;opacity:0.5;">Maximo, IFS</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border:1px dashed rgba(255,255,255,0.2);border-radius:6px;padding:10px;text-align:center;">
+              <div style="font-weight:600;font-size:10px;">Gov Portals</div>
+              <div style="font-size:9px;opacity:0.5;">ANP, IBAMA, PPSA</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Flow Architecture -->
+  <div class="card">
+    <h3>Data Flow — From Wellhead to Decision</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:20px;">How operational data flows from offshore assets through the platform layers to enable real-time decision-making.</p>
+    <div style="overflow-x:auto;">
+      <div style="min-width:680px;display:flex;align-items:center;gap:4px;font-family:Inter,system-ui,sans-serif;font-size:11px;">
+        <!-- Step 1 -->
+        <div style="flex:1;background:var(--sf-bg-alt);border:1px solid var(--sf-border);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">🛢️</div>
+          <div style="font-weight:700;font-size:11px;color:var(--sf-text);">Subsea Sensors</div>
+          <div style="font-size:9px;color:var(--sf-text-sec);margin-top:4px;">Pressure, temp, flow rate, vibration</div>
+        </div>
+        <div style="color:var(--sf-text-sec);font-size:16px;">→</div>
+        <!-- Step 2 -->
+        <div style="flex:1;background:var(--sf-bg-alt);border:1px solid var(--sf-border);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">📡</div>
+          <div style="font-weight:700;font-size:11px;color:var(--sf-text);">SCADA / Historian</div>
+          <div style="font-size:9px;color:var(--sf-text-sec);margin-top:4px;">Real-time acquisition, storage (OSIsoft PI)</div>
+        </div>
+        <div style="color:var(--sf-text-sec);font-size:16px;">→</div>
+        <!-- Step 3 -->
+        <div style="flex:1;background:rgba(255,75,75,0.06);border:1px solid rgba(255,75,75,0.2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">🔗</div>
+          <div style="font-weight:700;font-size:11px;color:#ff6b6b;">MuleSoft</div>
+          <div style="font-size:9px;color:var(--sf-text-sec);margin-top:4px;">API gateway, event streaming, transformation</div>
+        </div>
+        <div style="color:var(--sf-text-sec);font-size:16px;">→</div>
+        <!-- Step 4 -->
+        <div style="flex:1;background:rgba(106,13,173,0.06);border:1px solid rgba(106,13,173,0.2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">💾</div>
+          <div style="font-weight:700;font-size:11px;color:#b388ff;">Data Cloud</div>
+          <div style="font-size:9px;color:var(--sf-text-sec);margin-top:4px;">Unify, resolve, calculate insights</div>
+        </div>
+        <div style="color:var(--sf-text-sec);font-size:16px;">→</div>
+        <!-- Step 5 -->
+        <div style="flex:1;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">🤖</div>
+          <div style="font-weight:700;font-size:11px;color:#f5a623;">Agentforce</div>
+          <div style="font-size:9px;color:var(--sf-text-sec);margin-top:4px;">Detect, decide, act autonomously</div>
+        </div>
+        <div style="color:var(--sf-text-sec);font-size:16px;">→</div>
+        <!-- Step 6 -->
+        <div style="flex:1;background:rgba(1,118,211,0.06);border:1px solid rgba(1,118,211,0.2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:6px;">📊</div>
+          <div style="font-weight:700;font-size:11px;color:#1B96FF;">Decision Layer</div>
+          <div style="font-size:9px;color:var(--sf-text-sec);margin-top:4px;">Tableau, Slack alerts, mobile actions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Integration Patterns -->
+  <div class="card">
+    <h3>Integration Patterns — MuleSoft in Upstream</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">API-led connectivity architecture enabling bi-directional data flow between Salesforce and upstream operational systems.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Integration Pattern</th><th>Source → Target</th><th>Data / Events</th><th>Frequency</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>IoT Streaming</strong></td><td>SCADA → Data Cloud</td><td>Well pressure, temperature, flow rates, equipment vibration</td><td>Real-time (seconds)</td></tr>
+          <tr><td><strong>Production Sync</strong></td><td>Historian → Data Cloud</td><td>Daily production volumes, allocation data, test results</td><td>Every 15 min / Daily batch</td></tr>
+          <tr><td><strong>Maintenance Events</strong></td><td>CMMS ↔ Service Cloud</td><td>Work orders, PM schedules, equipment status, spare parts</td><td>Event-driven</td></tr>
+          <tr><td><strong>ERP Financial</strong></td><td>SAP ↔ Revenue Cloud</td><td>POs, invoices, contracts, cost centers, budget vs actuals</td><td>Near-real-time / Batch</td></tr>
+          <tr><td><strong>Regulatory Filing</strong></td><td>Salesforce → Gov Portals</td><td>Production reports, environmental data, permit submissions</td><td>Scheduled (monthly/quarterly)</td></tr>
+          <tr><td><strong>Reservoir Data</strong></td><td>Petrel/OFM → Data Cloud</td><td>Decline curves, reserves estimates, well models</td><td>On-demand / Monthly</td></tr>
+          <tr><td><strong>HSE Incidents</strong></td><td>Field Service → Service Cloud → Slack</td><td>Incident reports, investigation data, corrective actions</td><td>Event-driven (immediate)</td></tr>
+          <tr><td><strong>Supplier Performance</strong></td><td>ERP + Quality → Mfg Cloud</td><td>Delivery performance, NCRs, quality scores, certifications</td><td>Daily batch</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Architecture Principles -->
+  <div class="card">
+    <h3>Architecture Principles for Upstream</h3>
+    <div class="two-col">
+      <div>
+        <h4>Design Principles</h4>
+        <ul>
+          <li><strong>API-First:</strong> All integrations via managed APIs (MuleSoft Anypoint) — no point-to-point</li>
+          <li><strong>Event-Driven:</strong> Real-time events for operational data; batch only for financial reconciliation</li>
+          <li><strong>Offline-Capable:</strong> Field Service mobile app works offline on FPSOs with intermittent connectivity</li>
+          <li><strong>Multi-Tenant Safe:</strong> Partner/JV data isolation via Salesforce sharing model and shield encryption</li>
+          <li><strong>Composable:</strong> Modular services that can be adopted incrementally (start with one use case, expand)</li>
+          <li><strong>Data Sovereignty:</strong> All data resident in Brazil (São Paulo Hyperforce region)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Security & Governance</h4>
+        <ul>
+          <li><strong>Zero Trust:</strong> MuleSoft API gateway with OAuth 2.0, mTLS for OT-to-IT boundary</li>
+          <li><strong>Data Classification:</strong> Automatic tagging (Public, Internal, Confidential, Restricted) via Shield</li>
+          <li><strong>Audit Trail:</strong> Full event logging for regulatory compliance (ANP audit requirements)</li>
+          <li><strong>JV Partition:</strong> Consortium-level data visibility — each partner sees only their share</li>
+          <li><strong>LGPD Compliance:</strong> Personal data handling per Brazil's General Data Protection Law</li>
+          <li><strong>DR/BCP:</strong> Multi-AZ deployment with <4h RTO for critical operational systems</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCO & Sizing Guidance -->
+  <div class="card">
+    <h3>Sizing Guidance — Typical E&P Operator</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Reference sizing for a mid-large E&P operator (5-15 concessions, 3-8 FPSOs, 2,000-5,000 employees).</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Component</th><th>Scope</th><th>User Estimate</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Sales Cloud</strong></td><td>Gas sales, partner mgmt, government relations</td><td>50-150 users</td><td>Commercial + BD + regulatory affairs teams</td></tr>
+          <tr><td><strong>Service Cloud</strong></td><td>HSE cases, maintenance coordination, support</td><td>100-300 users</td><td>Operations center + offshore supervisors</td></tr>
+          <tr><td><strong>Field Service</strong></td><td>Offshore crews, inspections, interventions</td><td>500-2,000 users</td><td>Largest user base — offshore mobile workers</td></tr>
+          <tr><td><strong>Experience Cloud</strong></td><td>Partner portals, supplier portals, contractor HSE</td><td>2,000-10,000 ext. users</td><td>JV partners + suppliers + contractors</td></tr>
+          <tr><td><strong>Data Cloud</strong></td><td>IoT ingestion, unified profiles, insights</td><td>Based on volume</td><td>~1M events/day typical for 5 FPSOs</td></tr>
+          <tr><td><strong>MuleSoft</strong></td><td>30-60 APIs across systems</td><td>Anypoint Platform</td><td>SAP, SCADA, historian, gov portal connectors</td></tr>
+          <tr><td><strong>Tableau</strong></td><td>Production, HSE, ESG, supply chain dashboards</td><td>200-500 viewers</td><td>Management + operations + partners</td></tr>
+          <tr><td><strong>Net Zero Cloud</strong></td><td>Emissions tracking, carbon credits, ESG reports</td><td>20-50 users</td><td>Sustainability + finance + operations</td></tr>
+          <tr><td><strong>Agentforce</strong></td><td>8 autonomous agents</td><td>Based on actions</td><td>Scales with operational complexity</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Engagement Model:</strong> Start with Phase 1 (stakeholder CRM + HSE) as a lighthouse project — typically $500K-$1.5M in first-year licenses + implementation. Scale to full platform vision in 18-24 months as value is demonstrated.
+    </div>
+  </div>
+</div>
+
 <!-- ============ SECTION: SALESFORCE PLATFORM MAPPING ============ -->
 <div class="section" id="salesforce">
   <div class="section-hero">
@@ -2312,7 +2591,7 @@ table tr:hover { background: var(--sf-highlight); }
 <!-- FOOTER -->
 <footer class="page-footer">
   <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
-    <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.2 | June 2026</span>
+    <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.3 | June 2026</span>
     <span style="opacity:0.5">|</span>
     <span id="viewCount" style="font-size:10px;">👁 —</span>
     <span id="likeArea" style="font-size:10px;cursor:pointer;" title="Like this POV">♡ —</span>
