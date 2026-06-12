@@ -238,10 +238,26 @@ section {
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--sf-light-blue);
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   opacity: 0;
   transform: translateY(20px);
   animation: revealUp 0.8s ease forwards 0.4s;
+}
+
+.version-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--gold);
+  background: rgba(245,166,35,0.1);
+  border: 1px solid rgba(245,166,35,0.25);
+  padding: 4px 12px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: revealUp 0.8s ease forwards 0.5s;
 }
 
 .hero-title {
@@ -1105,7 +1121,8 @@ section {
     <div class="hero-logo">
       <img src="assets/salesforce-logo.png" alt="Salesforce">
     </div>
-    <p class="hero-eyebrow">Point of View — Brazil 2026</p>
+    <p class="hero-eyebrow">Oil & Gas — Point of View — Brazil 2026</p>
+    <span class="version-badge">v2.0 · June 2026</span>
     <h1 class="hero-title">
       <span class="line">Powering <span class="gold">Energy</span></span>
       <span class="line">with <span class="sf-blue">Intelligence</span></span>
@@ -1286,7 +1303,7 @@ section {
 <!-- FOOTER -->
 <div class="footer">
   <img src="assets/salesforce-logo.png" alt="Salesforce">
-  <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV | 2026</span>
+  <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.0 | June 2026</span>
   <span class="footer-separator">·</span>
   <span class="view-counter" id="viewCounter"></span>
 </div>
