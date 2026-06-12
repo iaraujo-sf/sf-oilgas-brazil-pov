@@ -293,10 +293,61 @@ section {
   animation: revealUp 0.8s ease forwards 1.3s;
 }
 
+/* Wave fill effect */
+.stats-wave-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.stats-wave {
+  position: absolute;
+  bottom: -100%;
+  left: -5%;
+  width: 110%;
+  height: 200%;
+  transition: none;
+}
+
+.stats-wave.filling {
+  animation: waveFill 2.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes waveFill {
+  0% { bottom: -100%; }
+  100% { bottom: -10%; }
+}
+
+.stats-wave svg {
+  position: absolute;
+  bottom: 48%;
+  left: 0;
+  width: 200%;
+  height: 60px;
+  animation: waveShift 3s linear infinite;
+}
+
+@keyframes waveShift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.stats-wave .wave-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 52%;
+  background: linear-gradient(180deg, rgba(245,166,35,0.1) 0%, rgba(180,120,20,0.05) 100%);
+}
+
 .hero-stat {
   padding: 24px 16px;
   text-align: center;
   position: relative;
+  z-index: 1;
 }
 
 .hero-stat:not(:last-child)::after {
@@ -789,6 +840,126 @@ section {
   opacity: 0.35;
 }
 
+.footer-separator {
+  opacity: 0.3;
+}
+
+.view-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+}
+
+/* FLOATING ACTIONS (Like + Share) */
+.floating-actions {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 900;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: revealUp 0.6s ease forwards 2.5s;
+}
+
+.fab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.fab-btn:hover {
+  border-color: var(--border-light);
+  background: var(--surface-card);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.fab-btn .fab-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.fab-btn.liked {
+  border-color: rgba(245,166,35,0.4);
+  color: var(--gold);
+}
+
+.fab-btn.liked .fab-icon {
+  animation: likePopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes likePopIn {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.fab-count {
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.share-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  min-width: 160px;
+}
+
+.share-menu.open { display: flex; }
+
+.share-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  width: 100%;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.share-option:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-primary);
+}
+
+.share-option .share-icon { font-size: 14px; width: 20px; text-align: center; }
+
 /* PAGINATION */
 .pagination {
   position: fixed;
@@ -943,7 +1114,16 @@ section {
   </div>
 
   <!-- Stats -->
-  <div class="hero-stats">
+  <div class="hero-stats" id="heroStats">
+    <div class="stats-wave-container">
+      <div class="stats-wave" id="statsWave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path d="M0,30 C200,10 400,50 600,30 C800,10 1000,50 1200,30 C1400,10 1600,50 1800,30 C2000,10 2200,50 2400,30" fill="none" stroke="rgba(245,166,35,0.4)" stroke-width="2"/>
+          <path d="M0,35 C200,55 400,15 600,35 C800,55 1000,15 1200,35 C1400,55 1600,15 1800,35 C2000,55 2200,15 2400,35" fill="none" stroke="rgba(200,130,20,0.25)" stroke-width="1.5"/>
+        </svg>
+        <div class="wave-body"></div>
+      </div>
+    </div>
     <div class="hero-stat">
       <div class="stat-value" data-target="3.7" data-suffix="M">0</div>
       <div class="stat-label">Barrels / Day</div>
@@ -1078,10 +1258,37 @@ section {
   </div>
 </section>
 
+<!-- FLOATING ACTIONS -->
+<div class="floating-actions" id="floatingActions">
+  <button class="fab-btn" id="likeBtn" aria-label="Like">
+    <span class="fab-icon">♡</span>
+    <span class="fab-count" id="likeCount"></span>
+  </button>
+  <div style="position:relative;">
+    <button class="fab-btn" id="shareBtn" aria-label="Share">
+      <span class="fab-icon">↗</span>
+      <span>Share</span>
+    </button>
+    <div class="share-menu" id="shareMenu">
+      <button class="share-option" id="copyLink">
+        <span class="share-icon">🔗</span> Copy link
+      </button>
+      <a class="share-option" id="shareLinkedIn" href="#" target="_blank" rel="noopener">
+        <span class="share-icon">in</span> LinkedIn
+      </a>
+      <a class="share-option" id="shareEmail" href="#">
+        <span class="share-icon">✉</span> Email
+      </a>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <div class="footer">
   <img src="assets/salesforce-logo.png" alt="Salesforce">
-  Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV | 2026
+  <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV | 2026</span>
+  <span class="footer-separator">·</span>
+  <span class="view-counter" id="viewCounter"></span>
 </div>
 
 <script>
@@ -1131,7 +1338,10 @@ function animateCounters() {
   });
 }
 
-setTimeout(animateCounters, 1800);
+setTimeout(() => {
+  animateCounters();
+  document.getElementById('statsWave').classList.add('filling');
+}, 1800);
 
 // Video on hover for chain cards
 document.querySelectorAll('.chain-card').forEach(card => {
@@ -1175,6 +1385,85 @@ dots.forEach(dot => {
     sections[idx].scrollIntoView({ behavior: 'smooth' });
   });
 });
+
+// View counter
+(function() {
+  const el = document.getElementById('viewCounter');
+  fetch('https://api.counterapi.dev/v1/sf-oilgas-pov/home/up')
+    .then(r => r.json())
+    .then(data => {
+      el.textContent = data.count + ' views';
+    })
+    .catch(() => { el.style.display = 'none'; });
+})();
+
+// Like button
+(function() {
+  const btn = document.getElementById('likeBtn');
+  const countEl = document.getElementById('likeCount');
+  const hasLiked = localStorage.getItem('pov-liked') === 'true';
+
+  function renderLiked(count) {
+    btn.classList.add('liked');
+    btn.querySelector('.fab-icon').textContent = '♥';
+    if (count) countEl.textContent = count;
+  }
+
+  fetch('https://api.counterapi.dev/v1/sf-oilgas-pov/likes/get')
+    .then(r => r.json())
+    .then(data => {
+      countEl.textContent = data.count || '';
+      if (hasLiked) renderLiked(data.count);
+    })
+    .catch(() => {});
+
+  btn.addEventListener('click', () => {
+    if (hasLiked) return;
+    localStorage.setItem('pov-liked', 'true');
+    fetch('https://api.counterapi.dev/v1/sf-oilgas-pov/likes/up')
+      .then(r => r.json())
+      .then(data => { renderLiked(data.count); })
+      .catch(() => { renderLiked(); });
+  });
+})();
+
+// Share menu
+(function() {
+  const shareBtn = document.getElementById('shareBtn');
+  const menu = document.getElementById('shareMenu');
+  const url = 'https://iaraujo-sf.github.io/sf-oilgas-brazil-pov/';
+  const title = 'Oil & Gas Brazil — Salesforce POV';
+
+  shareBtn.addEventListener('click', () => {
+    if (navigator.share) {
+      navigator.share({ title: title, url: url }).catch(() => {});
+    } else {
+      menu.classList.toggle('open');
+    }
+  });
+
+  document.getElementById('copyLink').addEventListener('click', () => {
+    navigator.clipboard.writeText(url).then(() => {
+      document.getElementById('copyLink').innerHTML = '<span class="share-icon">✓</span> Copied!';
+      setTimeout(() => {
+        document.getElementById('copyLink').innerHTML = '<span class="share-icon">🔗</span> Copy link';
+        menu.classList.remove('open');
+      }, 1500);
+    });
+  });
+
+  document.getElementById('shareLinkedIn').href =
+    'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url);
+
+  document.getElementById('shareEmail').href =
+    'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent('Check out this POV: ' + url);
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#shareBtn') && !e.target.closest('#shareMenu')) {
+      menu.classList.remove('open');
+    }
+  });
+})();
 </script>
 </body>
 </html>
