@@ -158,23 +158,6 @@ body {
   font-weight: 500;
 }
 
-.sidebar-footer {
-  padding: 16px 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  flex-shrink: 0;
-}
-
-.sidebar-footer a {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: rgba(255,255,255,0.6);
-  text-decoration: none;
-  font-size: 12px;
-  transition: color 0.15s;
-}
-
-.sidebar-footer a:hover { color: #fff; }
 
 /* TOPBAR */
 .topbar {
@@ -359,6 +342,27 @@ body {
   border-radius: 50%;
 }
 
+.section-hero .hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  z-index: 0;
+}
+
+.section-hero .hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,22,57,0.45) 0%, rgba(15,26,46,0.55) 100%);
+  z-index: 0;
+}
+
+[data-theme="light"] .section-hero .hero-video-overlay {
+  background: linear-gradient(135deg, rgba(3,45,96,0.5) 0%, rgba(10,61,107,0.55) 100%);
+}
+
 .section-hero h2 {
   font-size: 28px;
   font-weight: 700;
@@ -373,6 +377,37 @@ body {
   max-width: 640px;
   position: relative;
   z-index: 1;
+}
+
+.hero-kpi {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hero-kpi .kpi-number {
+  font-size: 56px;
+  font-weight: 800;
+  color: #f5a623;
+  line-height: 1;
+  letter-spacing: -2px;
+  text-shadow: 0 2px 24px rgba(245,166,35,0.3);
+  animation: kpiPulse 3s ease-in-out infinite;
+}
+
+.hero-kpi .kpi-context {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  max-width: 260px;
+  line-height: 1.4;
+}
+
+@keyframes kpiPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
 }
 
 /* CARDS */
@@ -715,6 +750,8 @@ table tr:hover { background: var(--sf-highlight); }
   .section-hero { padding: 32px 20px; }
   .section-hero h2 { font-size: 22px; }
   .metric-grid { grid-template-columns: 1fr 1fr; }
+  .hero-kpi .kpi-number { font-size: 40px; }
+  .hero-kpi { flex-direction: column; gap: 6px; }
 }
 </style>
 </head>
@@ -723,11 +760,12 @@ table tr:hover { background: var(--sf-highlight); }
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
+    <a href="../index.html" style="display:flex;align-items:center;gap:4px;color:rgba(255,255,255,0.5);text-decoration:none;font-size:11px;margin-bottom:10px;transition:color 0.15s;" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">← Oil & Gas Hub</a>
     <div class="logo-area">
       <img src="../assets/salesforce-logo.png" alt="Salesforce" class="logo-img">
     </div>
     <h1>Upstream Oil & Gas Brazil</h1>
-    <div class="subtitle">Exploration & Production — v2.1 · June 2026</div>
+    <div class="subtitle">Exploration & Production — v2.2 · June 2026</div>
   </div>
 
   <nav class="sidebar-nav">
@@ -773,13 +811,27 @@ table tr:hover { background: var(--sf-highlight); }
       <div class="nav-section-title">Salesforce Positioning <span class="chevron">▼</span></div>
       <div class="nav-items">
         <a href="#challenges">Industry Challenges</a>
-        <a href="#salesforce">Platform Capabilities</a>
+        <a href="#use-cases">Use Cases & Processes</a>
+        <a href="#agentforce">Agentforce Scenarios</a>
+        <a href="#salesforce">Platform Mapping</a>
+        <a href="#discovery">Discovery & Qualification</a>
       </div>
     </div>
   </nav>
 
-  <div class="sidebar-footer">
-    <a href="../">← Oil & Gas Hub</a>
+  <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,0.1);margin-top:8px;display:flex;flex-direction:column;gap:12px;">
+    <a href="#" id="agentLink" style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:12px;transition:color 0.15s;opacity:0.7;pointer-events:none;">
+      <img src="../assets/agentforce-avatar.png" width="20" height="20" style="border-radius:50%;object-fit:cover;" alt="Agentforce">
+      🤖 Talk to our Agent (coming soon)
+    </a>
+    <a href="../assets/podcast.m4a" id="podcastLink" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:12px;transition:color 0.15s;">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      🎧 Listen as Podcast
+    </a>
+    <a href="https://salesforce.enterprise.slack.com/team/U02FQV1BE9M" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:12px;transition:color 0.15s;">
+      <svg viewBox="0 0 128 128" width="16" height="16"><path d="M27.2 80c0 7.3-5.9 13.2-13.2 13.2S.8 87.3.8 80s5.9-13.2 13.2-13.2h13.2V80zm6.6 0c0-7.3 5.9-13.2 13.2-13.2s13.2 5.9 13.2 13.2v33c0 7.3-5.9 13.2-13.2 13.2s-13.2-5.9-13.2-13.2V80z" fill="#E01E5A"/><path d="M47 27c-7.3 0-13.2-5.9-13.2-13.2S39.7.6 47 .6s13.2 5.9 13.2 13.2V27H47zm0 6.7c7.3 0 13.2 5.9 13.2 13.2s-5.9 13.2-13.2 13.2H14c-7.3 0-13.2-5.9-13.2-13.2S6.7 33.7 14 33.7h33z" fill="#36C5F0"/><path d="M99.9 46.9c0-7.3 5.9-13.2 13.2-13.2s13.2 5.9 13.2 13.2-5.9 13.2-13.2 13.2H99.9V46.9zm-6.6 0c0 7.3-5.9 13.2-13.2 13.2s-13.2-5.9-13.2-13.2v-33c0-7.3 5.9-13.2 13.2-13.2s13.2 5.9 13.2 13.2v33z" fill="#2EB67D"/><path d="M80.1 99.8c7.3 0 13.2 5.9 13.2 13.2s-5.9 13.2-13.2 13.2-13.2-5.9-13.2-13.2V99.8h13.2zm0-6.6c-7.3 0-13.2-5.9-13.2-13.2s5.9-13.2 13.2-13.2h33c7.3 0 13.2 5.9 13.2 13.2s-5.9 13.2-13.2 13.2h-33z" fill="#ECB22E"/></svg>
+      Contact Site Admin on Slack
+    </a>
   </div>
 </aside>
 
@@ -791,7 +843,7 @@ table tr:hover { background: var(--sf-highlight); }
     <input type="text" id="searchInput" placeholder="Search upstream content...">
     <div class="search-results" id="searchResults"></div>
   </div>
-  <span class="topbar-meta">v2.1 · June 2026</span>
+  <span class="topbar-meta">v2.2 · June 2026</span>
   <div class="topbar-actions">
     <button id="ttsBtn" title="Read aloud">🔊</button>
     <button id="qrBtn" title="QR Code">⊞</button>
@@ -806,6 +858,14 @@ table tr:hover { background: var(--sf-highlight); }
 <!-- ============ SECTION: EXECUTIVE SUMMARY ============ -->
 <div class="section active" id="executive-summary">
   <div class="section-hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="../assets/video-upstream-web.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+    <div class="hero-kpi">
+      <span class="kpi-number">4.25M</span>
+      <span class="kpi-context">barrels per day — historic production record, March 2026</span>
+    </div>
     <h2>Executive Summary</h2>
     <p>Brazil's upstream sector has reached historic production milestones, positioning the country as a top-10 global producer with a clear trajectory to exceed 5 MMbpd by 2030. World-class pre-salt assets, massive investment commitments, and among the lowest carbon intensities globally make Brazil one of the most attractive E&P markets.</p>
   </div>
@@ -1664,57 +1724,555 @@ table tr:hover { background: var(--sf-highlight); }
   </div>
 </div>
 
-<!-- ============ SECTION: SALESFORCE ============ -->
-<div class="section" id="salesforce">
+<!-- ============ SECTION: USE CASES & PROCESSES ============ -->
+<div class="section" id="use-cases">
   <div class="section-hero">
-    <h2>Salesforce Platform Capabilities</h2>
-    <p>Salesforce's platform uniquely addresses upstream E&P challenges through integrated CRM, data, AI, and automation capabilities across the exploration-to-production lifecycle.</p>
+    <div class="hero-kpi">
+      <span class="kpi-number">8</span>
+      <span class="kpi-context">value domains where Salesforce accelerates upstream operations</span>
+    </div>
+    <h2>Use Cases & Business Processes</h2>
+    <p>Detailed mapping of Salesforce capabilities to upstream E&P business processes, activities, and stakeholder interactions — structured for AE qualification and SE solution design.</p>
+  </div>
+
+  <!-- UC1: Stakeholder & Partner Management -->
+  <div class="card">
+    <h3>1. Stakeholder & Partner Relationship Management</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Managing 84 E&P groups, government agencies (ANP, PPSA, IBAMA, MME), JV partners, and service providers across complex ownership structures.</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>Joint Venture (JV) partner onboarding & relationship tracking</li>
+          <li>Government relations — ANP, PPSA, MME, IBAMA engagement</li>
+          <li>Consortium management (Pre-salt Sharing Agreements)</li>
+          <li>IOC/NOC partnership pipeline & deal management</li>
+          <li>Farm-in / Farm-out transaction coordination</li>
+          <li>Industry association engagement (IBP, ABPIP)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Sales Cloud:</strong> Account hierarchies, opportunity tracking, JV deal flow</li>
+          <li><strong>Energy & Utilities Cloud:</strong> Partner models, asset relationships</li>
+          <li><strong>Data Cloud:</strong> 360° view across government, partner, and supplier interactions</li>
+          <li><strong>Experience Cloud:</strong> Partner portals for JV document sharing & reporting</li>
+          <li><strong>Einstein AI:</strong> Relationship intelligence, next-best-action for engagement</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Impact:</strong> A major E&P operator with 12+ active concessions typically manages 40+ JV partners across different ownership %. Salesforce unifies this into one relationship map with automated reporting obligations.
+    </div>
+  </div>
+
+  <!-- UC2: Supply Chain & Procurement -->
+  <div class="card">
+    <h3>2. E&P Supply Chain & Procurement</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Coordinating global EPC contractors, equipment suppliers, and service providers while meeting local content requirements (25-40% per FPSO).</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>Supplier qualification & performance scoring</li>
+          <li>Local content compliance tracking per contract/FPSO</li>
+          <li>RFx management for US$500M+ FPSO hull & topside contracts</li>
+          <li>Long-lead item tracking (subsea trees, risers, umbilicals)</li>
+          <li>Supplier audit management & non-conformance resolution</li>
+          <li>Critical equipment delivery milestone tracking</li>
+          <li>Vendor-managed inventory for offshore consumables</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Manufacturing Cloud:</strong> Supplier visibility, forecast sharing, collaborative planning</li>
+          <li><strong>MuleSoft:</strong> Integration with SAP/Oracle ERP procurement modules</li>
+          <li><strong>OmniStudio:</strong> Guided supplier onboarding with local content verification flows</li>
+          <li><strong>Flow Orchestration:</strong> Multi-step approval for high-value purchase orders</li>
+          <li><strong>Tableau:</strong> Spend analytics, local content dashboards, supplier risk heat maps</li>
+          <li><strong>Slack:</strong> Real-time alerts for delivery delays, quality issues</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Impact:</strong> With 15 FPSOs under construction/planning simultaneously, each with 2,000+ suppliers and US$2-4B budgets, missed milestones cascade into $10M+/month delays. Real-time supply chain visibility is not optional.
+    </div>
+  </div>
+
+  <!-- UC3: Asset Performance & Production Optimization -->
+  <div class="card">
+    <h3>3. Asset Performance & Production Optimization</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Monitoring and optimizing 50+ FPSO platforms and thousands of wells across ultra-deep pre-salt reservoirs where every 1% production uplift = US$1.5B+/year.</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>Real-time production monitoring per well & platform</li>
+          <li>Predictive maintenance for subsea equipment (BOPs, trees, flowlines)</li>
+          <li>Production allocation across JV partners</li>
+          <li>Well integrity management & intervention planning</li>
+          <li>Reservoir surveillance & decline curve analysis</li>
+          <li>Platform capacity optimization & debottlenecking</li>
+          <li>Unplanned downtime root-cause analysis</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Data Cloud:</strong> Real-time IoT ingestion from SCADA, DCS, historians (OSIsoft PI)</li>
+          <li><strong>Einstein AI:</strong> Anomaly detection, failure prediction, production forecasting</li>
+          <li><strong>Tableau:</strong> Production dashboards, trend analysis, KPI waterfall charts</li>
+          <li><strong>Service Cloud:</strong> Work order management for maintenance interventions</li>
+          <li><strong>MuleSoft:</strong> Integration with AVEVA, Emerson DeltaV, Petrel, OFM</li>
+          <li><strong>CRM Analytics:</strong> Executive production reports, partner allocation views</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Impact:</strong> Pre-salt wells produce 25,000-50,000 bpd each. A single well going offline at $80/bbl represents $2-4M/day in lost revenue. Predictive maintenance can reduce unplanned downtime by 30-50%.
+    </div>
+  </div>
+
+  <!-- UC4: HSE & Compliance -->
+  <div class="card">
+    <h3>4. Health, Safety, Environment & Regulatory Compliance</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Managing safety across 150+ offshore facilities, 40,000+ workers in hazardous environments, with zero-tolerance regulatory oversight from ANP, IBAMA, and labor authorities.</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>Incident/near-miss reporting & investigation workflows</li>
+          <li>Permit-to-work (PTW) management for hot work, confined spaces</li>
+          <li>Safety observation & behavior-based safety (BBS) tracking</li>
+          <li>Environmental monitoring (emissions, effluents, oil spill response)</li>
+          <li>Regulatory inspection management & corrective actions</li>
+          <li>Contractor HSE qualification & performance scoring</li>
+          <li>Emergency response plan activation & drill management</li>
+          <li>Occupational health surveillance & fitness-for-duty</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Service Cloud:</strong> Case management for incidents, investigations, CAPAs</li>
+          <li><strong>Experience Cloud:</strong> Contractor safety portals, PTW request & approval</li>
+          <li><strong>Flow:</strong> Automated escalation workflows, regulatory notification triggers</li>
+          <li><strong>Field Service:</strong> Safety inspection scheduling, mobile data capture offshore</li>
+          <li><strong>Net Zero Cloud:</strong> Emissions tracking (Scope 1/2/3), regulatory reporting</li>
+          <li><strong>Tableau:</strong> HSE dashboards, leading/lagging indicator trends, heat maps</li>
+          <li><strong>Einstein AI:</strong> Pattern recognition in near-misses to predict high-risk conditions</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Impact:</strong> A single major offshore incident can result in US$1B+ in losses, production shutdowns, and license revocations. Proactive safety management isn't just compliance — it's business continuity.
+    </div>
+  </div>
+
+  <!-- UC5: Workforce & Competency Management -->
+  <div class="card">
+    <h3>5. Offshore Workforce & Competency Management</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Coordinating 40,000+ offshore workers across 14/14 rotation schedules, multiple operators, and specialized competency requirements in one of the most demanding work environments globally.</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>Offshore rotation planning (14×14, 14×21 schedules)</li>
+          <li>Competency matrix management & certification tracking</li>
+          <li>Training compliance & recertification scheduling</li>
+          <li>Mobilization/demobilization logistics coordination</li>
+          <li>Personnel-on-board (POB) tracking per installation</li>
+          <li>Contractor crew management & approval workflows</li>
+          <li>Knowledge capture from experienced workforce (attrition risk)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Field Service:</strong> Advanced scheduling, skill-based routing, dispatch optimization</li>
+          <li><strong>Experience Cloud:</strong> Worker self-service portals for schedule visibility & requests</li>
+          <li><strong>Data Cloud:</strong> Unified worker profile (certifications, experience, medical, training)</li>
+          <li><strong>Flow:</strong> Automated competency gap alerts, recertification reminders</li>
+          <li><strong>Slack:</strong> Crew communication, shift handover notes, real-time coordination</li>
+          <li><strong>Einstein AI:</strong> Optimal crew composition recommendations, fatigue risk prediction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- UC6: Licensing, Permitting & Regulatory Affairs -->
+  <div class="card">
+    <h3>6. Licensing, Permitting & Regulatory Affairs</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Navigating Brazil's complex multi-agency permitting landscape: ANP concessions, IBAMA environmental licenses, Navy permits, state agencies — where a single delayed permit can hold $2B projects hostage.</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>Exploration Plan (PLANO) submission & tracking at ANP</li>
+          <li>Environmental Impact Assessment (EIA/RIMA) management</li>
+          <li>IBAMA licensing stages (LP, LI, LO) workflow tracking</li>
+          <li>Development Plan submission & approval monitoring</li>
+          <li>Annual production reporting (Boletim Mensal)</li>
+          <li>Decommissioning plan submission & stakeholder engagement</li>
+          <li>Open Acreage (OPC/OPP) bid preparation & submission</li>
+          <li>Local content certification & annual compliance reporting</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Public Sector Solutions:</strong> Permit lifecycle management, status tracking</li>
+          <li><strong>OmniStudio:</strong> Guided flows for complex multi-step submissions</li>
+          <li><strong>Document Generation:</strong> Automated regulatory filings with data merge</li>
+          <li><strong>Experience Cloud:</strong> Regulatory agency portals for status visibility</li>
+          <li><strong>Flow Orchestration:</strong> Multi-agency parallel tracking with dependency logic</li>
+          <li><strong>Einstein AI:</strong> Predicted approval timelines based on historical patterns</li>
+          <li><strong>Slack:</strong> Cross-functional coordination (legal, technical, environmental teams)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Impact:</strong> IBAMA environmental licensing alone averages 2-4 years. Real-time tracking and proactive document management can reduce cycle time by 20-30%, accelerating first-oil by months.
+    </div>
+  </div>
+
+  <!-- UC7: ESG & Energy Transition -->
+  <div class="card">
+    <h3>7. ESG Reporting & Energy Transition Management</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Meeting growing investor, regulatory, and societal expectations for carbon transparency while positioning for CCUS, green hydrogen, and offshore wind opportunities mandated by Law 14,993/2024.</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>GHG emissions measurement, reporting & verification (MRV)</li>
+          <li>Scope 1/2/3 carbon accounting per asset & company-wide</li>
+          <li>Carbon credit generation & trading (CCUS projects)</li>
+          <li>Methane detection, quantification & reduction tracking</li>
+          <li>ESG KPI reporting to investors (TCFD, ISSB, GRI frameworks)</li>
+          <li>Social investment & community engagement tracking</li>
+          <li>Biodiversity offset program management</li>
+          <li>Renewable energy project pipeline (offshore wind, H2)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Net Zero Cloud:</strong> Carbon accounting engine, emissions factors library</li>
+          <li><strong>Data Cloud:</strong> Aggregate emissions from multiple operational sources</li>
+          <li><strong>Tableau:</strong> ESG dashboards for board, investors, and regulators</li>
+          <li><strong>Experience Cloud:</strong> Community engagement portals, social investment tracking</li>
+          <li><strong>CRM Analytics:</strong> Carbon intensity benchmarking vs. industry peers</li>
+          <li><strong>Flow:</strong> Automated ESG data collection workflows per asset</li>
+          <li><strong>Einstein AI:</strong> Emissions anomaly detection, reduction opportunity identification</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Impact:</strong> Brazil's pre-salt already has 9-10 kgCO2e/boe (half global avg). Proving this with reliable data is a competitive advantage for international investors comparing global E&P portfolios.
+    </div>
+  </div>
+
+  <!-- UC8: Gas Commercialization -->
+  <div class="card">
+    <h3>8. Natural Gas Commercialization</h3>
+    <p style="font-size:13px;color:var(--sf-text-sec);margin-bottom:16px;">Brazil's natural gas market is rapidly liberalizing (New Gas Law), creating commercial opportunities for E&P producers to sell directly to industrial consumers and distributors for the first time.</p>
+    <div class="two-col">
+      <div>
+        <h4>Key Processes</h4>
+        <ul>
+          <li>Gas marketing — customer prospecting, contract negotiation</li>
+          <li>Take-or-pay contract management & volume tracking</li>
+          <li>Gas pricing (indexed formulas — Henry Hub, Brent, JKM)</li>
+          <li>Nomination & scheduling with pipeline operators</li>
+          <li>Billing, invoicing & revenue recognition</li>
+          <li>Customer portal for volume nominations & invoices</li>
+          <li>Market intelligence — competitor pricing, demand forecasting</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Salesforce Capabilities</h4>
+        <ul>
+          <li><strong>Sales Cloud:</strong> Gas customer pipeline, opportunity management, forecasting</li>
+          <li><strong>Revenue Cloud (CPQ):</strong> Complex pricing formulas, contract lifecycle, renewals</li>
+          <li><strong>Billing:</strong> Metered billing based on actual gas volumes delivered</li>
+          <li><strong>Experience Cloud:</strong> Customer self-service for nominations, invoices, disputes</li>
+          <li><strong>Data Cloud:</strong> Market signal integration (commodity prices, demand patterns)</li>
+          <li><strong>Einstein AI:</strong> Demand forecasting, price optimization, churn prediction</li>
+          <li><strong>MuleSoft:</strong> Integration with gas pipeline SCADA & metering systems</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout callout-info" style="margin-top:16px;">
+      <strong>Impact:</strong> Gas production of 204 MMm³/d (growing to 250+ by 2030) means producers need commercial capabilities they never had. This is a greenfield CRM/CPQ opportunity as the market liberalizes.
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: AGENTFORCE ============ -->
+<div class="section" id="agentforce">
+  <div class="section-hero">
+    <div class="hero-kpi">
+      <span class="kpi-number">AI</span>
+      <span class="kpi-context">autonomous agents transforming upstream operations</span>
+    </div>
+    <h2>Agentforce in Upstream E&P</h2>
+    <p>Concrete scenarios where autonomous AI agents can handle complex upstream workflows — reducing cycle time, improving safety, and enabling 24/7 intelligent operations.</p>
   </div>
 
   <div class="card">
-    <h3>Platform Mapping to Upstream Needs</h3>
+    <h3>Agentforce Scenario Map</h3>
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Challenge Area</th><th>Salesforce Solution</th><th>Key Capabilities</th></tr>
+          <tr><th>Agent</th><th>Trigger</th><th>Actions</th><th>Outcome</th></tr>
         </thead>
         <tbody>
-          <tr><td>Stakeholder Management</td><td>Sales Cloud + Energy & Utilities Cloud</td><td>Partner relationship management, JV tracking, government relations</td></tr>
-          <tr><td>Supply Chain / Procurement</td><td>MuleSoft + Manufacturing Cloud</td><td>Supplier onboarding, local content tracking, RFx automation</td></tr>
-          <tr><td>Asset Performance</td><td>Data Cloud + Tableau + Einstein AI</td><td>IoT ingestion, predictive maintenance, production optimization</td></tr>
-          <tr><td>HSE & Compliance</td><td>Experience Cloud + Flow</td><td>Incident management, safety reporting, audit trails</td></tr>
-          <tr><td>Workforce Management</td><td>Field Service + Scheduler</td><td>Offshore rotation planning, competency tracking, dispatch</td></tr>
-          <tr><td>Licensing & Permitting</td><td>Public Sector Solutions + OmniStudio</td><td>Application tracking, document management, status portals</td></tr>
-          <tr><td>ESG & Emissions</td><td>Net Zero Cloud + CRM Analytics</td><td>Scope 1/2/3 tracking, carbon credit management, ESG dashboards</td></tr>
-          <tr><td>Gas Commercialization</td><td>Revenue Cloud + CPQ</td><td>Contract management, pricing, B2B customer portals</td></tr>
+          <tr>
+            <td><strong>Supplier Compliance Agent</strong></td>
+            <td>New FPSO contract awarded</td>
+            <td>Auto-maps local content requirements, identifies qualified Brazilian suppliers, sends onboarding invitations, monitors certification expiry</td>
+            <td>Local content compliance starts day-1, reducing audit risk by 60%</td>
+          </tr>
+          <tr>
+            <td><strong>Well Integrity Agent</strong></td>
+            <td>Anomaly detected in pressure/temperature sensor</td>
+            <td>Cross-references against well history, evaluates severity classification, creates work order if threshold breached, notifies offshore superintendent</td>
+            <td>Potential integrity events caught 48h earlier, avoiding unplanned shutdowns</td>
+          </tr>
+          <tr>
+            <td><strong>Permit Tracker Agent</strong></td>
+            <td>Daily regulatory portal scan</td>
+            <td>Checks IBAMA/ANP portal for status updates, compares against project timeline, escalates if delay detected, prepares response documents</td>
+            <td>Licensing delays surfaced immediately with auto-prepared mitigation actions</td>
+          </tr>
+          <tr>
+            <td><strong>HSE Investigation Agent</strong></td>
+            <td>Incident reported via mobile app offshore</td>
+            <td>Classifies severity, assigns investigation team based on type, gathers similar historical incidents, suggests probable causes from knowledge base</td>
+            <td>Investigation kickoff reduced from 24h to 30min with pre-populated analysis</td>
+          </tr>
+          <tr>
+            <td><strong>Crew Rotation Agent</strong></td>
+            <td>Crew member requests schedule change / medical flag raised</td>
+            <td>Checks competency requirements for the role, identifies available replacements, validates certifications are current, proposes swap to supervisor</td>
+            <td>Rotation gaps filled autonomously, maintaining POB and competency compliance</td>
+          </tr>
+          <tr>
+            <td><strong>ESG Reporting Agent</strong></td>
+            <td>Monthly reporting cycle trigger</td>
+            <td>Collects emissions data from all platforms, calculates carbon intensity per field, benchmarks against targets, drafts investor-ready report</td>
+            <td>Monthly ESG report from data-collection-to-draft in hours instead of weeks</td>
+          </tr>
+          <tr>
+            <td><strong>Gas Nomination Agent</strong></td>
+            <td>Customer submits volume nomination</td>
+            <td>Validates against contracted capacity, checks pipeline availability, confirms scheduling with transporter, sends confirmation/counter-offer</td>
+            <td>Nominations processed 24/7, customers get confirmations in minutes not days</td>
+          </tr>
+          <tr>
+            <td><strong>Production Allocation Agent</strong></td>
+            <td>Daily production data available</td>
+            <td>Calculates each JV partner's share based on lifting agreements, reconciles against fiscal metering, prepares allocation statements, flags discrepancies</td>
+            <td>Partner disputes reduced by 80% through transparent, auditable daily allocation</td>
+          </tr>
         </tbody>
       </table>
     </div>
   </div>
 
   <div class="card">
-    <h3>Value Proposition for Brazil Upstream</h3>
+    <h3>Why Agentforce for Upstream</h3>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">24/7</div>
+        <div class="metric-label">Always-On Operations</div>
+        <div class="metric-sub">Offshore never stops — agents don't sleep</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">84</div>
+        <div class="metric-label">E&P Groups</div>
+        <div class="metric-sub">Scalable engagement across all operators</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">50+</div>
+        <div class="metric-label">Active Platforms</div>
+        <div class="metric-sub">Each generating 10K+ data points/day</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">10×</div>
+        <div class="metric-label">Faster Response</div>
+        <div class="metric-sub">From days/weeks to minutes/hours</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: SALESFORCE PLATFORM MAPPING ============ -->
+<div class="section" id="salesforce">
+  <div class="section-hero">
+    <h2>Platform Mapping — Full Architecture</h2>
+    <p>Comprehensive view of how Salesforce products map to upstream E&P value domains. Use this as a reference for solution design and proposal building.</p>
+  </div>
+
+  <div class="card">
+    <h3>Platform × Domain Matrix</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Salesforce Product</th><th>Upstream Domain</th><th>Key Capabilities</th><th>Buyer Persona</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Sales Cloud</strong></td><td>Gas Commercialization, Partner Management</td><td>Pipeline mgmt, forecasting, account planning, territory management</td><td>VP Commercial, Gas Marketing Director</td></tr>
+          <tr><td><strong>Service Cloud</strong></td><td>Asset Mgmt, HSE, Maintenance</td><td>Case management, knowledge base, entitlements, omni-channel</td><td>VP Operations, HSE Director</td></tr>
+          <tr><td><strong>Field Service</strong></td><td>Offshore Ops, Maintenance, Workforce</td><td>Scheduling, mobile, dispatch, skill routing, asset history</td><td>Maintenance Manager, Offshore Manager</td></tr>
+          <tr><td><strong>Data Cloud</strong></td><td>All — unified data layer</td><td>Real-time ingestion, identity resolution, calculated insights, segmentation</td><td>CDO, VP Digital, IT Director</td></tr>
+          <tr><td><strong>Einstein AI / Copilot</strong></td><td>Production, Maintenance, HSE</td><td>Predictive models, anomaly detection, NLP, recommendations</td><td>VP Digital, Data Science Lead</td></tr>
+          <tr><td><strong>Agentforce</strong></td><td>All — autonomous actions</td><td>Autonomous agents, guardrails, actions, topics, multi-step reasoning</td><td>COO, VP Ops, Transformation Lead</td></tr>
+          <tr><td><strong>MuleSoft</strong></td><td>Integration layer</td><td>API management, SAP/Oracle connectors, real-time events, SCADA integration</td><td>CIO, Integration Architect, VP IT</td></tr>
+          <tr><td><strong>Tableau</strong></td><td>All — analytics & visualization</td><td>Dashboards, embedded analytics, AI predictions, mobile</td><td>All C-level, Operational Managers</td></tr>
+          <tr><td><strong>Net Zero Cloud</strong></td><td>ESG & Emissions</td><td>Carbon accounting, offset tracking, regulatory reporting, benchmarks</td><td>VP Sustainability, ESG Director, CFO</td></tr>
+          <tr><td><strong>Revenue Cloud (CPQ)</strong></td><td>Gas Commercialization</td><td>Complex pricing, contract lifecycle, amendments, renewals, billing</td><td>VP Commercial, Legal, Finance</td></tr>
+          <tr><td><strong>Experience Cloud</strong></td><td>Partners, Contractors, Government</td><td>Self-service portals, document sharing, workflows, communities</td><td>VP Supply Chain, Regulatory Affairs</td></tr>
+          <tr><td><strong>Manufacturing Cloud</strong></td><td>Supply Chain, FPSO Construction</td><td>Forecast management, supplier collaboration, account-based planning</td><td>VP Procurement, Supply Chain Director</td></tr>
+          <tr><td><strong>Slack</strong></td><td>Cross-functional collaboration</td><td>Channels, huddles, workflows, integrations, knowledge sharing</td><td>All — enterprise communication</td></tr>
+          <tr><td><strong>OmniStudio</strong></td><td>Licensing, Onboarding, Complex Workflows</td><td>FlexCards, DataRaptors, guided interactions, document generation</td><td>Business Analysts, Process Owners</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Value Proposition Summary</h3>
     <div class="metric-grid">
       <div class="metric-card">
         <div class="metric-value">360°</div>
         <div class="metric-label">Stakeholder Visibility</div>
-        <div class="metric-sub">Across 84 E&P groups</div>
+        <div class="metric-sub">84 E&P groups in one platform</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">AI</div>
-        <div class="metric-label">Einstein Predictions</div>
-        <div class="metric-sub">Predictive maintenance & ops</div>
+        <div class="metric-value">14</div>
+        <div class="metric-label">Products Mapped</div>
+        <div class="metric-sub">Full platform play, not point solutions</div>
       </div>
       <div class="metric-card">
         <div class="metric-value">Real-time</div>
-        <div class="metric-label">Data Cloud Integration</div>
-        <div class="metric-sub">IoT + operational data</div>
+        <div class="metric-label">Data Cloud + IoT</div>
+        <div class="metric-sub">Operational intelligence from SCADA/historians</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">Agentforce</div>
-        <div class="metric-label">Autonomous Agents</div>
-        <div class="metric-sub">Process automation at scale</div>
+        <div class="metric-value">$120B</div>
+        <div class="metric-label">Addressable Investment</div>
+        <div class="metric-sub">Market opportunity through 2030</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: DISCOVERY & QUALIFICATION ============ -->
+<div class="section" id="discovery">
+  <div class="section-hero">
+    <h2>Discovery & Qualification Guide</h2>
+    <p>Structured questions for Account Executives and Solution Engineers to qualify opportunities and map pain points to Salesforce capabilities. Organized by persona and domain.</p>
+  </div>
+
+  <div class="card">
+    <h3>🎯 For the Account Executive — Qualifying Questions</h3>
+    <div class="two-col">
+      <div>
+        <h4>Opening & Strategic</h4>
+        <ul>
+          <li>"How many active concessions/blocks does your company currently operate? What's the 5-year plan?"</li>
+          <li>"How are you managing relationships with JV partners and government agencies today?"</li>
+          <li>"What is your biggest operational bottleneck as you scale production?"</li>
+          <li>"How are you thinking about the New Gas Law and direct gas sales opportunities?"</li>
+          <li>"What does your current digital transformation roadmap look like? What's funded?"</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Pain & Impact</h4>
+        <ul>
+          <li>"How much unplanned downtime did you experience last year? What was the revenue impact?"</li>
+          <li>"How long does it typically take to get an environmental license? Has that delayed first-oil?"</li>
+          <li>"How do you currently track local content compliance across your FPSO fleet?"</li>
+          <li>"What's your process for ESG reporting to investors? How manual is it?"</li>
+          <li>"If you could have one real-time dashboard on your desk, what would it show?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🔧 For the Solution Engineer — Technical Discovery</h3>
+    <div class="two-col">
+      <div>
+        <h4>Systems & Architecture</h4>
+        <ul>
+          <li>"What's your current tech stack for production monitoring? (Historians, SCADA vendors)"</li>
+          <li>"Do you have SAP, Oracle, or another ERP for procurement and finance?"</li>
+          <li>"How is operational data getting from offshore platforms to onshore decision-makers today?"</li>
+          <li>"What's your integration strategy — point-to-point, ESB, API-led? Any middleware in place?"</li>
+          <li>"Do you have a data lake/warehouse? What tools are used for analytics?"</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Process & Workflow</h4>
+        <ul>
+          <li>"Walk me through what happens when a safety incident is reported offshore today."</li>
+          <li>"How does a new supplier get qualified and onboarded into your vendor pool?"</li>
+          <li>"What does your crew rotation planning process look like? What tools are used?"</li>
+          <li>"How do you manage the lifecycle of a regulatory submission from draft to approval?"</li>
+          <li>"When a well shows anomalous behavior, what's the escalation and response workflow?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🏗️ For the Enterprise Architect — Platform Conversation</h3>
+    <div class="two-col">
+      <div>
+        <h4>Architecture & Integration</h4>
+        <ul>
+          <li>"What's your enterprise architecture vision for the next 3-5 years?"</li>
+          <li>"How do you handle real-time vs. batch data from offshore operations?"</li>
+          <li>"What's your API governance model? How many integrations exist today?"</li>
+          <li>"Are you pursuing a composable architecture or monolithic vendor strategy?"</li>
+          <li>"What's your cloud strategy? Multi-cloud, hybrid, or single-vendor?"</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Scale & Governance</h4>
+        <ul>
+          <li>"How many users would need access to an operational platform? Offshore + onshore?"</li>
+          <li>"What data sovereignty requirements apply to production data?"</li>
+          <li>"How do you manage master data across operations, finance, and partners?"</li>
+          <li>"What's your approach to AI governance and model explainability?"</li>
+          <li>"How do you measure success for digital initiatives? What KPIs matter?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Qualification Framework — MEDDPICC for Upstream</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Element</th><th>Upstream-Specific Qualification</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Metrics</strong></td><td>Production uptime %, unplanned downtime cost, permitting cycle time, HSE incident rate (TRIR), local content compliance %</td></tr>
+          <tr><td><strong>Economic Buyer</strong></td><td>COO, VP Operations, VP Digital Transformation, CIO — depending on initial use case</td></tr>
+          <tr><td><strong>Decision Criteria</strong></td><td>Integration with existing SCADA/historians, offline mobile capability, scalability for 50+ platforms, partner/contractor access</td></tr>
+          <tr><td><strong>Decision Process</strong></td><td>Typically: Functional sponsor → IT validation → Procurement → Board (for enterprise deals). 6-18 month cycles.</td></tr>
+          <tr><td><strong>Paper Process</strong></td><td>Complex procurement — requires vendor registration (CRC), technical qualification, commercial proposal, board approval for >$1M</td></tr>
+          <tr><td><strong>Identified Pain</strong></td><td>Top pains: unplanned downtime, compliance burden, partner visibility gaps, ESG reporting manual effort, supply chain opacity</td></tr>
+          <tr><td><strong>Champion</strong></td><td>Usually VP Digital/Innovation or functional VP with a specific automation/visibility goal and budget authority</td></tr>
+          <tr><td><strong>Competition</strong></td><td>SAP S/4HANA, Microsoft Dynamics + Azure IoT, Appian/ServiceNow for workflows, specialized O&G vendors (Aucerna, IFS, Maximo)</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -1754,7 +2312,7 @@ table tr:hover { background: var(--sf-highlight); }
 <!-- FOOTER -->
 <footer class="page-footer">
   <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
-    <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.1 | June 2026</span>
+    <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.2 | June 2026</span>
     <span style="opacity:0.5">|</span>
     <span id="viewCount" style="font-size:10px;">👁 —</span>
     <span id="likeArea" style="font-size:10px;cursor:pointer;" title="Like this POV">♡ —</span>

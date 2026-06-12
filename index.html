@@ -771,70 +771,88 @@ section {
 /* Authors */
 .authors-block {
   width: 100%;
-  max-width: 600px;
+  max-width: 720px;
+  margin-top: 16px;
 }
 
 .authors-title {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   color: var(--text-muted);
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .authors-grid {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 32px;
   flex-wrap: wrap;
 }
 
 .author-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 16px 24px;
+  gap: 14px;
+  padding: 28px 36px;
   background: var(--surface-elevated);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   transition: all 0.3s;
+  min-width: 220px;
 }
 
 .author-card:hover {
-  border-color: var(--border-light);
-  transform: translateY(-2px);
+  border-color: var(--sf-light-blue);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(1,118,211,0.12);
 }
 
 .author-avatar {
-  width: 48px;
-  height: 48px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--border-light);
+  border: 3px solid var(--sf-light-blue);
+  box-shadow: 0 4px 16px rgba(1,118,211,0.15);
 }
 
 .author-info {
-  text-align: left;
+  text-align: center;
 }
 
 .author-info h4 {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 2px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
 }
 
 .author-info .author-role {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .author-info .author-company {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--sf-light-blue);
-  font-weight: 600;
-  margin-top: 1px;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  margin-top: 4px;
+  letter-spacing: 0.8px;
+}
+
+.author-info .author-email {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.author-info .author-email:hover {
+  color: var(--sf-light-blue);
 }
 
 /* FOOTER */
@@ -1122,7 +1140,7 @@ section {
       <img src="assets/salesforce-logo.png" alt="Salesforce">
     </div>
     <p class="hero-eyebrow">Oil & Gas — Point of View — Brazil 2026</p>
-    <span class="version-badge">v2.1 · June 2026</span>
+    <span class="version-badge">v2.2 · June 2026</span>
     <h1 class="hero-title">
       <span class="line">Powering <span class="gold">Energy</span></span>
       <span class="line">with <span class="sf-blue">Intelligence</span></span>
@@ -1142,15 +1160,15 @@ section {
       </div>
     </div>
     <div class="hero-stat">
-      <div class="stat-value" data-target="3.7" data-suffix="M">0</div>
-      <div class="stat-label">Barrels / Day</div>
+      <div class="stat-value" data-target="4.25" data-suffix="M bpd">0</div>
+      <div class="stat-label">Oil Production (2026)</div>
     </div>
     <div class="hero-stat">
-      <div class="stat-value" data-target="200" data-prefix="$" data-suffix="B+">0</div>
-      <div class="stat-label">Industry Revenue</div>
+      <div class="stat-value" data-target="120" data-prefix="$" data-suffix="B">0</div>
+      <div class="stat-label">E&P Investment 2026-30</div>
     </div>
     <div class="hero-stat">
-      <div class="stat-value" data-target="42" data-suffix="K+">0</div>
+      <div class="stat-value" data-target="44" data-suffix="K+">0</div>
       <div class="stat-label">Gas Stations</div>
     </div>
     <div class="hero-stat">
@@ -1253,22 +1271,24 @@ section {
     <a href="#sec-chain" class="vision-cta">Explore the Value Chain →</a>
   </div>
   <div class="authors-block">
-    <div class="authors-title">Authors</div>
+    <div class="authors-title">Authors & Contacts</div>
     <div class="authors-grid">
       <div class="author-card">
         <img src="assets/igor.png" alt="Igor Araujo" class="author-avatar">
         <div class="author-info">
           <h4>Igor Araujo</h4>
-          <div class="author-role">Principal Enterprise Architect</div>
+          <div class="author-role">Principal, Enterprise Architect</div>
           <div class="author-company">Salesforce</div>
+          <a href="mailto:iaraujo@salesforce.com" class="author-email">iaraujo@salesforce.com</a>
         </div>
       </div>
       <div class="author-card">
         <img src="assets/mariana.png" alt="Mariana Meira" class="author-avatar">
         <div class="author-info">
           <h4>Mariana Meira</h4>
-          <div class="author-role">Lead, Account SE</div>
+          <div class="author-role">Lead, Account Solution Engineer</div>
           <div class="author-company">Salesforce</div>
+          <a href="mailto:mmeira@salesforce.com" class="author-email">mmeira@salesforce.com</a>
         </div>
       </div>
     </div>
@@ -1303,7 +1323,7 @@ section {
 <!-- FOOTER -->
 <div class="footer">
   <img src="assets/salesforce-logo.png" alt="Salesforce">
-  <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.1 | June 2026</span>
+  <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.2 | June 2026</span>
   <span class="footer-separator">·</span>
   <span class="view-counter" id="viewCounter"></span>
 </div>

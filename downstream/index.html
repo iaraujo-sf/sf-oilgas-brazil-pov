@@ -326,6 +326,27 @@ body {
   border-radius: 50%;
 }
 
+.section-hero .hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  z-index: 0;
+}
+
+.section-hero .hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,22,57,0.45) 0%, rgba(15,26,46,0.55) 100%);
+  z-index: 0;
+}
+
+[data-theme="light"] .section-hero .hero-video-overlay {
+  background: linear-gradient(135deg, rgba(3,45,96,0.5) 0%, rgba(10,61,107,0.55) 100%);
+}
+
 .section-hero h2 {
   font-size: 28px;
   font-weight: 700;
@@ -340,6 +361,40 @@ body {
   max-width: 640px;
   position: relative;
   z-index: 1;
+}
+
+.hero-kpi {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hero-kpi .kpi-number {
+  font-size: 56px;
+  font-weight: 800;
+  color: #f5a623;
+  line-height: 1;
+  letter-spacing: -2px;
+  text-shadow: 0 2px 24px rgba(245,166,35,0.3);
+}
+
+.hero-kpi .kpi-context {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  max-width: 260px;
+  line-height: 1.4;
+}
+
+@keyframes kpiPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+.hero-kpi .kpi-number {
+  animation: kpiPulse 3s ease-in-out infinite;
 }
 
 /* CARDS */
@@ -681,6 +736,8 @@ table tr:hover { background: var(--sf-highlight); }
   .metric-grid { grid-template-columns: repeat(2, 1fr); }
   .section-hero { padding: 32px 24px; }
   .section-hero h2 { font-size: 22px; }
+  .hero-kpi .kpi-number { font-size: 40px; }
+  .hero-kpi { flex-direction: column; gap: 6px; }
 }
 
 /* OVERLAY */
@@ -1429,7 +1486,7 @@ tr.persona-dim { opacity: 0.35; }
     </div>
     <div>
       <h1>Downstream Oil & Gas</h1>
-      <div class="subtitle">Oil & Gas Brazil POV v2.1 · June 2026</div>
+      <div class="subtitle">Oil & Gas Brazil POV v2.2 · June 2026</div>
     </div>
   </div>
   <div style="padding:8px 16px 4px;display:flex;justify-content:flex-end;">
@@ -1564,7 +1621,7 @@ tr.persona-dim { opacity: 0.35; }
     <input type="text" id="searchInput" placeholder="Search topics, metrics, products...">
     <div class="search-results" id="searchResults"></div>
   </div>
-  <div class="topbar-meta">v2.1 · June 2026</div>
+  <div class="topbar-meta">v2.2 · June 2026</div>
   <div class="topbar-tools">
     <button id="homeBtn" title="Back to About This POV">🏠 About</button>
     <button id="helpBtn" title="Help — Feature Guide">❓ Help</button>
@@ -1723,8 +1780,16 @@ tr.persona-dim { opacity: 0.35; }
 <!-- INTRO -->
 <div class="section active" id="sec-intro">
   <div class="section-hero">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="../assets/video-downstream-web.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+    <div class="hero-kpi">
+      <span class="kpi-number">$76B</span>
+      <span class="kpi-context">annual market where decision speed defines margin</span>
+    </div>
     <h2>Unlocking Value in Brazil's Downstream Oil & Gas</h2>
-    <p>A Salesforce Vision for Growth, Efficiency, and Customer Engagement in a $76 billion market where decision speed defines margin.</p>
+    <p>A Salesforce Vision for Growth, Efficiency, and Customer Engagement — connecting five value engines through intelligence and orchestration.</p>
   </div>
   <div class="two-col">
     <div class="card">
@@ -1736,22 +1801,7 @@ tr.persona-dim { opacity: 0.35; }
       </div>
     </div>
     <div class="card">
-      <h3>Authors</h3>
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-        <img src="../assets/mariana.png" alt="Mariana Meira" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
-        <div>
-          <div style="font-weight:600;font-size:14px;">Mariana Meira</div>
-          <div style="font-size:12px;color:var(--sf-text-sec);">Lead, Account SE • mmeira@salesforce.com</div>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-        <img src="../assets/igor.png" alt="Igor Araujo" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
-        <div>
-          <div style="font-weight:600;font-size:14px;">Igor Araujo</div>
-          <div style="font-size:12px;color:var(--sf-text-sec);">Principal, Enterprise Architect • iaraujo@salesforce.com</div>
-        </div>
-      </div>
-      <h3 style="margin-top:20px;">Agenda</h3>
+      <h3>Agenda</h3>
       <ol style="font-size:13px;padding-left:16px;color:var(--sf-text-sec);">
         <li>Brazil Downstream Market Dynamics</li>
         <li>The Five Downstream Value Engines</li>
@@ -4037,7 +4087,7 @@ tr.persona-dim { opacity: 0.35; }
 
 <!-- FOOTER -->
 <footer class="page-footer">
-  <img src="../assets/salesforce-logo.png" alt="Salesforce" style="height:14px;width:auto;vertical-align:middle;margin-right:6px;opacity:0.6;">Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.1 | June 2026
+  <img src="../assets/salesforce-logo.png" alt="Salesforce" style="height:14px;width:auto;vertical-align:middle;margin-right:6px;opacity:0.6;">Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.2 | June 2026
 </footer>
 
 <script>
@@ -4202,14 +4252,14 @@ tr.persona-dim { opacity: 0.35; }
     }
   });
 
-  // THEME TOGGLE (default is dark, toggle to light)
+  // THEME TOGGLE (default is light)
   const themeToggle = document.getElementById('themeToggle');
   const savedTheme = localStorage.getItem('pov-theme');
-  if (savedTheme === 'light') {
+  if (savedTheme === 'dark') {
+    themeToggle.textContent = '☀️';
+  } else {
     document.documentElement.setAttribute('data-theme', 'light');
     themeToggle.textContent = '🌙';
-  } else {
-    themeToggle.textContent = '☀️';
   }
   themeToggle.addEventListener('click', () => {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
