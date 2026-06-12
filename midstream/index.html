@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Midstream Oil & Gas Brazil — Salesforce POV</title>
+<link rel="stylesheet" href="../shared/tokens.css">
+<style>
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: var(--sf-white);
+  border-bottom: 1px solid var(--sf-border);
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sf-primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+
+.back-link:hover { opacity: 0.7; }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-right img { height: 20px; width: auto; opacity: 0.7; }
+
+.theme-toggle {
+  background: var(--sf-light-bg);
+  border: 1px solid var(--sf-border);
+  color: var(--sf-text);
+  padding: 5px 10px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.hero {
+  background: linear-gradient(135deg, var(--sf-dark) 0%, #0a3d6b 100%);
+  color: #fff;
+  padding: 56px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(1,118,211,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-icon { font-size: 48px; margin-bottom: 16px; }
+.hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; }
+.hero p { font-size: 15px; opacity: 0.8; max-width: 560px; margin: 0 auto; position: relative; z-index: 1; }
+
+.content {
+  flex: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  width: 100%;
+}
+
+.context-card {
+  background: var(--sf-white);
+  border: 1px solid var(--sf-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.context-card h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--sf-dark);
+  margin-bottom: 10px;
+}
+
+[data-theme="dark"] .context-card h2 { color: var(--sf-primary); }
+
+.context-card p {
+  font-size: 14px;
+  color: var(--sf-text-sec);
+  line-height: 1.8;
+}
+
+.coming-soon-box {
+  background: rgba(254,147,57,0.06);
+  border: 1px solid rgba(254,147,57,0.3);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.coming-soon-box .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(254,147,57,0.12);
+  color: var(--sf-warning);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.coming-soon-box h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--sf-text);
+  margin-bottom: 8px;
+}
+
+.coming-soon-box p {
+  font-size: 13px;
+  color: var(--sf-text-sec);
+}
+
+.planned-topics {
+  background: var(--sf-white);
+  border: 1px solid var(--sf-border);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.planned-topics h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--sf-dark);
+  margin-bottom: 12px;
+}
+
+[data-theme="dark"] .planned-topics h3 { color: var(--sf-text); }
+
+.planned-topics ul {
+  list-style: none;
+  padding: 0;
+}
+
+.planned-topics li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--sf-light-bg);
+  font-size: 13px;
+  color: var(--sf-text-sec);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.planned-topics li::before {
+  content: '○';
+  color: var(--sf-warning);
+  font-size: 10px;
+}
+
+.cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sf-primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  background: rgba(1,118,211,0.06);
+  border-radius: var(--radius);
+  transition: all 0.2s;
+}
+
+.cta-link:hover { background: rgba(1,118,211,0.12); }
+
+.page-footer {
+  border-top: 1px solid var(--sf-border);
+  padding: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--sf-text-sec);
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 40px 20px; }
+  .hero h1 { font-size: 24px; }
+  .content { padding: 24px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+<nav class="page-topbar">
+  <a href="../" class="back-link">← Oil & Gas Hub</a>
+  <div class="topbar-right">
+    <img src="../assets/salesforce-logo.png" alt="Salesforce">
+    <button class="theme-toggle" id="themeToggle">🌙</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-icon">🔗</div>
+  <h1>Midstream Oil & Gas Brazil</h1>
+  <p>Transport, Storage & Processing — Pipeline operations, terminals, gas processing, and logistics coordination across Brazil's energy infrastructure.</p>
+</div>
+
+<main class="content">
+
+  <section class="context-card">
+    <h2>Industry Overview</h2>
+    <p>Brazil's midstream sector connects upstream production to downstream distribution through a network of over 9,100 km of oil pipelines, 9,400 km of gas pipelines, and 35+ storage and regasification terminals. Operated primarily by Transpetro (a Petrobras subsidiary), the network handles crude oil transport from offshore platforms, natural gas processing, NGL fractionation, and LNG imports. Growing demand and new production frontiers are driving significant infrastructure expansion and modernization investments.</p>
+  </section>
+
+  <div class="coming-soon-box">
+    <div class="badge">◉ Under Development</div>
+    <h3>This stream is being built</h3>
+    <p>The Midstream POV is currently under development. In the meantime, explore the complete Downstream analysis.</p>
+  </div>
+
+  <section class="planned-topics">
+    <h3>Planned Content</h3>
+    <ul>
+      <li>Pipeline Operations & Integrity Management</li>
+      <li>Terminal & Storage Operations</li>
+      <li>Gas Processing & NGL Fractionation</li>
+      <li>LNG Regasification & Import Logistics</li>
+      <li>Transport Scheduling & Optimization</li>
+      <li>Safety, Compliance & Environmental Monitoring</li>
+      <li>Predictive Maintenance & IoT Integration</li>
+      <li>Salesforce Platform Capabilities for Midstream</li>
+    </ul>
+  </section>
+
+  <a href="../downstream/" class="cta-link">Explore Downstream POV →</a>
+
+</main>
+
+<footer class="page-footer">
+  Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV | 2026
+</footer>
+
+</div>
+
+<script>
+const toggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('pov-theme');
+if (saved === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark');
+  toggle.textContent = '☀️';
+}
+toggle.addEventListener('click', () => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('pov-theme', 'light');
+    toggle.textContent = '🌙';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    localStorage.setItem('pov-theme', 'dark');
+    toggle.textContent = '☀️';
+  }
+});
+</script>
+</body>
+</html>
