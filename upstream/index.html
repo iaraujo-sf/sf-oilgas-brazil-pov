@@ -4,288 +4,2163 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Upstream Oil & Gas Brazil — Salesforce POV</title>
-<link rel="stylesheet" href="../shared/tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <style>
-.page-wrapper {
-  min-height: 100vh;
+:root {
+  --sf-primary: #1B96FF;
+  --sf-dark: #e8edf3;
+  --sf-light-bg: #0B1222;
+  --sf-highlight: rgba(1,118,211,0.12);
+  --sf-success: #2E844A;
+  --sf-warning: #FE9339;
+  --sf-error: #EA001E;
+  --sf-text: #e8edf3;
+  --sf-text-sec: rgba(255,255,255,0.6);
+  --sf-border: rgba(255,255,255,0.08);
+  --sf-white: #132035;
+  --sidebar-w: 300px;
+  --topbar-h: 56px;
+  --oil-gold: #f5a623;
+  --radius: 8px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+[data-theme="light"] {
+  --sf-primary: #0176D3;
+  --sf-dark: #032D60;
+  --sf-light-bg: #F4F6F9;
+  --sf-highlight: #EEF4FF;
+  --sf-text: #181818;
+  --sf-text-sec: #706E6B;
+  --sf-border: #DDDBDA;
+  --sf-white: #FFFFFF;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 24px rgba(0,0,0,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--sf-light-bg);
+  color: var(--sf-text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: linear-gradient(180deg, #001639 0%, #0B1222 100%);
+  color: #fff;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid rgba(1,118,211,0.1);
 }
 
-.page-topbar {
+[data-theme="light"] .sidebar {
+  background: linear-gradient(180deg, #032D60 0%, #021b3d 100%);
+  border-right: none;
+}
+
+.sidebar-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.sidebar-header .logo-area {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 32px;
-  background: var(--sf-white);
-  border-bottom: 1px solid var(--sf-border);
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
-.back-link {
+.sidebar-header .logo-img {
+  height: 28px;
+  width: auto;
+  opacity: 0.95;
+}
+
+.sidebar-header h1 {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  opacity: 0.95;
+}
+
+.sidebar-header .subtitle {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+
+.nav-section { margin-bottom: 4px; }
+
+.nav-section-title {
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  opacity: 0.5;
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-section-title .chevron {
+  margin-left: auto;
+  transition: transform 0.2s;
+  font-size: 10px;
+}
+
+.nav-section.collapsed .chevron { transform: rotate(-90deg); }
+.nav-section.collapsed .nav-items { display: none; }
+
+.nav-items a {
+  display: block;
+  padding: 7px 20px 7px 32px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.nav-items a:hover {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+}
+
+.nav-items a.active {
+  background: rgba(1,118,211,0.2);
+  color: #fff;
+  border-left-color: var(--sf-primary);
+  font-weight: 500;
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.sidebar-footer a {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: var(--sf-primary);
+  color: rgba(255,255,255,0.6);
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  transition: opacity 0.15s;
+  font-size: 12px;
+  transition: color 0.15s;
 }
 
-.back-link:hover { opacity: 0.7; }
+.sidebar-footer a:hover { color: #fff; }
 
-.topbar-right {
+/* TOPBAR */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  height: var(--topbar-h);
+  background: rgba(11,18,34,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(1,118,211,0.1);
   display: flex;
   align-items: center;
+  padding: 0 24px;
+  z-index: 900;
   gap: 16px;
 }
 
-.topbar-right img { height: 20px; width: auto; opacity: 0.7; }
+[data-theme="light"] .topbar {
+  background: #FFFFFF;
+  backdrop-filter: none;
+  border-bottom: 1px solid #DDDBDA;
+}
 
-.theme-toggle {
-  background: var(--sf-light-bg);
-  border: 1px solid var(--sf-border);
-  color: var(--sf-text);
-  padding: 5px 10px;
-  border-radius: 16px;
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 20px;
   cursor: pointer;
-  font-size: 12px;
-  font-family: inherit;
-}
-
-.hero {
-  background: linear-gradient(135deg, var(--sf-dark) 0%, #0a3d6b 100%);
-  color: #fff;
-  padding: 56px 40px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
-  border-radius: 50%;
-}
-
-.hero-icon { font-size: 48px; margin-bottom: 16px; }
-.hero h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; }
-.hero p { font-size: 15px; opacity: 0.8; max-width: 560px; margin: 0 auto; position: relative; z-index: 1; }
-
-.content {
-  flex: 1;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 24px;
-  width: 100%;
-}
-
-.context-card {
-  background: var(--sf-white);
-  border: 1px solid var(--sf-border);
-  border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: var(--shadow);
-  margin-bottom: 24px;
-}
-
-.context-card h2 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--sf-dark);
-  margin-bottom: 10px;
-}
-
-[data-theme="dark"] .context-card h2 { color: var(--sf-primary); }
-
-.context-card p {
-  font-size: 14px;
-  color: var(--sf-text-sec);
-  line-height: 1.8;
-}
-
-.coming-soon-box {
-  background: rgba(254,147,57,0.06);
-  border: 1px solid rgba(254,147,57,0.3);
-  border-radius: var(--radius);
-  padding: 28px;
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.coming-soon-box .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(254,147,57,0.12);
-  color: var(--sf-warning);
-  padding: 6px 14px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.coming-soon-box h3 {
-  font-size: 16px;
-  font-weight: 600;
+  padding: 8px;
   color: var(--sf-text);
-  margin-bottom: 8px;
 }
 
-.coming-soon-box p {
+.search-container {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 8px 16px 8px 38px;
+  border: 1px solid var(--sf-border);
+  border-radius: 20px;
   font-size: 13px;
-  color: var(--sf-text-sec);
+  font-family: inherit;
+  background: rgba(255,255,255,0.05);
+  color: var(--sf-text);
+  transition: all 0.2s;
 }
 
-.planned-topics {
+[data-theme="light"] .search-container input {
+  background: #F4F6F9;
+  color: #181818;
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: var(--sf-primary);
+  background: var(--sf-white);
+  box-shadow: 0 0 0 3px rgba(1,118,211,0.15);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.4;
+  font-size: 14px;
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   background: var(--sf-white);
   border: 1px solid var(--sf-border);
   border-radius: var(--radius);
-  padding: 28px;
-  box-shadow: var(--shadow);
-  margin-bottom: 24px;
+  box-shadow: var(--shadow-lg);
+  max-height: 400px;
+  overflow-y: auto;
+  display: none;
+  margin-top: 4px;
+  z-index: 1100;
 }
 
-.planned-topics h3 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--sf-dark);
-  margin-bottom: 12px;
+.search-results.visible { display: block; }
+
+.search-result-item {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--sf-border);
+  cursor: pointer;
+  transition: background 0.1s;
 }
 
-[data-theme="dark"] .planned-topics h3 { color: var(--sf-text); }
+.search-result-item:hover { background: var(--sf-highlight); }
+.search-result-item .result-section { font-size: 11px; color: var(--sf-primary); font-weight: 600; }
+.search-result-item .result-text { font-size: 12px; color: var(--sf-text-sec); margin-top: 2px; }
 
-.planned-topics ul {
-  list-style: none;
-  padding: 0;
-}
-
-.planned-topics li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--sf-light-bg);
-  font-size: 13px;
+.topbar-meta {
+  font-size: 11px;
   color: var(--sf-text-sec);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.topbar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.planned-topics li::before {
-  content: '○';
-  color: var(--sf-warning);
-  font-size: 10px;
-}
-
-.cta-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--sf-primary);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 20px;
-  background: rgba(1,118,211,0.06);
-  border-radius: var(--radius);
+.topbar-actions button {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--sf-border);
+  color: var(--sf-text);
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
   transition: all 0.2s;
 }
 
-.cta-link:hover { background: rgba(1,118,211,0.12); }
+[data-theme="light"] .topbar-actions button {
+  background: #F4F6F9;
+}
 
-.page-footer {
-  border-top: 1px solid var(--sf-border);
+.topbar-actions button:hover {
+  background: var(--sf-highlight);
+  border-color: var(--sf-primary);
+}
+
+/* MAIN CONTENT */
+.main-content {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--topbar-h);
+  padding: 32px;
+  min-height: calc(100vh - var(--topbar-h));
+}
+
+.section {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SECTION HERO */
+.section-hero {
+  background: linear-gradient(135deg, #001639 0%, #0F1A2E 50%, #0a1525 100%);
+  color: #fff;
+  padding: 48px 40px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(1,118,211,0.12);
+}
+
+[data-theme="light"] .section-hero {
+  background: linear-gradient(135deg, #032D60 0%, #0a3d6b 100%);
+  border: none;
+}
+
+.section-hero::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(27,150,255,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.section-hero h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-hero p {
+  font-size: 15px;
+  opacity: 0.85;
+  max-width: 640px;
+  position: relative;
+  z-index: 1;
+}
+
+/* CARDS */
+.card {
+  background: var(--sf-white);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  border: 1px solid var(--sf-border);
+}
+
+.card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--sf-text);
+}
+
+.card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 16px 0 8px;
+  color: var(--sf-text);
+}
+
+.card p, .card li {
+  font-size: 13px;
+  color: var(--sf-text-sec);
+  line-height: 1.8;
+}
+
+.card ul { padding-left: 20px; }
+.card ul li { margin-bottom: 6px; }
+
+/* METRIC GRID */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  background: var(--sf-white);
+  border-radius: var(--radius);
   padding: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--sf-border);
+  text-align: center;
+  border-top: 3px solid var(--sf-primary);
+  transition: all 0.2s;
+}
+
+.metric-card:hover {
+  border-top-color: #1B96FF;
+  box-shadow: 0 4px 16px rgba(1,118,211,0.15);
+}
+
+.metric-card .metric-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--oil-gold);
+  margin-bottom: 4px;
+}
+
+.metric-card .metric-label {
+  font-size: 12px;
+  color: var(--sf-text-sec);
+  font-weight: 500;
+}
+
+.metric-card .metric-sub {
+  font-size: 11px;
+  color: var(--sf-primary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* TABLES */
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+table th {
+  background: var(--sf-primary);
+  color: #fff;
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--sf-border);
+  color: var(--sf-text-sec);
+}
+
+table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+[data-theme="light"] table tr:nth-child(even) { background: #f8fafc; }
+table tr:hover { background: var(--sf-highlight); }
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-green { background: rgba(46,132,74,0.15); color: var(--sf-success); }
+.badge-blue { background: var(--sf-highlight); color: var(--sf-primary); }
+.badge-gold { background: rgba(245,166,35,0.15); color: var(--oil-gold); }
+
+/* CALLOUT */
+.callout {
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  margin: 16px 0;
+  border-left: 4px solid;
+  font-size: 13px;
+  color: var(--sf-text-sec);
+}
+
+.callout-info { background: var(--sf-highlight); border-color: var(--sf-primary); }
+.callout-success { background: rgba(46,132,74,0.08); border-color: var(--sf-success); }
+.callout-gold { background: rgba(245,166,35,0.08); border-color: var(--oil-gold); }
+.callout strong { display: block; margin-bottom: 4px; color: var(--sf-text); }
+
+/* CHART CONTAINER */
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 20px auto;
+}
+
+.chart-container canvas { width: 100% !important; }
+
+/* TWO COLUMN */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 24px; margin: 16px 0; }
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--sf-primary);
+  opacity: 0.3;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  padding-left: 16px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sf-primary);
+}
+
+.timeline-item .year {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--sf-primary);
+  text-transform: uppercase;
+}
+
+.timeline-item .desc {
+  font-size: 13px;
+  color: var(--sf-text-sec);
+  margin-top: 2px;
+}
+
+/* FOOTER */
+.page-footer {
+  margin-left: var(--sidebar-w);
+  border-top: 1px solid var(--sf-border);
+  padding: 20px 32px;
   text-align: center;
   font-size: 11px;
   color: var(--sf-text-sec);
 }
 
+/* READING PROGRESS BAR */
+.reading-progress {
+  position: fixed;
+  top: var(--topbar-h);
+  left: var(--sidebar-w);
+  right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 899;
+  pointer-events: none;
+}
+.reading-progress .progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--sf-primary), #36b3f0);
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* BACK TO TOP */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sf-primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  z-index: 800;
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); }
+.back-to-top:hover { background: var(--sf-dark); transform: translateY(-2px); }
+
+/* TTS PLAYER */
+.tts-player {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  background: var(--sf-white);
+  border: 1px solid var(--sf-border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: var(--shadow-lg);
+  display: none;
+  align-items: center;
+  gap: 10px;
+  z-index: 800;
+  font-size: 12px;
+  color: var(--sf-text);
+}
+.tts-player.active { display: flex; }
+.tts-player button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.tts-player button:hover { background: var(--sf-highlight); }
+.tts-player .tts-status {
+  font-size: 11px;
+  color: var(--sf-text-sec);
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tts-player select {
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid var(--sf-border);
+  border-radius: 4px;
+  background: var(--sf-light-bg);
+  color: var(--sf-text);
+}
+
+/* QR MODAL */
+.qr-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--sf-white);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  z-index: 3000;
+  text-align: center;
+  display: none;
+}
+.qr-modal.active { display: block; }
+.qr-modal h3 { margin-bottom: 16px; font-size: 16px; color: var(--sf-text); }
+.qr-modal .qr-url { font-size: 11px; color: var(--sf-text-sec); word-break: break-all; margin-bottom: 16px; }
+.qr-modal button { background: var(--sf-primary); color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+
+/* PRINT */
+@media print {
+  .sidebar, .topbar, .hamburger, .back-to-top, .tts-player, .reading-progress, .qr-modal, .topbar-actions { display: none !important; }
+  .main-content { margin-left: 0 !important; margin-top: 0 !important; padding: 0 !important; }
+  .section { display: block !important; page-break-inside: avoid; margin-bottom: 24px; }
+  .section-hero { background: #032D60 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+  table th { background: #032D60 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page-footer { position: fixed; bottom: 0; width: 100%; }
+}
+
+/* MOBILE */
+@media (max-width: 1024px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .topbar { left: 0; }
+  .main-content { margin-left: 0; }
+  .page-footer { margin-left: 0; }
+  .hamburger { display: block; }
+  .two-col { grid-template-columns: 1fr; }
+  .reading-progress { left: 0; }
+}
+
 @media (max-width: 768px) {
-  .hero { padding: 40px 20px; }
-  .hero h1 { font-size: 24px; }
-  .content { padding: 24px 16px; }
+  .main-content { padding: 20px 16px; }
+  .section-hero { padding: 32px 20px; }
+  .section-hero h2 { font-size: 22px; }
+  .metric-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
-<div class="page-wrapper">
 
-<nav class="page-topbar">
-  <a href="../" class="back-link">← Oil & Gas Hub</a>
-  <div class="topbar-right">
-    <img src="../assets/salesforce-logo.png" alt="Salesforce">
-    <button class="theme-toggle" id="themeToggle">🌙</button>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo-area">
+      <img src="../assets/salesforce-logo.png" alt="Salesforce" class="logo-img">
+    </div>
+    <h1>Upstream Oil & Gas Brazil</h1>
+    <div class="subtitle">Exploration & Production — v2.1 · June 2026</div>
   </div>
-</nav>
 
-<div class="hero">
-  <div class="hero-icon">🛢️</div>
-  <h1>Upstream Oil & Gas Brazil</h1>
-  <p>Exploration & Production — Deep-water operations, Pre-Salt reserves, and digital transformation in Brazil's E&P sector.</p>
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-title">Overview <span class="chevron">▼</span></div>
+      <div class="nav-items">
+        <a href="#executive-summary" class="active">Executive Summary</a>
+        <a href="#key-metrics">Key Metrics</a>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Production & Reserves <span class="chevron">▼</span></div>
+      <div class="nav-items">
+        <a href="#production">Production Records</a>
+        <a href="#reserves">Reserves & Basins</a>
+        <a href="#pre-salt">Pre-Salt Deep Dive</a>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Investment & Growth <span class="chevron">▼</span></div>
+      <div class="nav-items">
+        <a href="#investments">Investment Outlook</a>
+        <a href="#fpso">FPSO Pipeline</a>
+        <a href="#licensing">Licensing & Open Acreage</a>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Operators & Market <span class="chevron">▼</span></div>
+      <div class="nav-items">
+        <a href="#operators">Key Operators</a>
+        <a href="#regulatory">Regulatory Framework</a>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Energy Transition <span class="chevron">▼</span></div>
+      <div class="nav-items">
+        <a href="#carbon">Carbon Intensity</a>
+        <a href="#transition">CCUS & Hydrogen</a>
+      </div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Salesforce Positioning <span class="chevron">▼</span></div>
+      <div class="nav-items">
+        <a href="#challenges">Industry Challenges</a>
+        <a href="#salesforce">Platform Capabilities</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="../">← Oil & Gas Hub</a>
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="hamburger" id="hamburger">☰</button>
+  <div class="search-container">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search upstream content...">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <span class="topbar-meta">v2.1 · June 2026</span>
+  <div class="topbar-actions">
+    <button id="ttsBtn" title="Read aloud">🔊</button>
+    <button id="qrBtn" title="QR Code">⊞</button>
+    <button id="themeToggle">🌙</button>
+    <button id="shareBtn">↗ Share</button>
+  </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+<!-- ============ SECTION: EXECUTIVE SUMMARY ============ -->
+<div class="section active" id="executive-summary">
+  <div class="section-hero">
+    <h2>Executive Summary</h2>
+    <p>Brazil's upstream sector has reached historic production milestones, positioning the country as a top-10 global producer with a clear trajectory to exceed 5 MMbpd by 2030. World-class pre-salt assets, massive investment commitments, and among the lowest carbon intensities globally make Brazil one of the most attractive E&P markets.</p>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value" data-counter="4.25">0</div>
+      <div class="metric-label">MMbpd Oil Production</div>
+      <div class="metric-sub">March 2026 — ANP</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="204">0</div>
+      <div class="metric-label">MMm³/d Natural Gas</div>
+      <div class="metric-sub">March 2026 — ANP</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="17.5">0</div>
+      <div class="metric-label">Billion bbl Proved Reserves</div>
+      <div class="metric-sub">December 2025</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="120">0</div>
+      <div class="metric-label">USD Billion Investment</div>
+      <div class="metric-sub">Expected by 2030</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Brazil's Upstream at a Glance</h3>
+    <p>Brazil's oil and gas sector continues to present very strong growth prospects. Production remains at historically high levels, driven mainly by the pre-salt layer, which accounts for 78.8% of total output. The combination of resource potential, technological capability, regulatory predictability, and increasing digitalization of licensing processes positions Brazil as one of the most attractive upstream markets globally.</p>
+    <br>
+    <p>Key highlights from the latest ANP presentation to the IMF (May 2026):</p>
+    <ul>
+      <li><strong>4th largest crude exporter</strong> — on track to become the 5th largest global producer</li>
+      <li><strong>84 E&P economic groups</strong> operating across 134,824 regulated agents</li>
+      <li><strong>FDI 2024: US$70 billion</strong> — 2nd largest recipient globally</li>
+      <li><strong>Carbon intensity: 9–10 kgCO₂e/boe</strong> (pre-salt) — half the global average</li>
+      <li><strong>~50% primary energy from renewables</strong> — one of the cleanest energy matrices</li>
+    </ul>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>Sources</strong>
+    ANP Presentation to IMF (May 2026) · EPE Brazilian Oil & Gas Report 2024/2025 · IBP Industry Outlook 2025-2029
+  </div>
 </div>
 
-<main class="content">
-
-  <section class="context-card">
-    <h2>Industry Overview</h2>
-    <p>Brazil's upstream sector is dominated by deep-water and ultra-deep-water operations in the Pre-Salt layer, discovered in 2006. With proven reserves exceeding 15 billion barrels and production surpassing 3.7 million barrels per day, Brazil is the largest oil producer in Latin America. The sector attracts over $40 billion in annual investment, driven by production sharing agreements and an expanding roster of international operators alongside Petrobras.</p>
-  </section>
-
-  <div class="coming-soon-box">
-    <div class="badge">◉ Under Development</div>
-    <h3>This stream is being built</h3>
-    <p>The Upstream POV is currently under development. In the meantime, explore the complete Downstream analysis.</p>
+<!-- ============ SECTION: KEY METRICS ============ -->
+<div class="section" id="key-metrics">
+  <div class="section-hero">
+    <h2>Key Metrics Dashboard</h2>
+    <p>Critical performance indicators for Brazil's upstream sector — production, reserves, investment, and workforce.</p>
   </div>
 
-  <section class="planned-topics">
-    <h3>Planned Content</h3>
-    <ul>
-      <li>Pre-Salt Operations & Reservoir Management</li>
-      <li>Production Optimization & Digital Twins</li>
-      <li>Asset Performance Management</li>
-      <li>Health, Safety & Environment (HSE)</li>
-      <li>Supply Chain & Procurement</li>
-      <li>Workforce Management & Field Operations</li>
-      <li>Decarbonization & Energy Transition</li>
-      <li>Salesforce Platform Capabilities for E&P</li>
-    </ul>
-  </section>
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value" data-counter="4.9">0</div>
+      <div class="metric-label">MMbpd Peak Forecast</div>
+      <div class="metric-sub">2029–2031 (EPE PDE 2035)</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="78.8">0</div>
+      <div class="metric-label">% Pre-Salt Share</div>
+      <div class="metric-sub">Of total production</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="573">0</div>
+      <div class="metric-label">Billion m³ Gas Reserves</div>
+      <div class="metric-sub">Proved — Dec 2025</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="111">0</div>
+      <div class="metric-label">USD Bn Petrobras CAPEX</div>
+      <div class="metric-sub">Strategic Plan 2025–2029</div>
+    </div>
+  </div>
 
-  <a href="../downstream/" class="cta-link">Explore Downstream POV →</a>
+  <div class="two-col">
+    <div class="card">
+      <h3>Production Growth Trajectory</h3>
+      <div class="chart-container">
+        <canvas id="chartProductionGrowth"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Investment Distribution</h3>
+      <div class="chart-container">
+        <canvas id="chartInvestmentDist"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Workforce & Economic Impact</h3>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value" data-counter="2.8">0</div>
+        <div class="metric-label">Million Direct+Indirect Jobs</div>
+        <div class="metric-sub">IBP 2025</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" data-counter="19">0</div>
+        <div class="metric-label">% of GDP (Oil sector)</div>
+        <div class="metric-sub">Federal revenues</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" data-counter="70">0</div>
+        <div class="metric-label">USD Bn FDI in 2024</div>
+        <div class="metric-sub">2nd largest globally</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value" data-counter="84">0</div>
+        <div class="metric-label">E&P Economic Groups</div>
+        <div class="metric-sub">Active operators — ANP</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: PRODUCTION ============ -->
+<div class="section" id="production">
+  <div class="section-hero">
+    <h2>Production Records</h2>
+    <p>Brazil set successive production records in 2024–2026, driven by new FPSO start-ups and pre-salt ramp-ups across Santos and Campos basins.</p>
+  </div>
+
+  <div class="card">
+    <h3>Oil & Gas Production Table (EPE BOR 2024/2025)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>2024 Avg</th>
+            <th>2024 Q3</th>
+            <th>2024 Q4</th>
+            <th>2025 Q1</th>
+            <th>2025 Apr</th>
+            <th>2025 May</th>
+            <th>2025 Jun</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Oil (MMbpd)</strong></td>
+            <td>3.358</td>
+            <td>3.349</td>
+            <td>3.334</td>
+            <td>3.407</td>
+            <td>3.515</td>
+            <td>3.679</td>
+            <td>3.636</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;Offshore</td>
+            <td>3.273</td>
+            <td>3.265</td>
+            <td>3.246</td>
+            <td>3.321</td>
+            <td>3.429</td>
+            <td>3.589</td>
+            <td>3.548</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;Onshore</td>
+            <td>0.085</td>
+            <td>0.084</td>
+            <td>0.089</td>
+            <td>0.086</td>
+            <td>0.086</td>
+            <td>0.090</td>
+            <td>0.089</td>
+          </tr>
+          <tr>
+            <td><strong>Gas (MMm³/d)</strong></td>
+            <td>153</td>
+            <td>160</td>
+            <td>159</td>
+            <td>160</td>
+            <td>168</td>
+            <td>172</td>
+            <td>182</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;Offshore</td>
+            <td>130</td>
+            <td>134</td>
+            <td>133</td>
+            <td>139</td>
+            <td>146</td>
+            <td>151</td>
+            <td>155</td>
+          </tr>
+          <tr>
+            <td>&nbsp;&nbsp;Onshore</td>
+            <td>23</td>
+            <td>26</td>
+            <td>26</td>
+            <td>21</td>
+            <td>22</td>
+            <td>21</td>
+            <td>27</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout callout-gold">
+      <strong>Latest: March 2026 (ANP)</strong>
+      Oil production reached 4.25 MMbpd and gas 204 MMm³/d — confirming the accelerating growth trajectory driven by new FPSO start-ups in Búzios and Mero fields.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Production Milestones</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">Sep 2024</div>
+        <div class="desc">Record: 3.47 MMboe/d and 170 MMm³/d natural gas — highest monthly output ever at that time</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Q4 2024</div>
+        <div class="desc">Three new FPSOs begin operations: Marechal Duque de Caxias (Mero, 180 kbpd), Maria Quitéria (Jubarte, 100 kbpd), Atlanta (Campos, 50 kbpd)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">May 2025</div>
+        <div class="desc">FPSO Alexandre de Gusmão starts in Mero field (180 kbpd), raising field capacity to 770 kbpd</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Jun 2025</div>
+        <div class="desc">New record: 3.75 MMbpd oil + 182 MMm³/d gas (EPE)</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Mar 2026</div>
+        <div class="desc">4.25 MMbpd oil + 204 MMm³/d gas — reaching pre-salt dominance at 78.8% of output (ANP)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Production Forecast to 2035</h3>
+    <div class="chart-container">
+      <canvas id="chartForecast"></canvas>
+    </div>
+    <p style="text-align:center; font-size:12px; color:var(--sf-text-sec); margin-top:8px;">Source: EPE PDE 2035 / ANP Presentation to IMF (May 2026)</p>
+  </div>
+</div>
+
+<!-- ============ SECTION: RESERVES ============ -->
+<div class="section" id="reserves">
+  <div class="section-hero">
+    <h2>Reserves & Sedimentary Basins</h2>
+    <p>Brazil's geological potential extends across 8.5 million km² of sedimentary area, with frontier regions like the Equatorial Margin and Pelotas Basin offering significant upside.</p>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value" data-counter="17.5">0</div>
+      <div class="metric-label">Billion bbl Oil Reserves</div>
+      <div class="metric-sub">Proved — Dec 2025</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="573">0</div>
+      <div class="metric-label">Billion m³ Gas Reserves</div>
+      <div class="metric-sub">Proved — Dec 2025</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="8.5">0</div>
+      <div class="metric-label">Million km² Sedimentary Area</div>
+      <div class="metric-sub">Total geological potential</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="29">0</div>
+      <div class="metric-label">Sedimentary Basins</div>
+      <div class="metric-sub">7 currently producing</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Key Producing Basins</h3>
+      <ul>
+        <li><strong>Santos Basin</strong> — Largest pre-salt province (Búzios, Tupi/Lula, Mero, Sépia, Atapu, Itapu)</li>
+        <li><strong>Campos Basin</strong> — Mature post-salt + new pre-salt plays (Marlim revit., Peregrino)</li>
+        <li><strong>Espírito Santo</strong> — Jubarte field (FPSO Maria Quitéria)</li>
+        <li><strong>Sergipe-Alagoas</strong> — SEAP deepwater project (Petrobras)</li>
+        <li><strong>Potiguar</strong> — Onshore mature fields + Pitu discovery</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Frontier Exploration Areas</h3>
+      <ul>
+        <li><strong>Equatorial Margin (Foz do Amazonas)</strong> — Petrobras environmental licensing in final APO stage; drillship positioned at FZA-M-59 block</li>
+        <li><strong>Pelotas Basin</strong> — Included in recent Open Acreage cycles; high geological potential</li>
+        <li><strong>Aram (Santos)</strong> — 6 exploratory wells drilled, hydrocarbons confirmed in 2 wells (Petrobras/CNPC consortium)</li>
+        <li><strong>Parecis Basin</strong> — Onshore frontier included in 5th Concession Cycle</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Reserves Distribution</h3>
+    <div class="chart-container">
+      <canvas id="chartReserves"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: PRE-SALT ============ -->
+<div class="section" id="pre-salt">
+  <div class="section-hero">
+    <h2>Pre-Salt Deep Dive</h2>
+    <p>Discovered in 2006, the pre-salt layer represents world-class deepwater assets with high productivity, low sulfur content, and carbon intensity half the global average.</p>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value">78.8%</div>
+      <div class="metric-label">Of National Production</div>
+      <div class="metric-sub">Pre-salt share</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">5–7 km</div>
+      <div class="metric-label">Reservoir Depth</div>
+      <div class="metric-sub">Below ocean floor</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">9–10</div>
+      <div class="metric-label">kgCO₂e/boe</div>
+      <div class="metric-sub">Carbon intensity</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">2006</div>
+      <div class="metric-label">Discovery Year</div>
+      <div class="metric-sub">Tupi (Lula) field</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Pre-Salt Characteristics</h3>
+    <div class="two-col">
+      <div>
+        <h4>Geological Profile</h4>
+        <ul>
+          <li>Carbonate reservoirs beneath 2,000m thick salt layer</li>
+          <li>Water depth: 1,500 to 3,000 meters</li>
+          <li>High-pressure, high-temperature (HPHT) environment</li>
+          <li>Light/medium crude (28–30° API) with low sulfur</li>
+          <li>High natural CO₂ content requiring separation & reinjection</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Operational Excellence</h4>
+        <ul>
+          <li>World-record well productivities (>30,000 bpd per well)</li>
+          <li>FPSO-based production systems</li>
+          <li>CO₂ reinjection for enhanced recovery + emissions reduction</li>
+          <li>Flaring at only 2% of associated gas production</li>
+          <li>Digital twins and subsea automation deployed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-success">
+    <strong>ESG Advantage</strong>
+    Pre-salt carbon intensity of 9–10 kgCO₂e/boe is half the global E&P average (19.5 kgCO₂e/boe per OGCI). This gives Brazil a structural competitive advantage in a lower-carbon investment landscape. The largest offshore operators are committed to low carbon emissions.
+  </div>
+</div>
+
+<!-- ============ SECTION: INVESTMENTS ============ -->
+<div class="section" id="investments">
+  <div class="section-hero">
+    <h2>Investment Outlook</h2>
+    <p>Over US$120 billion in E&P investments expected by 2030. Petrobras alone committed US$111 billion in its 2025–2029 Strategic Plan, with US$77 billion directed to E&P.</p>
+  </div>
+
+  <div class="metric-grid">
+    <div class="metric-card">
+      <div class="metric-value" data-counter="120">0</div>
+      <div class="metric-label">USD Bn by 2030</div>
+      <div class="metric-sub">Total E&P investments</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="77">0</div>
+      <div class="metric-label">USD Bn Petrobras E&P</div>
+      <div class="metric-sub">2025–2029 Plan</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="20">0</div>
+      <div class="metric-label">USD Bn Refining</div>
+      <div class="metric-sub">Petrobras RTC</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value" data-counter="11">0</div>
+      <div class="metric-label">USD Bn Low Carbon</div>
+      <div class="metric-sub">Gas & energy transition</div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3>Exploration Investments (USD M)</h3>
+      <div class="chart-container">
+        <canvas id="chartExploration"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Production Investments (USD Bn)</h3>
+      <div class="chart-container">
+        <canvas id="chartProdInvestment"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Petrobras Strategic Plan 2025–2029</h3>
+    <p>In November 2024, Petrobras approved its new strategic plan totaling US$111 billion — an 8.8% increase over the previous cycle. Key allocations:</p>
+    <ul>
+      <li><strong>E&P:</strong> US$77 billion — core deepwater development</li>
+      <li><strong>Refining, Trading & Commercialization:</strong> US$20 billion — modernization, RefTOP, low-carbon fuels</li>
+      <li><strong>Gas & Low Carbon Energy:</strong> US$11 billion — gas infrastructure, CCUS, renewables</li>
+      <li><strong>RefTOP Program:</strong> US$826 million for operational efficiency & sustainability improvements</li>
+      <li><strong>Maintenance:</strong> US$3.8 billion for shutdowns at Replan, RPBC, Refap, RNEST, Revap</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SECTION: FPSO ============ -->
+<div class="section" id="fpso">
+  <div class="section-hero">
+    <h2>FPSO Pipeline</h2>
+    <p>Brazil accounts for one-third of global FPSO demand. Around 15 projects are being implemented or expected through 2030+, representing massive capacity additions.</p>
+  </div>
+
+  <div class="callout callout-gold">
+    <strong>1/3 of Global FPSO Demand</strong>
+    Brazil is the world's largest market for Floating Production Storage and Offloading units, with local content requirements ranging from 25% to 40% across projects.
+  </div>
+
+  <div class="card">
+    <h3>FPSO Deployment Timeline</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Year</th><th>FPSO Name</th><th>Field</th><th>Capacity</th><th>Local Content</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2023</td><td>Búzios 5 (Almirante Barroso)</td><td>Búzios</td><td>225 kbpd</td><td>25%</td><td><span class="badge badge-green">Operating</span></td></tr>
+          <tr><td>2024</td><td>Búzios 7 (Almirante Tamandaré)</td><td>Búzios</td><td>225 kbpd</td><td>25%</td><td><span class="badge badge-green">Operating</span></td></tr>
+          <tr><td>2024</td><td>Mero 3 (Marechal Duque de Caxias)</td><td>Mero</td><td>180 kbpd</td><td>40%</td><td><span class="badge badge-green">Operating</span></td></tr>
+          <tr><td>2025</td><td>Mero 4 (Alexandre de Gusmão)</td><td>Mero</td><td>180 kbpd</td><td>40%</td><td><span class="badge badge-green">Operating</span></td></tr>
+          <tr><td>2025</td><td>Maria Quitéria</td><td>Jubarte</td><td>100 kbpd</td><td>—</td><td><span class="badge badge-green">Operating</span></td></tr>
+          <tr><td>2026</td><td>Búzios 8 (P-78)</td><td>Búzios</td><td>180 kbpd</td><td>25%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2027</td><td>Búzios 9 (P-80)</td><td>Búzios</td><td>225 kbpd</td><td>25%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2027</td><td>Búzios 10 (P-82)</td><td>Búzios</td><td>225 kbpd</td><td>25%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2027</td><td>Búzios 11 (P-83)</td><td>Búzios</td><td>225 kbpd</td><td>25%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2028+</td><td>Raia (Equinor)</td><td>Raia</td><td>125 kbpd</td><td>40%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2028+</td><td>Atapu 2 (P-84)</td><td>Atapu</td><td>225 kbpd</td><td>30%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2029+</td><td>Sépia 2 (P-85)</td><td>Sépia</td><td>225 kbpd</td><td>30%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2029+</td><td>Gato do Mato (Shell)</td><td>Gato do Mato</td><td>120 kbpd</td><td>40%</td><td><span class="badge badge-blue">Planned</span></td></tr>
+          <tr><td>2030+</td><td>SEAP 1 & 2</td><td>Sergipe</td><td>240 kbpd</td><td>30–40%</td><td><span class="badge badge-gold">Under study</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>FPSO Count by Year</h3>
+    <div class="chart-container">
+      <canvas id="chartFPSO"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: LICENSING ============ -->
+<div class="section" id="licensing">
+  <div class="section-hero">
+    <h2>Licensing & Open Acreage</h2>
+    <p>Brazil has consolidated the Open Acreage system as its main licensing mechanism, providing continuous investment opportunities under both concession and production sharing regimes.</p>
+  </div>
+
+  <div class="card">
+    <h3>Open Acreage — Permanent Offer System</h3>
+    <p>Unlike traditional bidding rounds with fixed dates, Brazil's Open Acreage model allows companies to evaluate opportunities and submit expressions of interest according to their own strategic timing. This flexibility is a key advantage in attracting capital.</p>
+    <br>
+    <h4>Upcoming Cycles (2026)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Cycle</th><th>Regime</th><th>Blocks</th><th>Sessions Date</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>OPC 6 (6th Concession)</td><td>Concession</td><td>495 blocks</td><td>October 7, 2026</td><td><span class="badge badge-blue">In progress</span></td></tr>
+          <tr><td>OPP 4 (4th Production Sharing)</td><td>PSA</td><td>23 blocks</td><td>October 7, 2026</td><td><span class="badge badge-blue">In progress</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Recent Licensing Results</h3>
+    <ul>
+      <li><strong>5th Concession Cycle (Jun 2025):</strong> Record 989.3 million BRL in signature bonuses; 34 of 41 blocks awarded to 9 companies across Parecis, Foz do Amazonas, Santos, and Pelotas basins; planned investments of 1.46 billion BRL</li>
+      <li><strong>5th Government Oil Auction (PPSA):</strong> 74.5 million barrels sold; record revenue of 28 billion BRL (3B above forecast); lots in Mero, Búzios, Sépia, Itapu</li>
+      <li><strong>Open Acreage cumulative:</strong> US$589 million in signature bonuses + US$1.32 billion in planned investments</li>
+      <li><strong>Digital Bidding Platform:</strong> ANP partnered with B3 (Brazil's stock exchange) for digital licensing — enhancing governance, transparency, accessibility, and efficiency</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Licensing Timeline 2026</h3>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="year">May 22, 2026</div>
+        <div class="desc">Opening of new OPC6/OPP4 cycles</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Jun 5, 2026</div>
+        <div class="desc">New registrations and document updates deadline</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Jul 21, 2026</div>
+        <div class="desc">Declaration of Sectors of Interest deadline</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Aug 6, 2026</div>
+        <div class="desc">Disclosure of Areas on Offer</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Aug 31, 2026</div>
+        <div class="desc">Declaration of Areas of Interest on Offer deadline</div>
+      </div>
+      <div class="timeline-item">
+        <div class="year">Oct 7, 2026</div>
+        <div class="desc">Public Sessions — bidding day</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: OPERATORS ============ -->
+<div class="section" id="operators">
+  <div class="section-hero">
+    <h2>Key Operators</h2>
+    <p>84 E&P economic groups operate in Brazil. While Petrobras dominates production, international majors and independent players are expanding rapidly.</p>
+  </div>
+
+  <div class="card">
+    <h3>Major Operators & Recent Moves</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Operator</th><th>Type</th><th>Key Assets / Moves</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Petrobras</strong></td><td>NOC</td><td>Dominant: Búzios, Mero, Tupi, Sépia, Atapu, SEAP; US$111B plan 2025-29</td></tr>
+          <tr><td><strong>Shell</strong></td><td>IOC</td><td>Gato do Mato FID (Santos pre-salt, 120 kbpd, 2029 start); consortium with Ecopetrol, TotalEnergies</td></tr>
+          <tr><td><strong>Equinor</strong></td><td>IOC</td><td>Raia Project (gas + oil); Bacalhau; pipeline infrastructure EPE-approved</td></tr>
+          <tr><td><strong>TotalEnergies</strong></td><td>IOC</td><td>Partner in Mero, Lapa; part of Gato do Mato consortium</td></tr>
+          <tr><td><strong>PRIO</strong></td><td>Independent</td><td>Peregrino (acquired 100%), Wahoo, gas commercialization pioneer; 300k m³/d initial gas portfolio</td></tr>
+          <tr><td><strong>Brava Energia</strong></td><td>Independent</td><td>Atlanta field (FPSO, 50 kbpd); merged entity focused on deepwater</td></tr>
+          <tr><td><strong>Enauta / 3R</strong></td><td>Independent</td><td>Atlanta consortium; mature field optimization</td></tr>
+          <tr><td><strong>CNPC</strong></td><td>NOC</td><td>20% stake in Aram block (Santos pre-salt, PSA with Petrobras)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Market Structure</h3>
+    <div class="chart-container">
+      <canvas id="chartOperators"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECTION: REGULATORY ============ -->
+<div class="section" id="regulatory">
+  <div class="section-hero">
+    <h2>Regulatory Framework</h2>
+    <p>A stable, predictable, and flexible investment environment is essential to sustain companies' confidence and channel capital to Brazil's upstream sector over the long term.</p>
+  </div>
+
+  <div class="card">
+    <h3>Dual Regime System</h3>
+    <div class="two-col">
+      <div>
+        <h4>Concession Regime</h4>
+        <ul>
+          <li>Operator owns produced oil (pays royalties + special participations)</li>
+          <li>Open Acreage permanent offer cycles</li>
+          <li>Applicable to most basins and blocks</li>
+          <li>ANP as regulator and licensing authority</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Production Sharing (PSA)</h4>
+        <ul>
+          <li>Applies to strategic pre-salt areas</li>
+          <li>Government share ("profit oil") managed by PPSA</li>
+          <li>Petrobras guaranteed minimum 30% participation</li>
+          <li>Recent: 5th Government Oil Auction (74.5M bbl sold)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Key Regulatory Bodies</h3>
+    <ul>
+      <li><strong>ANP</strong> — National Agency of Petroleum, Gas and Biofuels: regulator, licensing authority, data custodian</li>
+      <li><strong>PPSA</strong> — Pré-Sal Petróleo S.A.: manages government interests in PSA contracts</li>
+      <li><strong>MME</strong> — Ministry of Mines and Energy: energy policy formulation</li>
+      <li><strong>EPE</strong> — Energy Research Office: planning, studies, demand/supply forecasting</li>
+      <li><strong>CNPE</strong> — National Energy Policy Council: strategic policy decisions</li>
+      <li><strong>IBAMA</strong> — Environmental licensing authority</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Recent Regulatory Developments</h3>
+    <ul>
+      <li><strong>Law 15,164/2025:</strong> Enables government to auction rights from unitization agreements in pre-salt/strategic areas — anticipating revenue from future production</li>
+      <li><strong>Potencializa E&P Program:</strong> Federal initiative to promote sustainable development of new frontiers and marginal fields</li>
+      <li><strong>Gas for Employment Decree (12,153/2024):</strong> Expands natural gas market, lowers end-user prices, creates Gas Sector Monitoring Committee</li>
+      <li><strong>Digital Bidding Platform (ANP + B3):</strong> Partnership with Brazil's stock exchange for digital, transparent, accessible licensing</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SECTION: CARBON ============ -->
+<div class="section" id="carbon">
+  <div class="section-hero">
+    <h2>Carbon Intensity & ESG</h2>
+    <p>Brazil's pre-salt operations achieve carbon intensity of 9–10 kgCO₂e/boe — half the global average — positioning the country as a leader in low-carbon oil production.</p>
+  </div>
+
+  <div class="card">
+    <h3>Carbon Intensity Comparison</h3>
+    <div class="chart-container">
+      <canvas id="chartCarbon"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>ESG Competitive Advantages</h3>
+    <div class="two-col">
+      <div>
+        <h4>Low-Carbon Production</h4>
+        <ul>
+          <li>Pre-salt: 9–10 kgCO₂e/boe</li>
+          <li>Offshore average: 14 kgCO₂e/boe</li>
+          <li>Global OGCI average: 19.5 kgCO₂e/boe</li>
+          <li>Flaring: only 2% of associated gas</li>
+          <li>CO₂ reinjection as standard practice</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Clean Energy Matrix</h4>
+        <ul>
+          <li>~50% primary energy from renewables</li>
+          <li>87% electricity from renewable sources</li>
+          <li>World's largest tropical biodiversity</li>
+          <li>1% of gross revenue mandatory R&D investment</li>
+          <li>R$4 billion/year in Brazilian research centers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-success">
+    <strong>R&D for Sustainability</strong>
+    30% of mandatory R&D spending (R$4 billion/year) is directed to sustainability and decarbonization projects. Over 400 projects initiated in areas such as environmental recovery, hydrogen, biogas, ocean energy, and bio-kerosene.
+  </div>
+</div>
+
+<!-- ============ SECTION: TRANSITION ============ -->
+<div class="section" id="transition">
+  <div class="section-hero">
+    <h2>CCUS & Hydrogen</h2>
+    <p>The future of Brazil's energy sector will be driven by diversification and innovation — CCUS, hydrogen, and digital transformation of licensing processes.</p>
+  </div>
+
+  <div class="card">
+    <h3>CCUS — Carbon Capture, Utilization & Storage</h3>
+    <ul>
+      <li><strong>Legal framework:</strong> Law No. 14,993/2024 (Fuel of the Future Law)</li>
+      <li><strong>Regulator:</strong> ANP designated as authority for carbon capture and geological storage</li>
+      <li><strong>Target sectors:</strong> Cement, steel, thermoelectric power, and O&G</li>
+      <li><strong>Current actions:</strong> Implementation of regulatory framework + pilot projects</li>
+      <li><strong>Pre-salt advantage:</strong> Existing CO₂ separation infrastructure in FPSOs can be repurposed for CCUS</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Hydrogen</h3>
+    <ul>
+      <li><strong>Legal framework:</strong> Law No. 14,948/2024 — ANP responsible for regulating production, operations, and commercialization</li>
+      <li><strong>Max carbon intensity:</strong> 7 kgCO₂eq/kg H₂ to be classified as low-carbon</li>
+      <li><strong>Incentives:</strong> Special Incentive Regime for Hydrogen Production (Rehidro) — 5-year validity starting 2025</li>
+      <li><strong>Tax credits:</strong> Law 14,990/2024 allocates R$18.3 billion for hydrogen tax credits</li>
+      <li><strong>Authorization Manual:</strong> Published in 2025</li>
+      <li><strong>Challenges:</strong> Certification, physicochemical specifications, operational safety</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Fuel of the Future Law (14,993/2024)</h3>
+    <p>Recognized as the world's largest transport and mobility decarbonization program. Key provisions:</p>
+    <ul>
+      <li><strong>Investment forecast:</strong> R$260 billion across multiple sectors by 2037</li>
+      <li><strong>CO₂ reduction:</strong> 705 million tons expected by 2037</li>
+      <li><strong>Ethanol blending:</strong> Expanded from 18–27.5% to 22–35% in gasoline</li>
+      <li><strong>Biodiesel:</strong> 13–20% blending mandated (currently at 15%, target 20% by 2030)</li>
+      <li><strong>SAF (Sustainable Aviation Fuel):</strong> Minimum 1% from 2027, increasing to 10% by 2037</li>
+      <li><strong>Biomethane:</strong> 1% participation target in 2026, up to 10% in subsequent years</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SECTION: CHALLENGES ============ -->
+<div class="section" id="challenges">
+  <div class="section-hero">
+    <h2>Industry Challenges</h2>
+    <p>Despite strong fundamentals, Brazil's upstream sector faces operational, technological, and regulatory challenges that create opportunities for digital transformation.</p>
+  </div>
+
+  <div class="card">
+    <h3>Key Pain Points for E&P Operators</h3>
+    <div class="two-col">
+      <div>
+        <h4>Operational Challenges</h4>
+        <ul>
+          <li>Ultra-deepwater complexity (2,000–3,000m water depth)</li>
+          <li>FPSO fleet management across remote locations</li>
+          <li>Supply chain coordination for 15+ simultaneous FPSO projects</li>
+          <li>HSE compliance in high-pressure environments</li>
+          <li>Workforce scheduling across offshore rotations</li>
+          <li>Predictive maintenance for subsea equipment</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Commercial & Regulatory</h4>
+        <ul>
+          <li>Local content compliance tracking (25–40% per FPSO)</li>
+          <li>Multi-stakeholder contract management (ANP, PPSA, partners)</li>
+          <li>Environmental licensing timelines (IBAMA APO process)</li>
+          <li>Gas commercialization in liberalizing market</li>
+          <li>Royalty & special participation calculations</li>
+          <li>ESG reporting and emissions transparency</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Digital Transformation Opportunity</h3>
+    <p>The scale of investment (US$120B by 2030), number of concurrent mega-projects (15+ FPSOs), regulatory complexity (dual regime + environmental), and ESG requirements create a compelling case for integrated platform solutions that can:</p>
+    <ul>
+      <li>Unify stakeholder engagement across 84 E&P groups and 134,824 regulated agents</li>
+      <li>Orchestrate supply chains spanning global EPC contractors and local content requirements</li>
+      <li>Automate regulatory compliance and reporting across ANP, PPSA, IBAMA, and state agencies</li>
+      <li>Enable real-time asset performance visibility across distributed offshore operations</li>
+      <li>Accelerate licensing and permitting workflows in the new digital platform era</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SECTION: SALESFORCE ============ -->
+<div class="section" id="salesforce">
+  <div class="section-hero">
+    <h2>Salesforce Platform Capabilities</h2>
+    <p>Salesforce's platform uniquely addresses upstream E&P challenges through integrated CRM, data, AI, and automation capabilities across the exploration-to-production lifecycle.</p>
+  </div>
+
+  <div class="card">
+    <h3>Platform Mapping to Upstream Needs</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Challenge Area</th><th>Salesforce Solution</th><th>Key Capabilities</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stakeholder Management</td><td>Sales Cloud + Energy & Utilities Cloud</td><td>Partner relationship management, JV tracking, government relations</td></tr>
+          <tr><td>Supply Chain / Procurement</td><td>MuleSoft + Manufacturing Cloud</td><td>Supplier onboarding, local content tracking, RFx automation</td></tr>
+          <tr><td>Asset Performance</td><td>Data Cloud + Tableau + Einstein AI</td><td>IoT ingestion, predictive maintenance, production optimization</td></tr>
+          <tr><td>HSE & Compliance</td><td>Experience Cloud + Flow</td><td>Incident management, safety reporting, audit trails</td></tr>
+          <tr><td>Workforce Management</td><td>Field Service + Scheduler</td><td>Offshore rotation planning, competency tracking, dispatch</td></tr>
+          <tr><td>Licensing & Permitting</td><td>Public Sector Solutions + OmniStudio</td><td>Application tracking, document management, status portals</td></tr>
+          <tr><td>ESG & Emissions</td><td>Net Zero Cloud + CRM Analytics</td><td>Scope 1/2/3 tracking, carbon credit management, ESG dashboards</td></tr>
+          <tr><td>Gas Commercialization</td><td>Revenue Cloud + CPQ</td><td>Contract management, pricing, B2B customer portals</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Value Proposition for Brazil Upstream</h3>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="metric-value">360°</div>
+        <div class="metric-label">Stakeholder Visibility</div>
+        <div class="metric-sub">Across 84 E&P groups</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">AI</div>
+        <div class="metric-label">Einstein Predictions</div>
+        <div class="metric-sub">Predictive maintenance & ops</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Real-time</div>
+        <div class="metric-label">Data Cloud Integration</div>
+        <div class="metric-sub">IoT + operational data</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">Agentforce</div>
+        <div class="metric-label">Autonomous Agents</div>
+        <div class="metric-sub">Process automation at scale</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>Explore the Complete Downstream Analysis</strong>
+    See how Salesforce maps to fuel distribution, convenience retail, fleet management, and loyalty in the <a href="../downstream/" style="color:var(--sf-primary);">Downstream POV →</a>
+  </div>
+</div>
 
 </main>
 
-<footer class="page-footer">
-  Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.0 | June 2026
-</footer>
+<!-- READING PROGRESS BAR -->
+<div class="reading-progress"><div class="progress-fill" id="progressFill"></div></div>
 
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop">↑</button>
+
+<!-- TTS PLAYER -->
+<div class="tts-player" id="ttsPlayer">
+  <button id="ttsPlay" title="Play">▶</button>
+  <button id="ttsPause" title="Pause">⏸</button>
+  <button id="ttsStop" title="Stop">⏹</button>
+  <select id="ttsSpeed"><option value="0.8">0.8×</option><option value="1" selected>1×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option></select>
+  <select id="ttsVoice"></select>
+  <span class="tts-status" id="ttsStatus">Ready</span>
+  <button id="ttsClose" title="Close">✕</button>
 </div>
 
+<!-- QR MODAL -->
+<div class="qr-modal" id="qrModal">
+  <h3>Share this POV</h3>
+  <div id="qrCanvas"></div>
+  <div class="qr-url" id="qrUrl"></div>
+  <button onclick="document.getElementById('qrModal').classList.remove('active')">Close</button>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+    <span>Salesforce Confidential — Internal Use Only | Oil & Gas Brazil POV v2.1 | June 2026</span>
+    <span style="opacity:0.5">|</span>
+    <span id="viewCount" style="font-size:10px;">👁 —</span>
+    <span id="likeArea" style="font-size:10px;cursor:pointer;" title="Like this POV">♡ —</span>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
 <script>
-const toggle = document.getElementById('themeToggle');
+// === NAVIGATION ===
+const navLinks = document.querySelectorAll('.nav-items a');
+const sections = document.querySelectorAll('.section');
+
+function showSection(id) {
+  sections.forEach(s => s.classList.remove('active'));
+  navLinks.forEach(a => a.classList.remove('active'));
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('active');
+    const link = document.querySelector(`.nav-items a[href="#${id}"]`);
+    if (link) link.classList.add('active');
+    animateCounters(target);
+  }
+}
+
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const id = link.getAttribute('href').substring(1);
+    showSection(id);
+    history.pushState(null, '', `#${id}`);
+    if (window.innerWidth <= 1024) sidebar.classList.remove('open');
+  });
+});
+
+// Nav section collapse
+document.querySelectorAll('.nav-section-title').forEach(title => {
+  title.addEventListener('click', () => {
+    title.parentElement.classList.toggle('collapsed');
+  });
+});
+
+// Hash navigation
+if (location.hash) showSection(location.hash.substring(1));
+window.addEventListener('popstate', () => {
+  if (location.hash) showSection(location.hash.substring(1));
+});
+
+// === HAMBURGER ===
+const sidebar = document.getElementById('sidebar');
+document.getElementById('hamburger').addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+});
+
+// === THEME TOGGLE (default: light) ===
+const themeToggle = document.getElementById('themeToggle');
 const saved = localStorage.getItem('pov-theme');
 if (saved === 'dark') {
-  document.documentElement.setAttribute('data-theme', 'dark');
-  toggle.textContent = '☀️';
+  themeToggle.textContent = '☀️';
+} else {
+  document.documentElement.setAttribute('data-theme', 'light');
+  themeToggle.textContent = '🌙';
 }
-toggle.addEventListener('click', () => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  if (isDark) {
+
+themeToggle.addEventListener('click', () => {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
     document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('pov-theme', 'light');
-    toggle.textContent = '🌙';
-  } else {
-    document.documentElement.setAttribute('data-theme', 'dark');
     localStorage.setItem('pov-theme', 'dark');
-    toggle.textContent = '☀️';
+    themeToggle.textContent = '☀️';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    localStorage.setItem('pov-theme', 'light');
+    themeToggle.textContent = '🌙';
   }
 });
+
+// === SHARE ===
+document.getElementById('shareBtn').addEventListener('click', () => {
+  const url = window.location.href;
+  if (navigator.share) {
+    navigator.share({ title: 'Upstream Oil & Gas Brazil — Salesforce POV', url });
+  } else {
+    navigator.clipboard.writeText(url).then(() => alert('Link copied!'));
+  }
+});
+
+// === ANIMATED COUNTERS ===
+function animateCounters(container) {
+  container.querySelectorAll('[data-counter]').forEach(el => {
+    const target = parseFloat(el.dataset.counter);
+    const duration = 1500;
+    const start = performance.now();
+    const isDecimal = target % 1 !== 0;
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = target * eased;
+      el.textContent = isDecimal ? current.toFixed(1) : Math.round(current).toLocaleString();
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+// Initial counters
+animateCounters(document.querySelector('.section.active'));
+
+// === SEARCH ===
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+const searchIndex = [];
+sections.forEach(section => {
+  const id = section.id;
+  const hero = section.querySelector('.section-hero h2');
+  const title = hero ? hero.textContent : id;
+  const text = section.textContent.substring(0, 2000);
+  searchIndex.push({ id, title, text });
+});
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (q.length < 2) { searchResults.classList.remove('visible'); return; }
+  const matches = searchIndex.filter(item => item.text.toLowerCase().includes(q)).slice(0, 8);
+  if (!matches.length) { searchResults.classList.remove('visible'); return; }
+  searchResults.innerHTML = matches.map(m => {
+    const idx = m.text.toLowerCase().indexOf(q);
+    const snippet = m.text.substring(Math.max(0, idx - 30), idx + 60).replace(/\n/g, ' ');
+    return `<div class="search-result-item" data-id="${m.id}">
+      <div class="result-section">${m.title}</div>
+      <div class="result-text">...${snippet}...</div>
+    </div>`;
+  }).join('');
+  searchResults.classList.add('visible');
+});
+
+searchResults.addEventListener('click', e => {
+  const item = e.target.closest('.search-result-item');
+  if (item) {
+    showSection(item.dataset.id);
+    searchResults.classList.remove('visible');
+    searchInput.value = '';
+  }
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-container')) searchResults.classList.remove('visible');
+});
+
+// === CHARTS ===
+const sfBlue = '#1B96FF';
+const sfDark = '#032D60';
+const sfGold = '#f5a623';
+const sfSuccess = '#2E844A';
+const sfError = '#EA001E';
+
+function getChartColors() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  return {
+    grid: isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)',
+    text: isLight ? '#706E6B' : 'rgba(255,255,255,0.6)'
+  };
+}
+
+// Production Growth
+new Chart(document.getElementById('chartProductionGrowth'), {
+  type: 'line',
+  data: {
+    labels: ['2020','2021','2022','2023','2024','2025','2026 (Mar)'],
+    datasets: [{
+      label: 'Oil Production (MMbpd)',
+      data: [2.94, 2.99, 3.11, 3.40, 3.36, 3.64, 4.25],
+      borderColor: sfGold,
+      backgroundColor: 'rgba(245,166,35,0.1)',
+      fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: sfGold
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: false, min: 2.5, title: { display: true, text: 'MMbpd', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { color: getChartColors().text } },
+      x: { grid: { display: false }, ticks: { color: getChartColors().text } }
+    }
+  }
+});
+
+// Investment Distribution (Doughnut)
+new Chart(document.getElementById('chartInvestmentDist'), {
+  type: 'doughnut',
+  data: {
+    labels: ['E&P', 'Refining & Trading', 'Gas & Low Carbon'],
+    datasets: [{
+      data: [77, 20, 11],
+      backgroundColor: [sfBlue, sfGold, sfSuccess],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: getChartColors().text, padding: 12 } },
+      tooltip: { callbacks: { label: ctx => `${ctx.label}: US$${ctx.raw}B` } }
+    }
+  }
+});
+
+// Production Forecast
+new Chart(document.getElementById('chartForecast'), {
+  type: 'line',
+  data: {
+    labels: ['2024','2025','2026','2027','2028','2029','2030','2031','2032','2033','2034','2035'],
+    datasets: [{
+      label: 'Oil Production Forecast (MMbpd)',
+      data: [3.36, 3.64, 4.25, 4.50, 4.75, 4.90, 4.85, 4.90, 4.80, 4.65, 4.50, 4.35],
+      borderColor: sfBlue,
+      backgroundColor: 'rgba(27,150,255,0.08)',
+      fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: sfBlue
+    },{
+      label: 'Natural Gas (MMm³/d ÷ 50)',
+      data: [3.06, 3.28, 4.08, 4.20, 4.40, 4.60, 4.80, 5.00, 5.10, 5.00, 4.90, 4.80],
+      borderColor: sfSuccess,
+      backgroundColor: 'rgba(46,132,74,0.05)',
+      fill: false, tension: 0.3, pointRadius: 3, borderDash: [5,3]
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { color: getChartColors().text } } },
+    scales: {
+      y: { title: { display: true, text: 'MMbpd / scaled gas', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { color: getChartColors().text } },
+      x: { grid: { display: false }, ticks: { color: getChartColors().text } }
+    }
+  }
+});
+
+// Reserves (Horizontal Bar)
+new Chart(document.getElementById('chartReserves'), {
+  type: 'bar',
+  data: {
+    labels: ['Santos Basin', 'Campos Basin', 'Espírito Santo', 'Sergipe-Alagoas', 'Potiguar', 'Others'],
+    datasets: [{
+      label: 'Estimated Share (%)',
+      data: [62, 22, 6, 4, 3, 3],
+      backgroundColor: [sfBlue, sfGold, sfSuccess, '#6b21a8', sfError, '#DDDBDA'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { title: { display: true, text: '% of Proved Reserves', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { color: getChartColors().text } },
+      y: { grid: { display: false }, ticks: { color: getChartColors().text } }
+    }
+  }
+});
+
+// Exploration Investments
+new Chart(document.getElementById('chartExploration'), {
+  type: 'bar',
+  data: {
+    labels: ['2026','2027','2028','2029','2030','2031','2032','2033'],
+    datasets: [{
+      label: 'USD Million',
+      data: [888, 188, 71, 30, 4, 17, 26, 1],
+      backgroundColor: sfBlue,
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { title: { display: true, text: 'USD Million', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { color: getChartColors().text } },
+      x: { grid: { display: false }, ticks: { color: getChartColors().text } }
+    }
+  }
+});
+
+// Production Investments
+new Chart(document.getElementById('chartProdInvestment'), {
+  type: 'bar',
+  data: {
+    labels: ['2026','2027','2028','2029','2030'],
+    datasets: [{
+      label: 'USD Billion',
+      data: [30.52, 30.41, 22.37, 20.62, 15.45],
+      backgroundColor: sfGold,
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { title: { display: true, text: 'USD Billion', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { color: getChartColors().text } },
+      x: { grid: { display: false }, ticks: { color: getChartColors().text } }
+    }
+  }
+});
+
+// FPSO Count
+new Chart(document.getElementById('chartFPSO'), {
+  type: 'bar',
+  data: {
+    labels: ['2023','2024','2025','2026','2027','2028+'],
+    datasets: [{
+      label: 'FPSOs Starting Operations',
+      data: [1, 3, 2, 1, 3, 5],
+      backgroundColor: [sfSuccess, sfSuccess, sfSuccess, sfBlue, sfBlue, sfGold],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { title: { display: true, text: 'Units', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { stepSize: 1, color: getChartColors().text } },
+      x: { grid: { display: false }, ticks: { color: getChartColors().text } }
+    }
+  }
+});
+
+// Operators Market Structure (Pie)
+new Chart(document.getElementById('chartOperators'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Petrobras', 'Shell', 'TotalEnergies', 'Equinor', 'PRIO', 'Others (79 groups)'],
+    datasets: [{
+      data: [68, 8, 6, 5, 4, 9],
+      backgroundColor: [sfBlue, sfDark, sfGold, sfSuccess, '#6b21a8', '#DDDBDA'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: getChartColors().text, padding: 10 } },
+      tooltip: { callbacks: { label: ctx => `${ctx.label}: ~${ctx.raw}% of production` } }
+    }
+  }
+});
+
+// Carbon Intensity Comparison
+new Chart(document.getElementById('chartCarbon'), {
+  type: 'bar',
+  data: {
+    labels: ['Brazil Pre-Salt', 'Brazil Offshore Avg', 'Norway', 'OGCI Global Avg', 'US Shale', 'Canada Oil Sands'],
+    datasets: [{
+      label: 'kgCO₂e/boe',
+      data: [9.5, 14, 15, 19.5, 25, 45],
+      backgroundColor: [sfSuccess, sfBlue, sfBlue, sfGold, sfError, sfError],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { title: { display: true, text: 'kgCO₂e/boe', color: getChartColors().text }, grid: { color: getChartColors().grid }, ticks: { color: getChartColors().text } },
+      x: { grid: { display: false }, ticks: { color: getChartColors().text, maxRotation: 45 } }
+    }
+  }
+});
+
+// === READING PROGRESS BAR ===
+const progressFill = document.getElementById('progressFill');
+const mainContent = document.querySelector('.main-content');
+mainContent.addEventListener('scroll', () => {
+  const scrollTop = mainContent.scrollTop;
+  const scrollHeight = mainContent.scrollHeight - mainContent.clientHeight;
+  const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  progressFill.style.width = progress + '%';
+});
+
+// === BACK TO TOP ===
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 300);
+});
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// === TEXT-TO-SPEECH ===
+const ttsBtn = document.getElementById('ttsBtn');
+const ttsPlayer = document.getElementById('ttsPlayer');
+const ttsPlay = document.getElementById('ttsPlay');
+const ttsPause = document.getElementById('ttsPause');
+const ttsStop = document.getElementById('ttsStop');
+const ttsSpeed = document.getElementById('ttsSpeed');
+const ttsVoiceSelect = document.getElementById('ttsVoice');
+const ttsStatus = document.getElementById('ttsStatus');
+const ttsClose = document.getElementById('ttsClose');
+let ttsUtterance = null;
+let ttsVoices = [];
+let ttsPaused = false;
+
+function ttsLoadVoices() {
+  ttsVoices = speechSynthesis.getVoices();
+  ttsVoiceSelect.innerHTML = '';
+  const enVoices = ttsVoices.filter(v => v.lang.startsWith('en'));
+  const displayVoices = enVoices.length ? enVoices.slice(0, 6) : ttsVoices.slice(0, 6);
+  displayVoices.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = ttsVoices.indexOf(v);
+    opt.textContent = v.name.replace(/Microsoft |Google |Apple /, '').substring(0, 18) + ' (' + v.lang + ')';
+    ttsVoiceSelect.appendChild(opt);
+  });
+}
+
+if ('speechSynthesis' in window) {
+  speechSynthesis.onvoiceschanged = ttsLoadVoices;
+  ttsLoadVoices();
+}
+
+function ttsGetText() {
+  const active = document.querySelector('.section.active');
+  if (!active) return '';
+  const clone = active.cloneNode(true);
+  clone.querySelectorAll('script, style, canvas').forEach(el => el.remove());
+  return clone.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function ttsSpeak() {
+  const text = ttsGetText();
+  if (!text) { ttsStatus.textContent = 'No content'; return; }
+  speechSynthesis.cancel();
+  ttsUtterance = new SpeechSynthesisUtterance(text);
+  ttsUtterance.rate = parseFloat(ttsSpeed.value);
+  const voiceIdx = parseInt(ttsVoiceSelect.value);
+  if (!isNaN(voiceIdx) && ttsVoices[voiceIdx]) ttsUtterance.voice = ttsVoices[voiceIdx];
+  ttsUtterance.onstart = () => { ttsStatus.textContent = 'Playing…'; };
+  ttsUtterance.onend = () => { ttsStatus.textContent = 'Done'; ttsPaused = false; };
+  speechSynthesis.speak(ttsUtterance);
+  ttsPaused = false;
+}
+
+ttsBtn.addEventListener('click', () => { ttsPlayer.classList.add('active'); ttsSpeak(); });
+ttsPlay.addEventListener('click', () => { if (ttsPaused) { speechSynthesis.resume(); ttsPaused = false; ttsStatus.textContent = 'Playing…'; } else { ttsSpeak(); } });
+ttsPause.addEventListener('click', () => { if (speechSynthesis.speaking && !ttsPaused) { speechSynthesis.pause(); ttsPaused = true; ttsStatus.textContent = 'Paused'; } });
+ttsStop.addEventListener('click', () => { speechSynthesis.cancel(); ttsPaused = false; ttsStatus.textContent = 'Stopped'; });
+ttsSpeed.addEventListener('change', () => { if (speechSynthesis.speaking) ttsSpeak(); });
+ttsClose.addEventListener('click', () => { speechSynthesis.cancel(); ttsPlayer.classList.remove('active'); ttsPaused = false; });
+
+// === QR CODE ===
+document.getElementById('qrBtn').addEventListener('click', () => {
+  const modal = document.getElementById('qrModal');
+  const url = window.location.href;
+  document.getElementById('qrUrl').textContent = url;
+  const container = document.getElementById('qrCanvas');
+  container.innerHTML = '';
+  if (typeof qrcode !== 'undefined') {
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    container.innerHTML = qr.createSvgTag(5);
+  } else {
+    container.innerHTML = '<p style="font-size:12px;color:var(--sf-text-sec);">QR library not loaded</p>';
+  }
+  modal.classList.add('active');
+});
+
+// === VIEW / LIKE COUNTERS ===
+const COUNTER_NS = 'oilgas-upstream-pov';
+const viewEl = document.getElementById('viewCount');
+const likeEl = document.getElementById('likeArea');
+
+async function loadCounters() {
+  try {
+    const vr = await fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/views/up`);
+    const vd = await vr.json();
+    viewEl.textContent = `👁 ${vd.count || 0}`;
+  } catch(e) { viewEl.textContent = '👁 —'; }
+  try {
+    const lr = await fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/likes`);
+    const ld = await lr.json();
+    const liked = localStorage.getItem('upstream-liked');
+    likeEl.textContent = `${liked ? '♥' : '♡'} ${ld.count || 0}`;
+  } catch(e) { likeEl.textContent = '♡ —'; }
+}
+
+likeEl.addEventListener('click', async () => {
+  if (localStorage.getItem('upstream-liked')) return;
+  try {
+    const r = await fetch(`https://api.counterapi.dev/v1/${COUNTER_NS}/likes/up`);
+    const d = await r.json();
+    localStorage.setItem('upstream-liked', '1');
+    likeEl.textContent = `♥ ${d.count || 1}`;
+  } catch(e) {}
+});
+
+loadCounters();
 </script>
 </body>
 </html>
