@@ -9,8 +9,8 @@
   'use strict';
 
   const AGENT_NAME = 'Agentforce';
-  const PROXY_URL = 'http://localhost:3001';
   const IS_REMOTE = window.location.protocol === 'https:';
+  const PROXY_URL = IS_REMOTE ? 'https://sf-oilgas-brazil-pov.vercel.app' : 'http://localhost:3001';
   let proxyAvailable = false;
   let clientId = null;
 
@@ -20,33 +20,48 @@
         : 'assets/agentforce-avatar.png');
 
   async function checkProxy() {
-    if (IS_REMOTE) {
-      proxyAvailable = false;
-      console.log('[Agentforce] Running on remote host, using local knowledge base');
-      return;
-    }
     try {
-      const res = await fetch(PROXY_URL + '/health', { signal: AbortSignal.timeout(2000) });
-      if (res.ok) {
-        proxyAvailable = true;
-        const session = await fetch(PROXY_URL + '/session', { method: 'POST' });
-        const data = await session.json();
-        clientId = data.clientId;
-        console.log('[Agentforce] Connected to live agent via proxy');
+      if (IS_REMOTE) {
+        const res = await fetch(PROXY_URL + '/api/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: 'ping' }),
+          signal: AbortSignal.timeout(5000)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.reply) {
+            proxyAvailable = true;
+            console.log('[Agentforce] Connected to live Agentforce via Vercel');
+            return;
+          }
+        }
+      } else {
+        const res = await fetch(PROXY_URL + '/health', { signal: AbortSignal.timeout(2000) });
+        if (res.ok) {
+          proxyAvailable = true;
+          const session = await fetch(PROXY_URL + '/session', { method: 'POST' });
+          const data = await session.json();
+          clientId = data.clientId;
+          console.log('[Agentforce] Connected to live agent via local proxy');
+          return;
+        }
       }
     } catch {
-      proxyAvailable = false;
-      console.log('[Agentforce] Proxy unavailable, using local knowledge base');
     }
+    proxyAvailable = false;
+    console.log('[Agentforce] Proxy unavailable, using local knowledge base');
   }
 
   async function askAgent(message) {
     if (!proxyAvailable) return null;
     try {
-      const res = await fetch(PROXY_URL + '/message', {
+      const endpoint = IS_REMOTE ? PROXY_URL + '/api/agent' : PROXY_URL + '/message';
+      const body = IS_REMOTE ? { message } : { clientId, message };
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientId, message })
+        body: JSON.stringify(body)
       });
       if (!res.ok) return null;
       const data = await res.json();
