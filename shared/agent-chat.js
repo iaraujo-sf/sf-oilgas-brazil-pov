@@ -230,6 +230,37 @@
   const PAGE_BASE = window.location.pathname.includes('/downstream/') || window.location.pathname.includes('/upstream/') || window.location.pathname.includes('/midstream/')
     ? '../' : '';
 
+  const PAGE_INDEX = [
+    { keywords: ['pre-salt','pre salt','pré-sal','presal','santos basin','buzios','tupi','lula field'], page: 'upstream/', anchor: '#pre-salt', title: 'Pre-Salt Deep Dive', summary: 'Brazil\'s pre-salt reserves are among the largest deep-water discoveries in history. Located 5-7km below the ocean floor under a thick salt layer, these fields (Santos & Campos basins) produce 70%+ of Brazil\'s oil. Key fields: Búzios, Tupi/Lula, Mero, Sépia.' },
+    { keywords: ['fpso','floating production','turret','hull','topside'], page: 'upstream/', anchor: '#fpso', title: 'FPSO Fleet & Operations', summary: 'Brazil operates the world\'s largest FPSO fleet with 50+ units. Each FPSO processes 150-200k bbl/day. Petrobras plans 14 new FPSOs through 2028. Key challenges: local content requirements, maintenance cycles, and workforce management.' },
+    { keywords: ['production','barrels','bpd','output','record','million barrels'], page: 'upstream/', anchor: '#production', title: 'Production Records', summary: 'Brazil produces 4+ million barrels of oil equivalent per day (2024 record). Growth driven by pre-salt ramp-up. Target: 5.4M boe/d by 2029 (Petrobras Strategic Plan).' },
+    { keywords: ['reserves','sedimentary','basin','campos basin','equatorial margin','exploration'], page: 'upstream/', anchor: '#reserves', title: 'Reserves & Sedimentary Basins', summary: 'Brazil has ~15 billion barrels of proven reserves across multiple sedimentary basins. Key producing basins: Santos, Campos. Frontier: Equatorial Margin (Foz do Amazonas), Pelotas.' },
+    { keywords: ['investment','capex','spending','billions'], page: 'upstream/', anchor: '#investments', title: 'Investment & CAPEX', summary: 'Petrobras alone plans $102B in CAPEX (2024-2028). Private operators investing $30B+. Focus: pre-salt expansion, FPSO construction, and decommissioning.' },
+    { keywords: ['licensing','bid round','auction','leilão','concession','sharing'], page: 'upstream/', anchor: '#licensing', title: 'Licensing & Bid Rounds', summary: 'ANP conducts regular bid rounds for E&P blocks under concession and production-sharing regimes. Recent rounds attract Shell, TotalEnergies, Equinor, and Chinese NOCs.' },
+    { keywords: ['operator','petrobras','shell','total','equinor','private'], page: 'upstream/', anchor: '#operators', title: 'Operators & Key Players', summary: '84 E&P groups operate in Brazil. Petrobras dominates (75%+ of production) but private sector growing fast. Key IOCs: Shell, TotalEnergies, Equinor, Repsol, Galp.' },
+    { keywords: ['regulatory','regulation','anp regulation','ibama','environmental','permit'], page: 'upstream/', anchor: '#regulatory', title: 'Regulatory Framework', summary: 'ANP regulates E&P, IBAMA handles environmental licensing, ANM for mining. Complex permitting process: EIA/RIMA required for all offshore operations.' },
+    { keywords: ['carbon','emission','esg','sustainability','intensity','net zero','climate'], page: 'upstream/', anchor: '#carbon', title: 'Carbon & ESG Performance', summary: 'Brazil\'s pre-salt has one of the lowest carbon intensities globally (avg 10 kgCO2/boe vs. 18 world average). ESG reporting increasingly required by investors.' },
+    { keywords: ['ccus','hydrogen','energy transition','ccs','carbon capture','green hydrogen'], page: 'upstream/', anchor: '#transition', title: 'CCUS & Hydrogen', summary: 'Brazil advancing CCUS with Petrobras leading Santos Basin CO2 reinjection (10M+ tonnes). Green hydrogen pilots in Ceará, Bahia. Fuel of the Future Law (14,993/2024) sets framework.' },
+    { keywords: ['challenge','pain point','digital transformation','legacy'], page: 'upstream/', anchor: '#challenges', title: 'Industry Challenges', summary: 'Key upstream challenges: aging infrastructure, talent shortage, regulatory complexity, data silos across operations, and decommissioning costs.' },
+    { keywords: ['use case','business process','supply chain','procurement','asset'], page: 'upstream/', anchor: '#use-cases', title: 'Use Cases & Business Processes', summary: '8 core upstream use cases: Stakeholder Management, Supply Chain, Asset Optimization, HSE & Compliance, Workforce Management, Licensing & Permitting, ESG Reporting, Gas Commercialization.' },
+    { keywords: ['history','timeline','discovery','70 years','petrobras history'], page: 'upstream/', anchor: '#history', title: 'Historical Timeline', summary: 'From Petrobras founding (1953) to 4M+ bpd today — 70 years of technological achievement in deep-water E&P.' },
+    { keywords: ['architecture','enterprise','platform','integration','mulesoft','data flow'], page: 'upstream/', anchor: '#architecture', title: 'Enterprise Architecture Vision', summary: 'Layered architecture for upstream digital platform: Data Layer (IoT/SCADA), Integration (MuleSoft), Platform (Salesforce), Intelligence (AI/Agentforce).' },
+    { keywords: ['discovery','qualification','meddpicc','ae questions','se questions'], page: 'upstream/', anchor: '#discovery', title: 'Discovery & Qualification Guide', summary: 'MEDDPICC framework adapted for upstream: qualifying questions for AE, technical discovery for SE, platform conversation for EA.' },
+    { keywords: ['biofuel','ethanol','biodiesel','renovabio','cbio','mandate'], page: 'downstream/', anchor: '#sec-biofuels', title: 'Biofuels & Ethanol Market', summary: 'Brazil is the world\'s #2 ethanol producer. Mandatory blends: 27% ethanol in gasoline, 14% biodiesel in diesel. RenovaBio carbon credit program (CBIOs) drives compliance.' },
+    { keywords: ['market overview','fuel market','value chain','distributor','vibra','ipiranga','raizen'], page: 'downstream/', anchor: '#sec-market-overview', title: 'Brazilian Fuel Market Overview', summary: 'R$700B+ annual market. Top 5 distributors: Vibra, Ipiranga, Raízen, Alesat, Taurus. 42,000+ gas stations. 65% transported by tanker truck.' },
+    { keywords: ['market size','growth','consumption','fuel demand'], page: 'downstream/', anchor: '#sec-market-size', title: 'Market Size & Growth', summary: 'Fuel consumption growing 3-5% annually. 215 billion liters/year. Gasoline and diesel dominant, ethanol growing fastest.' },
+    { keywords: ['transport','fleet','vehicle','ev','electrification','highway'], page: 'downstream/', anchor: '#sec-transport-trends', title: 'Transportation Trends', summary: 'Brazil\'s vehicle fleet: 115M+ units, growing 3%/year. Highway-dependent logistics (60% of freight). EV penetration <2% — minimal disruption to fuel demand through 2035.' },
+    { keywords: ['refinery','refining','capacity','petrobras refinery','rlam','replan'], page: 'downstream/', anchor: '#sec-refineries', title: 'Refineries & Capacity', summary: 'Brazil has 18 refineries (2.4M bpd total capacity). Petrobras operates 11. Utilization ~85%. Import dependence for diesel (~25% imported).' },
+    { keywords: ['import','dependence','diesel import','gasoline import'], page: 'downstream/', anchor: '#sec-imports', title: 'Import Dependence', summary: 'Brazil imports ~25% of diesel and ~10% of gasoline consumed. Creates pricing complexity tied to international markets + FX.' },
+    { keywords: ['consolidation','m&a','acquisition','alesat','taurus'], page: 'downstream/', anchor: '#sec-consolidation', title: 'Market Consolidation', summary: 'Downstream undergoing consolidation. Top 3 hold 65%+ market share. Mid-tier players (Alesat, Taurus) growing through acquisitions.' },
+    { keywords: ['data cloud','360','iot','unified data','customer 360'], page: 'downstream/', anchor: '#sec-arch-datacloud', title: 'Data Cloud Architecture', summary: 'Data Cloud unifies IoT telemetry, CRM data, and external feeds into a single platform. Enables real-time tank monitoring, predictive analytics, and AI-driven decisions.' },
+    { keywords: ['impact','roi','value','business case','savings'], page: 'downstream/', anchor: '#sec-impact', title: 'Business Impact & ROI', summary: 'Projected impact: 15-25% faster pricing response, 8-12% logistics cost reduction, 30% fewer stockouts, 2x dealer engagement.' },
+    { keywords: ['why salesforce','compete','sap','oracle','objection'], page: 'downstream/', anchor: '#sec-why-sf', title: 'Why Salesforce', summary: 'Salesforce vs. SAP/Oracle: breadth of customer engagement + native AI + single platform advantage. SAP strong in ERP but weak in CX. No CRM competitor in O&G-specific workflows.' },
+    { keywords: ['pipeline','midstream pipeline','duto','gasoduto','transpetro','scheduling'], page: 'midstream/', anchor: '', title: 'Midstream Pipeline Operations', summary: '~7,500 km of gas pipelines in Brazil. Transpetro dominant operator. ANP mandates open access and transparency. Growing LNG regasification capacity.' },
+    { keywords: ['terminal','port','loading','ship','vessel','storage','tank farm'], page: 'midstream/', anchor: '', title: 'Terminal Operations', summary: '40+ terminal locations across Brazil. Coordinate ship arrival, tank availability, and loading schedules. Integration with Port Authority systems.' },
+    { keywords: ['lng','regasification','natural gas','gas market','gas processing'], page: 'midstream/', anchor: '', title: 'LNG & Gas Processing', summary: 'Brazil expanding LNG regasification capacity. Natural gas demand growing with thermal power plants and industrial use. Gas processing plants ensure transport-quality specs.' },
+  ];
+
   function findBestMatch(query) {
     const q = query.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
     let bestScore = 0;
@@ -252,6 +283,31 @@
         }
       }
     }
+
+    let bestPageScore = 0;
+    let bestPage = null;
+    for (const entry of PAGE_INDEX) {
+      let score = 0;
+      for (const kw of entry.keywords) {
+        const normalizedKw = kw.normalize('NFD').replace(/[̀-ͯ]/g, '');
+        if (q.includes(normalizedKw)) {
+          score += normalizedKw.length;
+        }
+      }
+      if (score > bestPageScore) {
+        bestPageScore = score;
+        bestPage = entry;
+      }
+    }
+
+    if (bestPage && bestPageScore >= bestScore) {
+      const link = PAGE_BASE + bestPage.page + bestPage.anchor;
+      const content = bestContent && bestScore > 0
+        ? bestContent + `\n\n📄 **[${bestPage.title} →](${link})**`
+        : `**${bestPage.title}**\n\n${bestPage.summary}\n\n📄 **[Read the full section →](${link})**`;
+      return content;
+    }
+
     if (bestContent && bestLink) {
       const resolvedLink = PAGE_BASE + bestLink.replace('../', '');
       bestContent += `\n\n📄 **[Learn more →](${resolvedLink})**`;
