@@ -4,8 +4,9 @@
     <label>OilGas POV Web</label>
     <oauthConfig>
         <callbackUrl>https://login.salesforce.com/services/oauth2/callback</callbackUrl>
+        <certificate>MIIDVzCCAj+gAwIBAgIUJJ1WbwCwoBix/MMs2kot/ctJVSswDQYJKoZIhvcNAQELBQAwOzEXMBUGA1UEAwwOT2lsR2FzIFBPViBXZWIxEzARBgNVBAoMClNhbGVzZm9yY2UxCzAJBgNVBAYTAkJSMB4XDTI2MDYyNTE4MTIwOFoXDTI4MDYyNDE4MTIwOFowOzEXMBUGA1UEAwwOT2lsR2FzIFBPViBXZWIxEzARBgNVBAoMClNhbGVzZm9yY2UxCzAJBgNVBAYTAkJSMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqnHUipukvWufP+CFE/FrgwJfow/wCXd5MvT2owZ6Qw/hm/NwYaMGf3M3bmxIZvajPds5z+79s3oc77bz9CEY23VxSsvHz2PkcIfukC0wckCwwr1s0opCuAlLGDyv2QD8GVWnDmXpP4FxjV641zsJVWTQEvJ2CQCowhYYdTf4XDMioahylVWGYzijljialMks+3alknL7tQoyPB3KjRTHSZ8IhFW5blW9Z3+OJ6crqjVitW+bbmX96z+BfMX0PFjrmkeJMhnryyQ0dt66MhFLM8SeH+O/OFAMVGUOXb9w8pFiTSPAwKcq23/1uyxqbxiw2LOzamBGEDplj8wnJ3S2xQIDAQABo1MwUTAdBgNVHQ4EFgQU4o27F1rGGxr6V3GGQme83TirLEcwHwYDVR0jBBgwFoAU4o27F1rGGxr6V3GGQme83TirLEcwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAbQWph8dNcfHfTD05mrBFXMQW6oapujrGYejk41SwAbU4eQxYA5sq7CczTs5i7A7xDRM+LSp0qAflnDmRpIbRtavkBWMGDojtkt/WrSIpfB1m0IdCWFW5mUH5g9Xsp+eZLHlogs0tTCHH62KqUrnoIA84n37rNRE0qCRmnmLEgIcKaUArBLhkms+Hx0Pt8WhkqpNhS7punHL0mTwu9neqfTT6Z6UwZKh0w7VCLV1Ub7RolqxNo5O+V7FsQg0G4xXRJZsE3+P6ZuyguV0s7e3dpm/oIpJXftHXC7bT7UTpVbIgLViFNq0fLL3pQ7XkNSjNSyQvg783UsG32JGBoF+5iw==</certificate>
         <consumerKey>OilGasPOVWeb</consumerKey>
-        <isAdminApproved>false</isAdminApproved>
+        <isAdminApproved>true</isAdminApproved>
         <isConsumerSecretOptional>false</isConsumerSecretOptional>
         <isIntrospectAllTokens>false</isIntrospectAllTokens>
         <scopes>Api</scopes>
