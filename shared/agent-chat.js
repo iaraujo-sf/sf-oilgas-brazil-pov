@@ -728,18 +728,19 @@ Try asking about any of these topics!`;
       input.value = '';
       showTyping();
 
+      const localAnswer = respond(text);
+
       if (proxyAvailable) {
         const liveReply = await askAgent(text);
         hideTyping();
-        if (liveReply) {
-          await streamMessage(liveReply);
-        } else {
-          await streamMessage(respond(text));
-        }
+        const combined = localAnswer
+          ? localAnswer
+          : (liveReply || 'I can help with Downstream, Upstream, Midstream, and Agentforce topics. Try asking about pricing, pre-salt, pipelines, or how agents work!');
+        await streamMessage(combined);
       } else {
         await new Promise(r => setTimeout(r, 400 + Math.random() * 400));
         hideTyping();
-        await streamMessage(respond(text));
+        await streamMessage(localAnswer || 'I can help with Downstream, Upstream, Midstream, and Agentforce topics. Try asking about pricing, pre-salt, pipelines, or how agents work!');
       }
     }
 
