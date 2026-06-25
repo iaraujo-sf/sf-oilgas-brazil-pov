@@ -2,60 +2,62 @@
  * Agentforce POV Chat Widget — Cross-Vertical Oil & Gas Assistant
  * Embeds in any POV page via <script src="../shared/agent-chat.js"></script>
  *
- * Connects to real Agentforce agent via local proxy (node shared/agent-proxy.js).
+ * Connects to real Agentforce agent via Vercel proxy (api/agent.js).
  * Falls back to local knowledge base when proxy is unavailable.
  */
 (function() {
   'use strict';
 
   const AGENT_NAME = 'Agentforce';
-  const IS_REMOTE = window.location.protocol === 'https:';
-  const PROXY_URL = 'http://localhost:3001';
-  let proxyAvailable = false;
-  let clientId = null;
+  const PROXY_URL = 'https://sf-oilgas-brazil-pov.vercel.app/api/agent';
+  let agentSessionId = null;
+  let agentConnected = false;
 
   const AVATAR_PATH = (document.querySelector('meta[name="agent-avatar"]') || {}).content
     || (window.location.pathname.includes('/downstream/') || window.location.pathname.includes('/upstream/') || window.location.pathname.includes('/midstream/')
         ? '../assets/agentforce-avatar.png'
         : 'assets/agentforce-avatar.png');
 
-  async function checkProxy() {
-    if (IS_REMOTE) {
-      proxyAvailable = false;
-      return;
-    }
+  async function startAgentSession() {
     try {
-      const res = await fetch(PROXY_URL + '/health', { signal: AbortSignal.timeout(2000) });
-      if (res.ok) {
-        proxyAvailable = true;
-        const session = await fetch(PROXY_URL + '/session', { method: 'POST' });
-        const data = await session.json();
-        clientId = data.clientId;
-        console.log('[Agentforce] Connected to live agent via local proxy');
+      const res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'start' }),
+        signal: AbortSignal.timeout(10000),
+      });
+      if (!res.ok) return false;
+      const data = await res.json();
+      if (data.sessionId) {
+        agentSessionId = data.sessionId;
+        agentConnected = true;
+        console.log('[Agentforce] Connected to live agent');
+        return true;
       }
-    } catch {
-      proxyAvailable = false;
+    } catch (e) {
+      console.log('[Agentforce] Proxy unavailable, using local KB', e.message);
     }
+    return false;
   }
 
   async function askAgent(message) {
-    if (!proxyAvailable) return null;
+    if (!agentConnected || !agentSessionId) return null;
     try {
-      const res = await fetch(PROXY_URL + '/message', {
+      const res = await fetch(PROXY_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clientId, message })
+        body: JSON.stringify({ action: 'send', sessionId: agentSessionId, message }),
+        signal: AbortSignal.timeout(30000),
       });
       if (!res.ok) return null;
       const data = await res.json();
-      if (data.fallback) return null;
       return data.reply || null;
     } catch {
       return null;
     }
   }
 
-  checkProxy();
+  startAgentSession();
 
   const KNOWLEDGE_BASE = {
     downstream: {
@@ -711,9 +713,15 @@ Try asking about any of these topics!`;
       input.value = '';
       showTyping();
 
-      await new Promise(r => setTimeout(r, 300 + Math.random() * 400));
+      let answer = null;
+      if (agentConnected) {
+        answer = await askAgent(text);
+      }
+      if (!answer) {
+        await new Promise(r => setTimeout(r, 200 + Math.random() * 300));
+        answer = respond(text) || 'I can help with Downstream, Upstream, Midstream, and Agentforce topics. Try asking about pricing, pre-salt, pipelines, or how agents work!';
+      }
       hideTyping();
-      const answer = respond(text) || 'I can help with Downstream, Upstream, Midstream, and Agentforce topics. Try asking about pricing, pre-salt, pipelines, or how agents work!';
       await streamMessage(answer);
     }
 
