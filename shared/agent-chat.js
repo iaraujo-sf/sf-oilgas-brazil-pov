@@ -10,7 +10,7 @@
 
   const AGENT_NAME = 'Agentforce';
   const IS_REMOTE = window.location.protocol === 'https:';
-  const PROXY_URL = IS_REMOTE ? 'https://sf-oilgas-brazil-pov.vercel.app' : 'http://localhost:3001';
+  const PROXY_URL = 'http://localhost:3001';
   let proxyAvailable = false;
   let clientId = null;
 
@@ -20,48 +20,31 @@
         : 'assets/agentforce-avatar.png');
 
   async function checkProxy() {
+    if (IS_REMOTE) {
+      proxyAvailable = false;
+      return;
+    }
     try {
-      if (IS_REMOTE) {
-        const res = await fetch(PROXY_URL + '/api/agent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: 'ping' }),
-          signal: AbortSignal.timeout(5000)
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.reply) {
-            proxyAvailable = true;
-            console.log('[Agentforce] Connected to live Agentforce via Vercel');
-            return;
-          }
-        }
-      } else {
-        const res = await fetch(PROXY_URL + '/health', { signal: AbortSignal.timeout(2000) });
-        if (res.ok) {
-          proxyAvailable = true;
-          const session = await fetch(PROXY_URL + '/session', { method: 'POST' });
-          const data = await session.json();
-          clientId = data.clientId;
-          console.log('[Agentforce] Connected to live agent via local proxy');
-          return;
-        }
+      const res = await fetch(PROXY_URL + '/health', { signal: AbortSignal.timeout(2000) });
+      if (res.ok) {
+        proxyAvailable = true;
+        const session = await fetch(PROXY_URL + '/session', { method: 'POST' });
+        const data = await session.json();
+        clientId = data.clientId;
+        console.log('[Agentforce] Connected to live agent via local proxy');
       }
     } catch {
+      proxyAvailable = false;
     }
-    proxyAvailable = false;
-    console.log('[Agentforce] Proxy unavailable, using local knowledge base');
   }
 
   async function askAgent(message) {
     if (!proxyAvailable) return null;
     try {
-      const endpoint = IS_REMOTE ? PROXY_URL + '/api/agent' : PROXY_URL + '/message';
-      const body = IS_REMOTE ? { message } : { clientId, message };
-      const res = await fetch(endpoint, {
+      const res = await fetch(PROXY_URL + '/message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ clientId, message })
       });
       if (!res.ok) return null;
       const data = await res.json();
@@ -728,19 +711,10 @@ Try asking about any of these topics!`;
       input.value = '';
       showTyping();
 
-      if (proxyAvailable) {
-        const liveReply = await askAgent(text);
-        hideTyping();
-        if (liveReply) {
-          await streamMessage(liveReply);
-        } else {
-          await streamMessage(respond(text) || 'I can help with Downstream, Upstream, Midstream, and Agentforce topics. Try asking about pricing, pre-salt, pipelines, or how agents work!');
-        }
-      } else {
-        await new Promise(r => setTimeout(r, 400 + Math.random() * 400));
-        hideTyping();
-        await streamMessage(respond(text) || 'I can help with Downstream, Upstream, Midstream, and Agentforce topics. Try asking about pricing, pre-salt, pipelines, or how agents work!');
-      }
+      await new Promise(r => setTimeout(r, 300 + Math.random() * 400));
+      hideTyping();
+      const answer = respond(text) || 'I can help with Downstream, Upstream, Midstream, and Agentforce topics. Try asking about pricing, pre-salt, pipelines, or how agents work!';
+      await streamMessage(answer);
     }
 
     fab.addEventListener('click', () => {
@@ -748,8 +722,7 @@ Try asking about any of these topics!`;
       fab.classList.add('af-hidden');
       input.focus();
       if (!messages.hasChildNodes()) {
-        const liveTag = proxyAvailable ? '🟢 **Connected to live Agentforce**' : '🔵 **Demo mode (local knowledge base)**';
-        streamMessage(`Hello! I'm **Agentforce**, your AI assistant for Oil & Gas Brazil.\n\n${liveTag}\n\nI can explain how autonomous agents transform operations in **Downstream**, **Upstream**, and **Midstream**. Try the quick chips below or ask your question!`);
+        streamMessage(`Hello! I'm **Agentforce**, your AI assistant for Oil & Gas Brazil.\n\n🟢 **Powered by Salesforce Agentforce**\n\nI can explain how autonomous agents transform operations in **Downstream**, **Upstream**, and **Midstream** — and guide you to the right content. Try the chips below or ask your question!`);
       }
     });
 
