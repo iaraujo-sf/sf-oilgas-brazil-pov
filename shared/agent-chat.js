@@ -10,6 +10,7 @@
 
   const AGENT_NAME = 'Agentforce';
   const PROXY_URL = 'http://localhost:3001';
+  const IS_REMOTE = window.location.protocol === 'https:';
   let proxyAvailable = false;
   let clientId = null;
 
@@ -19,6 +20,11 @@
         : 'assets/agentforce-avatar.png');
 
   async function checkProxy() {
+    if (IS_REMOTE) {
+      proxyAvailable = false;
+      console.log('[Agentforce] Running on remote host, using local knowledge base');
+      return;
+    }
     try {
       const res = await fetch(PROXY_URL + '/health', { signal: AbortSignal.timeout(2000) });
       if (res.ok) {
