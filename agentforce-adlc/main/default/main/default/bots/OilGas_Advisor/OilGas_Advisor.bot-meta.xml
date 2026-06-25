@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bot xmlns="http://soap.sforce.com/2006/04/metadata">
+    <agentDSLEnabled>true</agentDSLEnabled>
+    <agentType>AgentforceEmployeeAgent</agentType>
+    <botMlDomain>
+        <label>Oil &amp; Gas Industry Advisor</label>
+        <name>OilGas_Advisor</name>
+    </botMlDomain>
+    <botSource>None</botSource>
+    <description>Cross-vertical AI advisor for Oil &amp; Gas Brazil. Assists AEs and SEs with industry context, use cases, and Salesforce product mapping across Downstream, Upstream, and Midstream.</description>
+    <label>Oil &amp; Gas Industry Advisor</label>
+    <logPrivateConversationData>false</logPrivateConversationData>
+    <richContentEnabled>true</richContentEnabled>
+    <sessionTimeout>0</sessionTimeout>
+    <type>InternalCopilot</type>
+</Bot>

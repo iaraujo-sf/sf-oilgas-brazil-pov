@@ -1,0 +1,14 @@
+{
+  "required" : [ "market_segment" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "market_segment" : {
+      "title" : "Market Segment",
+      "description" : "Market segment to query (upstream, midstream, downstream, overview)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

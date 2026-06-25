@@ -1,0 +1,14 @@
+{
+  "required" : [ "operation_type" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "operation_type" : {
+      "title" : "Operation Type",
+      "description" : "Type of operation data to retrieve (general, compliance, workforce, production)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

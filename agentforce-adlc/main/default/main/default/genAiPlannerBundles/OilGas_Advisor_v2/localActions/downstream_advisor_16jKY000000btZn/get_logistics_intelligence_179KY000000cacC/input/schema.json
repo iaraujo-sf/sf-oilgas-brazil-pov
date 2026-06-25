@@ -1,0 +1,14 @@
+{
+  "required" : [ "vertical" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "vertical" : {
+      "title" : "Vertical",
+      "description" : "The vertical to query logistics data for",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

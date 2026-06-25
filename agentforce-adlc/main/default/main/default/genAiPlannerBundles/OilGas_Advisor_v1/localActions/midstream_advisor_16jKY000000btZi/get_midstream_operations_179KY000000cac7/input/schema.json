@@ -1,0 +1,14 @@
+{
+  "required" : [ "segment" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "segment" : {
+      "title" : "Segment",
+      "description" : "Midstream segment to query (pipeline, terminal, trading, general)",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

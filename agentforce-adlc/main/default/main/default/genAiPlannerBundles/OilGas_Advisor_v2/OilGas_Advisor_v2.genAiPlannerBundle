@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Cross-vertical AI advisor for Oil &amp; Gas Brazil. Assists AEs and SEs with industry context, use cases, and Salesforce product mapping across Downstream, Upstream, and Midstream.</description>
+    <localTopicLinks>
+        <genAiPluginName>agentforce_explainer_16jKY000000btZn</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>downstream_advisor_16jKY000000btZn</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>industry_router_16jKY000000btZn</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>market_context_16jKY000000btZn</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>midstream_advisor_16jKY000000btZn</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>off_topic_16jKY000000btZn</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>upstream_advisor_16jKY000000btZn</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>midstream_advisor_16jKY000000btZn</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Handles questions about midstream operations: pipeline scheduling, terminal operations, gas processing, trading, and balancing in Brazil</description>
+        <developerName>midstream_advisor_16jKY000000btZn</developerName>
+        <genAiPluginInstructions>
+            <description>You are an Oil &amp; Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&amp;G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user&apos;s question. Never provide financial advice or share confidential customer information.</description>
+            <developerName>instruction0_179KY000000cacA</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179KY000000cacA</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>get_midstream_operations_179KY000000cacA</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>get_midstream_operations_179KY000000cacA</fullName>
+            <description>Retrieves midstream operational data including pipeline capacity, terminal status, and trading positions</description>
+            <developerName>get_midstream_operations_179KY000000cacA</developerName>
+            <invocationTarget>OilGas_MidstreamOperations</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_midstream_operations</localDeveloperName>
+            <masterLabel>Get Midstream Operations</masterLabel>
+        </localActions>
+        <localDeveloperName>midstream_advisor</localDeveloperName>
+        <masterLabel>Midstream Advisor</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>market_context_16jKY000000btZn</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Provides Brazilian Oil &amp; Gas market context: market size, regulation, competitive landscape, and opportunity sizing for Salesforce</description>
+        <developerName>market_context_16jKY000000btZn</developerName>
+        <genAiPluginInstructions>
+            <description>You are an Oil &amp; Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&amp;G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user&apos;s question. Never provide financial advice or share confidential customer information.</description>
+            <developerName>instruction0_179KY000000cacB</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179KY000000cacB</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>get_market_intelligence_179KY000000cacB</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>get_market_intelligence_179KY000000cacB</fullName>
+            <description>Retrieves Brazilian Oil &amp; Gas market data including size, regulation, and competitive landscape</description>
+            <developerName>get_market_intelligence_179KY000000cacB</developerName>
+            <invocationTarget>OilGas_MarketIntelligence</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_market_intelligence</localDeveloperName>
+            <masterLabel>Get Market Intelligence</masterLabel>
+        </localActions>
+        <localDeveloperName>market_context</localDeveloperName>
+        <masterLabel>Market Context</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>downstream_advisor_16jKY000000btZn</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Handles questions about downstream fuel distribution: pricing intelligence, logistics optimization, dealer management, loyalty programs, and commercial operations in Brazil</description>
+        <developerName>downstream_advisor_16jKY000000btZn</developerName>
+        <genAiPluginInstructions>
+            <description>You are an Oil &amp; Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&amp;G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user&apos;s question. Never provide financial advice or share confidential customer information.</description>
+            <developerName>instruction0_179KY000000cacC</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179KY000000cacC</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>get_logistics_intelligence_179KY000000cacC</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>get_pricing_intelligence_179KY000000cacC</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>get_pricing_intelligence_179KY000000cacC</fullName>
+            <description>Retrieves current pricing intelligence and market data for downstream fuel distribution</description>
+            <developerName>get_pricing_intelligence_179KY000000cacC</developerName>
+            <invocationTarget>OilGas_PricingIntelligence</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_pricing_intelligence</localDeveloperName>
+            <masterLabel>Get Pricing Intelligence</masterLabel>
+        </localActions>
+        <localActions>
+            <fullName>get_logistics_intelligence_179KY000000cacC</fullName>
+            <description>Retrieves logistics optimization data and delivery performance metrics</description>
+            <developerName>get_logistics_intelligence_179KY000000cacC</developerName>
+            <invocationTarget>OilGas_LogisticsIntelligence</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_logistics_intelligence</localDeveloperName>
+            <masterLabel>Get Logistics Intelligence</masterLabel>
+        </localActions>
+        <localDeveloperName>downstream_advisor</localDeveloperName>
+        <masterLabel>Downstream Advisor</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>agentforce_explainer_16jKY000000btZn</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Explains how Agentforce works, its architecture, guardrails, and specific agent scenarios for Oil &amp; Gas</description>
+        <developerName>agentforce_explainer_16jKY000000btZn</developerName>
+        <genAiPluginInstructions>
+            <description>You are an Oil &amp; Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&amp;G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user&apos;s question. Never provide financial advice or share confidential customer information.</description>
+            <developerName>instruction0_179KY000000cacD</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179KY000000cacD</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>get_agentforce_details_179KY000000cacD</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>get_agentforce_details_179KY000000cacD</fullName>
+            <description>Retrieves detailed Agentforce architecture information and Oil &amp; Gas specific scenarios</description>
+            <developerName>get_agentforce_details_179KY000000cacD</developerName>
+            <invocationTarget>OilGas_AgentforceDetails</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_agentforce_details</localDeveloperName>
+            <masterLabel>Get Agentforce Details</masterLabel>
+        </localActions>
+        <localDeveloperName>agentforce_explainer</localDeveloperName>
+        <masterLabel>Agentforce Explainer</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>off_topic_16jKY000000btZn</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Redirect conversation to relevant subagents when user request goes off-topic</description>
+        <developerName>off_topic_16jKY000000btZn</developerName>
+        <genAiPluginInstructions>
+            <description>You are an Oil &amp; Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&amp;G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user&apos;s question. Never provide financial advice or share confidential customer information.</description>
+            <developerName>instruction0_179KY000000cacE</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179KY000000cacE</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>off_topic</localDeveloperName>
+        <masterLabel>Off Topic</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>upstream_advisor_16jKY000000btZn</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Handles questions about upstream E&amp;P operations: offshore platforms, well integrity, compliance, workforce management, production allocation, and HSE in Brazil</description>
+        <developerName>upstream_advisor_16jKY000000btZn</developerName>
+        <genAiPluginInstructions>
+            <description>You are an Oil &amp; Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&amp;G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user&apos;s question. Never provide financial advice or share confidential customer information.</description>
+            <developerName>instruction0_179KY000000cacF</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179KY000000cacF</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>get_upstream_operations_179KY000000cacF</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>get_upstream_operations_179KY000000cacF</fullName>
+            <description>Retrieves upstream operational data including platform status, well integrity metrics, and compliance status</description>
+            <developerName>get_upstream_operations_179KY000000cacF</developerName>
+            <invocationTarget>OilGas_UpstreamOperations</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>get_upstream_operations</localDeveloperName>
+            <masterLabel>Get Upstream Operations</masterLabel>
+        </localActions>
+        <localDeveloperName>upstream_advisor</localDeveloperName>
+        <masterLabel>Upstream Advisor</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>industry_router_16jKY000000btZn</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Welcome the user and route to the appropriate vertical subagent based on their question</description>
+        <developerName>industry_router_16jKY000000btZn</developerName>
+        <genAiPluginInstructions>
+            <description>You are an Oil &amp; Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&amp;G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user&apos;s question. Never provide financial advice or share confidential customer information.</description>
+            <developerName>instruction0_179KY000000cac9</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179KY000000cac9</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>industry_router</localDeveloperName>
+        <masterLabel>Industry Router</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <masterLabel>Oil &amp; Gas Industry Advisor</masterLabel>
+    <plannerType>Atlas__ConcurrentMultiAgentOrchestration</plannerType>
+</GenAiPlannerBundle>
