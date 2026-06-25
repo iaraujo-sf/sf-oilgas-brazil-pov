@@ -4,14 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Salesforce Downstream Oil & Gas Brazil POV</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/AvantGardeForSalesforceW05-Dm.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="../assets/fonts/SalesforceSans-Regular.woff" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="../assets/fonts/SalesforceSans-Bold.woff" as="font" type="font/woff" crossorigin>
+<link rel="stylesheet" href="../shared/tokens.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <style>
 :root {
-  --sf-primary: #1B96FF;
+  --sf-primary: #066AFE;
   --sf-dark: #e8edf3;
-  --sf-light-bg: #0B1222;
+  --sf-light-bg: #000B2E;
   --sf-highlight: rgba(1,118,211,0.12);
   --sf-success: #2E844A;
   --sf-warning: #FE9339;
@@ -29,7 +32,7 @@
 }
 
 [data-theme="light"] {
-  --sf-primary: #0176D3;
+  --sf-primary: #066AFE;
   --sf-dark: #032D60;
   --sf-light-bg: #F4F6F9;
   --sf-highlight: #EEF4FF;
@@ -44,12 +47,17 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'SalesforceSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--sf-light-bg);
   color: var(--sf-text);
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+h1, h2 {
+  font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+  font-weight: 500;
 }
 
 [data-theme="light"] body { background: #F4F6F9; }
@@ -61,7 +69,8 @@ body {
   left: 0;
   width: var(--sidebar-w);
   height: 100vh;
-  background: linear-gradient(180deg, #001639 0%, #0B1222 100%);
+  height: 100dvh;
+  background: linear-gradient(180deg, #001E5B 0%, #000B2E 100%);
   color: #fff;
   overflow-y: auto;
   z-index: 1000;
@@ -96,8 +105,9 @@ body {
 }
 
 .sidebar-header h1 {
+  font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+  font-weight: 500;
   font-size: 14px;
-  font-weight: 600;
   letter-spacing: 0.3px;
   opacity: 0.95;
 }
@@ -171,6 +181,7 @@ body {
   height: var(--topbar-h);
   background: rgba(11,18,34,0.92);
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(1,118,211,0.1);
   display: flex;
   align-items: center;
@@ -280,6 +291,7 @@ body {
 
 /* MAIN CONTENT */
 .main-content {
+  position: relative;
   margin-left: var(--sidebar-w);
   margin-top: var(--topbar-h);
   padding: 32px;
@@ -300,7 +312,7 @@ body {
 
 /* SECTION HEADER */
 .section-hero {
-  background: linear-gradient(135deg, #001639 0%, #0F1A2E 50%, #0a1525 100%);
+  background: linear-gradient(135deg, #001E5B 0%, #0F1A2E 50%, #0a1525 100%);
   color: #fff;
   padding: 48px 40px;
   border-radius: 12px;
@@ -348,8 +360,9 @@ body {
 }
 
 .section-hero h2 {
+  font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+  font-weight: 500;
   font-size: 28px;
-  font-weight: 700;
   margin-bottom: 8px;
   position: relative;
   z-index: 1;
@@ -405,18 +418,22 @@ body {
   box-shadow: var(--shadow);
   margin-bottom: 24px;
   border: 1px solid var(--sf-border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .card h3 {
+  font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+  font-weight: 500;
   font-size: 16px;
-  font-weight: 600;
   margin-bottom: 16px;
   color: var(--sf-text);
 }
 
 .card h4 {
+  font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+  font-weight: 500;
   font-size: 14px;
-  font-weight: 600;
   margin: 16px 0 8px;
   color: var(--sf-text);
 }
@@ -438,6 +455,8 @@ body {
   text-align: center;
   border-top: 3px solid var(--sf-primary);
   transition: all 0.2s;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .metric-card:hover {
@@ -1474,6 +1493,14 @@ tr.persona-dim { opacity: 0.35; }
   canvas { max-height: 200px; }
   .page-footer { position: fixed; bottom: 0; width: 100%; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1764,6 +1791,14 @@ tr.persona-dim { opacity: 0.35; }
 
 <!-- MAIN CONTENT -->
 <main class="main-content" id="mainContent">
+
+<!-- Sacred Sparkles -->
+<img src="../assets/sparkles/Sparkles Blue Inclined.svg" alt="" aria-hidden="true" style="position: absolute; top: 120px; left: 40px; width: 48px; height: 48px; pointer-events: none; z-index: 1; opacity: 0.5;">
+<img src="../assets/sparkles/Sparkles Yellow Main.svg" alt="" aria-hidden="true" style="position: absolute; top: 240px; right: 60px; width: 36px; height: 36px; pointer-events: none; z-index: 1; opacity: 0.4;">
+<img src="../assets/sparkles/Sparkles DarkBlue Main.svg" alt="" aria-hidden="true" style="position: absolute; top: 680px; left: 30px; width: 56px; height: 56px; pointer-events: none; z-index: 1; opacity: 0.45;">
+<img src="../assets/sparkles/Sparkles Yellow Inclined 2.svg" alt="" aria-hidden="true" style="position: absolute; top: 1200px; right: 50px; width: 42px; height: 42px; pointer-events: none; z-index: 1; opacity: 0.5;">
+<img src="../assets/sparkles/Sparkles Blue Inclined.svg" alt="" aria-hidden="true" style="position: absolute; top: 1800px; left: 45px; width: 52px; height: 52px; pointer-events: none; z-index: 1; opacity: 0.4;">
+<img src="../assets/sparkles/Sparkles DarkBlue Main.svg" alt="" aria-hidden="true" style="position: absolute; top: 2400px; right: 55px; width: 44px; height: 44px; pointer-events: none; z-index: 1; opacity: 0.48;">
 
 <!-- PERSONA LENS BAR -->
 <div class="persona-bar" id="personaBar">

@@ -1,37 +1,246 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+/* ==========================================================================
+   OIL & GAS BRAZIL POV — Sacred Visual System + Industry Override
+   Based on Salesforce Brand Guidelines with O&G gold accent
+   ========================================================================== */
+
+/* Font Face Declarations */
+@font-face {
+  font-family: 'AvantGarde';
+  src: url('../assets/fonts/AvantGardeForSalesforceW05-Dm.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SalesforceSans';
+  src: url('../assets/fonts/SalesforceSans-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SalesforceSans';
+  src: url('../assets/fonts/SalesforceSans-Book.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SalesforceSans';
+  src: url('../assets/fonts/SalesforceSans-Regular.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SalesforceSans';
+  src: url('../assets/fonts/SalesforceSans-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SalesforceSans';
+  src: url('../assets/fonts/SalesforceSans-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
-  --sf-primary: #0176D3;
-  --sf-dark: #032D60;
-  --sf-light-bg: #F4F6F9;
-  --sf-highlight: #EEF4FF;
-  --sf-success: #2E844A;
-  --sf-warning: #FE9339;
-  --sf-error: #EA001E;
-  --sf-text: #181818;
-  --sf-text-sec: #706E6B;
-  --sf-border: #DDDBDA;
-  --sf-white: #FFFFFF;
+  /* Sacred Palette — Electric Blue */
+  --electric-blue-15: #001E5B;
+  --electric-blue-30: #022AC0;
+  --electric-blue-50: #066AFE;
+
+  /* Sacred Palette — Cloud Blue */
+  --cloud-blue-68: #00B3FF;
+  --cloud-blue-80: #90D0FE;
+  --cloud-blue-95: #EAF5FE;
+
+  /* Sacred Palette — Neutrals */
+  --white: #FFFFFF;
+  --black: #000B2E;
+  --gray-20: #181818;
+  --gray-40: #3E3E3C;
+  --gray-60: #706E6B;
+  --gray-80: #DDDBDA;
+  --gray-95: #F3F2F2;
+
+  /* Sacred Palette — Accent (Sparingly) */
+  --green: #2E844A;
+  --orange: #DD7A01;
+  --violet: #9050E9;
+  --hot-pink: #FF538A;
+
+  /* O&G Industry Override — Gold (maintained per project identity) */
   --oil-gold: #f5a623;
-  --radius: 8px;
-  --shadow: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-lg: 0 4px 24px rgba(0,0,0,0.12);
+  --oil-gold-glow: rgba(245, 166, 35, 0.25);
+  --oil-gold-subtle: rgba(245, 166, 35, 0.08);
+
+  /* Sacred Gradients */
+  --gradient-morning: linear-gradient(180deg, #EAF5FE 0%, #FFFFFF 100%);
+  --gradient-midday: linear-gradient(180deg, #00B3FF 0%, #066AFE 100%);
+  --gradient-dusk: linear-gradient(180deg, #022AC0 0%, #001E5B 100%);
+  --gradient-evening: linear-gradient(180deg, #001E5B 0%, #000B2E 100%);
+
+  /* Functional Tokens — Dark Mode (default for O&G) */
+  --surface: #000B2E;
+  --surface-elevated: #001E5B;
+  --surface-card: rgba(0, 30, 91, 0.4);
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-muted: rgba(255, 255, 255, 0.35);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(6, 106, 254, 0.2);
+
+  /* Spacing */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+  --shadow-glow: 0 0 20px rgba(6, 106, 254, 0.15);
+  --shadow-gold: 0 0 20px rgba(245, 166, 35, 0.15);
+
+  /* Legacy Compat (map old tokens → new) */
+  --sf-primary: var(--electric-blue-50);
+  --sf-dark: var(--electric-blue-15);
+  --sf-light-bg: var(--surface);
+  --sf-highlight: rgba(6, 106, 254, 0.12);
+  --sf-success: var(--green);
+  --sf-warning: var(--orange);
+  --sf-error: #EA001E;
+  --sf-text: var(--text-primary);
+  --sf-text-sec: var(--text-secondary);
+  --sf-border: var(--border);
+  --sf-white: var(--surface-elevated);
+  --radius: var(--radius-sm);
+  --shadow: var(--shadow-sm);
+  --shadow-lg-legacy: var(--shadow-lg);
 }
 
-[data-theme="dark"] {
-  --sf-light-bg: #1a1a2e;
-  --sf-white: #16213e;
-  --sf-text: #e0e0e0;
-  --sf-text-sec: #a0a0a0;
-  --sf-border: #2a2a4a;
-  --sf-highlight: rgba(1,118,211,0.15);
+[data-theme="light"] {
+  --surface: #FFFFFF;
+  --surface-elevated: var(--gray-95);
+  --surface-card: #FFFFFF;
+  --text-primary: var(--gray-20);
+  --text-secondary: var(--gray-60);
+  --text-muted: var(--gray-80);
+  --border: var(--gray-80);
+  --border-accent: rgba(6, 106, 254, 0.3);
+
+  --sf-primary: var(--electric-blue-50);
+  --sf-dark: var(--electric-blue-15);
+  --sf-light-bg: var(--gray-95);
+  --sf-highlight: var(--cloud-blue-95);
+  --sf-text: var(--gray-20);
+  --sf-text-sec: var(--gray-60);
+  --sf-border: var(--gray-80);
+  --sf-white: #FFFFFF;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Base Reset */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--sf-light-bg);
-  color: var(--sf-text);
+  font-family: 'SalesforceSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--surface);
+  color: var(--text-primary);
   line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2 {
+  font-family: 'AvantGarde', 'SalesforceSans', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+h3, h4, h5, h6 {
+  font-family: 'SalesforceSans', sans-serif;
+  font-weight: 700;
+}
+
+/* Frosted Glass System */
+.glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-lg);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-md);
+}
+
+.glass-dark {
+  background: rgba(0, 30, 91, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(6, 106, 254, 0.3);
+  border-radius: var(--radius-lg);
+}
+
+/* Sparkle Positioning */
+.sparkle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.7;
+  animation: sparkle-float 6s ease-in-out infinite;
+}
+
+.sparkle-left { left: 2%; }
+.sparkle-right { right: 2%; }
+
+.sparkle-sm { width: 28px; height: 28px; }
+.sparkle-md { width: 48px; height: 48px; }
+.sparkle-lg { width: 72px; height: 72px; }
+.sparkle-xl { width: 96px; height: 96px; }
+
+@keyframes sparkle-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+@keyframes sparkle-float-alt {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(-5deg); }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .sparkle { animation: none; }
 }
