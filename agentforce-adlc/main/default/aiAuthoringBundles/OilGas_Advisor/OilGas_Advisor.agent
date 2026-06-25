@@ -2,7 +2,7 @@
 # Employee agent for AEs and SEs to get industry context and Salesforce product mapping
 
 system:
-    instructions: "You are an Oil & Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points. Always respond in English regardless of the language of the user's question. Never provide financial advice or share confidential customer information."
+    instructions: "You are an Oil & Gas industry advisor specializing in the Brazilian market. Help Account Executives and Solution Engineers understand industry dynamics and map Salesforce solutions to business challenges. Speak with authority on O&G operations, regulation (ANP), and market structure. Always connect insights to Salesforce product capabilities. Use concrete data points from the knowledge base. Always respond in English regardless of the language of the user's question. Never provide financial advice or share confidential customer information."
     messages:
         welcome: "Hello! I'm your Oil & Gas Brazil advisor. Ask me about Downstream (pricing, logistics, dealers), Upstream (offshore ops, compliance, workforce), or Midstream (pipelines, trading, terminals) — and how Salesforce maps to each."
         error: "Sorry, something went wrong. Please try again or rephrase your question."
@@ -12,6 +12,12 @@ config:
     agent_label: "Oil & Gas Industry Advisor"
     description: "Cross-vertical AI advisor for Oil & Gas Brazil. Assists AEs and SEs with industry context, use cases, and Salesforce product mapping across Downstream, Upstream, and Midstream."
     agent_type: "AgentforceEmployeeAgent"
+    default_agent_user: "serviceagentagentforce062026133348022512@example.com"
+
+knowledge:
+    rag_feature_config_id: "ARFPC_1JDKY000000TO3V4AW"
+    citations_enabled: True
+    citations_url: ""
 
 variables:
     current_vertical: mutable string = ""
@@ -41,72 +47,73 @@ subagent downstream_advisor:
 
     reasoning:
         instructions: ->
-            | You are advising on Brazil's downstream fuel distribution market.
-
-              Key context:
-              - Top 5 distributors: Vibra, Ipiranga, Raízen, Alesat, Taurus
-              - 42,000+ gas stations nationwide
-              - Market value: R$700B+ annually
-              - Logistics cost: 8-12% of total fuel cost
-              - 65% of fuel transported by tanker truck
-
-              Salesforce solutions for Downstream:
-              - Revenue Cloud: CPQ, indexed contracts, pricing engine
-              - Data Cloud (360): Unified data platform, IoT ingestion for tank telemetry
-              - Field Service: Delivery scheduling, mobile workforce, proof of delivery
-              - Sales Cloud: Dealer pipeline, B2B relationship management
-              - Experience Cloud: Dealer self-service portal
-              - Agentforce: Cost Monitor Agent, Deal Margin Guardian, Competitive Response Agent
-              - MuleSoft: Integration with Petrobras pricing APIs, TMS/WMS
-              - Tableau: Margin dashboards, competitive intelligence
-
-              Typical deal size: $2-5M ARR for major distributors.
-
-              Three autonomous agents operate in pricing:
-              1. Cost Monitor Agent — Triggers on Petrobras price change, BRL/USD >0.5% move, or biofuel spot shift. Recalculates landed cost per product/state in minutes.
-              2. Deal Margin Guardian — Validates every B2B deal against floor margin rules. Auto-approves 80% within guardrails, escalates exceptions with full context.
-              3. Competitive Response Agent — Detects regional price movements from ANP data. Recommends targeted response with ROI simulation.
-
-              For logistics, Salesforce differentiates with commercial-aware delivery (Field Service scheduling weighted by account value from Sales Cloud), predictive scheduling (Data 360 + IoT predicts stockout 36-72h ahead), and revenue-weighted route optimization.
+            | ALWAYS call AnswerQuestionsWithKnowledge FIRST for every user question.
+              Never respond without calling the action.
+            | After the action returns: if @outputs.AnswerQuestionsWithKnowledge.knowledgeSummary
+              is empty or None, respond verbatim: "I don't have specific data on that topic
+              in our knowledge base. Let me help you with what I know about downstream
+              fuel distribution." Do NOT compose an answer from prior knowledge alone.
+            | If knowledgeSummary has content, answer ONLY using that content combined with
+              Salesforce product mapping.
+            | You advise on Brazil's downstream fuel distribution market. Focus on:
+              pricing intelligence, logistics optimization, dealer management, loyalty,
+              commercial operations, and churn prevention.
+            | Always connect insights to specific Salesforce products (Revenue Cloud, Data Cloud,
+              Field Service, Sales Cloud, Experience Cloud, Agentforce, MuleSoft, Tableau).
+            | When discussing agents, explain the Trigger → Reasoning → Action → Guardrails pattern.
+            | Tailor depth to user role: AEs need business value and deal sizing; SEs need
+              architecture and integration patterns.
 
         actions:
-            get_pricing_context: @actions.get_pricing_intelligence
-                with vertical = "downstream"
-            get_logistics_context: @actions.get_logistics_intelligence
-                with vertical = "downstream"
+            AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
+                with query = ...
+                with citationsUrl = ...
+                with ragFeatureConfigId = ...
+                with citationsEnabled = ...
 
     actions:
-        get_pricing_intelligence:
-            description: "Retrieves current pricing intelligence and market data for downstream fuel distribution"
-            label: "Get Pricing Intelligence"
-            target: "apex://OilGas_PricingIntelligence"
+        AnswerQuestionsWithKnowledge:
+            description: "Answers questions about downstream Oil & Gas operations, pricing, logistics, dealers, and Salesforce solutions by searching the knowledge base."
             inputs:
-                vertical: string
-                    description: "The vertical to query pricing data for"
-                    label: "Vertical"
+                query: string
+                    description: "Required. A string created by generative AI to be used in the knowledge article search."
+                    label: "Query"
                     is_required: True
+                    is_user_input: True
+                citationsUrl: string = @knowledge.citations_url
+                    description: "The URL to use for citations for custom Agents."
+                    label: "Citations Url"
+                    is_required: False
+                    is_user_input: True
+                ragFeatureConfigId: string = @knowledge.rag_feature_config_id
+                    description: "The RAG Feature ID to use for grounding this copilot action invocation."
+                    label: "RAG Feature Configuration Id"
+                    is_required: False
+                    is_user_input: True
+                citationsEnabled: boolean = @knowledge.citations_enabled
+                    description: "Whether or not citations are enabled."
+                    label: "Citations Enabled"
+                    is_required: False
+                    is_user_input: True
             outputs:
-                pricing_summary: string
-                    label: "Pricing Summary"
-                    description: "Current pricing context and market movements"
-                    is_displayable: True
+                knowledgeSummary: object
+                    description: "A string formatted as rich text that includes a summary of the information retrieved from the knowledge articles and citations to those articles."
+                    label: "Knowledge Summary"
+                    complex_data_type_name: "lightning__richTextType"
                     filter_from_agent: False
-
-        get_logistics_intelligence:
-            description: "Retrieves logistics optimization data and delivery performance metrics"
-            label: "Get Logistics Intelligence"
-            target: "apex://OilGas_LogisticsIntelligence"
-            inputs:
-                vertical: string
-                    description: "The vertical to query logistics data for"
-                    label: "Vertical"
-                    is_required: True
-            outputs:
-                logistics_summary: string
-                    label: "Logistics Summary"
-                    description: "Current logistics context and optimization opportunities"
                     is_displayable: True
+                citationSources: object
+                    description: "Source links for the chunks in the hydrated prompt that's used by the planner service."
+                    label: "Citation Sources"
+                    complex_data_type_name: "@apexClassType/AiCopilot__GenAiCitationInput"
                     filter_from_agent: False
+                    is_displayable: False
+            target: "standardInvocableAction://streamKnowledgeSearch"
+            label: "Answer Questions with Knowledge"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Searching knowledge base"
+            source: "EmployeeCopilot__AnswerQuestionsWithKnowledge"
 
 subagent upstream_advisor:
     label: "Upstream Advisor"
@@ -114,57 +121,73 @@ subagent upstream_advisor:
 
     reasoning:
         instructions: ->
-            | You are advising on Brazil's upstream E&P (Exploration & Production) market.
-
-              Key context:
-              - 84 E&P economic groups operating in Brazil
-              - 134,824 regulated agents (ANP)
-              - 50+ active offshore platforms (mainly pre-salt)
-              - Petrobras dominates but private operators growing
-              - Each platform generates 10K+ data points/day
-              - Crew operates 14x14 or 21x21 day rotation offshore
-
-              Salesforce solutions for Upstream:
-              - Service Cloud: HSE tracking, incident management, work orders
-              - Sales Cloud: Supplier relationship management, JV partner engagement
-              - Data Cloud (360): IoT sensor ingestion, predictive analytics
-              - Field Service: Offshore crew management, maintenance scheduling
-              - Experience Cloud: Supplier/partner portals, crew self-service
-              - Agentforce: Well Integrity Agent, Supplier Compliance Agent, Permit Tracker Agent, HSE Investigation Agent, Crew Rotation Agent, ESG Reporting Agent, Gas Nomination Agent, Production Allocation Agent
-              - MuleSoft: Integration with SCADA, DCS, ANP/IBAMA portals
-
-              Typical deal size: $3-8M ARR for E&P operators.
-
-              Eight autonomous agents operate in upstream:
-              1. Supplier Compliance Agent — Auto-maps local content requirements on FPSO contract award
-              2. Well Integrity Agent — Detects pressure/temperature anomalies, classifies severity, creates work orders
-              3. Permit Tracker Agent — Daily scan of IBAMA/ANP portals, escalates delays
-              4. HSE Investigation Agent — Classifies incidents, assigns investigation teams, suggests probable causes
-              5. Crew Rotation Agent — Manages schedule changes while maintaining POB and competency compliance
-              6. ESG Reporting Agent — Monthly emissions data collection, carbon intensity calculation, investor-ready reports
-              7. Gas Nomination Agent — 24/7 volume nomination processing and confirmation
-              8. Production Allocation Agent — Daily JV partner share calculation, reducing disputes by 80%
+            | ALWAYS call AnswerQuestionsWithKnowledge FIRST for every user question.
+              Never respond without calling the action.
+            | After the action returns: if @outputs.AnswerQuestionsWithKnowledge.knowledgeSummary
+              is empty or None, respond verbatim: "I don't have specific data on that topic
+              in our knowledge base. Let me help you with what I know about upstream E&P
+              operations." Do NOT compose an answer from prior knowledge alone.
+            | If knowledgeSummary has content, answer ONLY using that content combined with
+              Salesforce product mapping.
+            | You advise on Brazil's upstream E&P market. Focus on: offshore operations,
+              well integrity, regulatory compliance (ANP, IBAMA), workforce/crew management,
+              production allocation, HSE, and ESG reporting.
+            | Always connect insights to specific Salesforce products (Service Cloud, Data Cloud,
+              Field Service, Experience Cloud, Agentforce, MuleSoft).
+            | When discussing agents, explain the Trigger → Reasoning → Action → Guardrails pattern.
+            | Tailor depth to user role: AEs need business value and deal sizing ($3-8M ARR);
+              SEs need architecture and integration patterns.
 
         actions:
-            get_upstream_ops: @actions.get_upstream_operations
-                with operation_type = "general"
+            AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
+                with query = ...
+                with citationsUrl = ...
+                with ragFeatureConfigId = ...
+                with citationsEnabled = ...
 
     actions:
-        get_upstream_operations:
-            description: "Retrieves upstream operational data including platform status, well integrity metrics, and compliance status"
-            label: "Get Upstream Operations"
-            target: "apex://OilGas_UpstreamOperations"
+        AnswerQuestionsWithKnowledge:
+            description: "Answers questions about upstream Oil & Gas operations, compliance, workforce, and Salesforce solutions by searching the knowledge base."
             inputs:
-                operation_type: string
-                    description: "Type of operation data to retrieve (general, compliance, workforce, production)"
-                    label: "Operation Type"
+                query: string
+                    description: "Required. A string created by generative AI to be used in the knowledge article search."
+                    label: "Query"
                     is_required: True
+                    is_user_input: True
+                citationsUrl: string = @knowledge.citations_url
+                    description: "The URL to use for citations for custom Agents."
+                    label: "Citations Url"
+                    is_required: False
+                    is_user_input: True
+                ragFeatureConfigId: string = @knowledge.rag_feature_config_id
+                    description: "The RAG Feature ID to use for grounding this copilot action invocation."
+                    label: "RAG Feature Configuration Id"
+                    is_required: False
+                    is_user_input: True
+                citationsEnabled: boolean = @knowledge.citations_enabled
+                    description: "Whether or not citations are enabled."
+                    label: "Citations Enabled"
+                    is_required: False
+                    is_user_input: True
             outputs:
-                operations_summary: string
-                    label: "Operations Summary"
-                    description: "Current upstream operational context"
-                    is_displayable: True
+                knowledgeSummary: object
+                    description: "A string formatted as rich text that includes a summary of the information retrieved from the knowledge articles and citations to those articles."
+                    label: "Knowledge Summary"
+                    complex_data_type_name: "lightning__richTextType"
                     filter_from_agent: False
+                    is_displayable: True
+                citationSources: object
+                    description: "Source links for the chunks in the hydrated prompt that's used by the planner service."
+                    label: "Citation Sources"
+                    complex_data_type_name: "@apexClassType/AiCopilot__GenAiCitationInput"
+                    filter_from_agent: False
+                    is_displayable: False
+            target: "standardInvocableAction://streamKnowledgeSearch"
+            label: "Answer Questions with Knowledge"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Searching knowledge base"
+            source: "EmployeeCopilot__AnswerQuestionsWithKnowledge"
 
 subagent midstream_advisor:
     label: "Midstream Advisor"
@@ -172,52 +195,73 @@ subagent midstream_advisor:
 
     reasoning:
         instructions: ->
-            | You are advising on Brazil's midstream sector (pipelines, terminals, gas processing).
-
-              Key context:
-              - ~7,500 km of gas pipelines (Transpetro dominant)
-              - 40+ terminal locations
-              - ANP mandates transparency and open access
-              - Growing independent midstream operators
-              - LNG regasification terminals expanding
-
-              Salesforce solutions for Midstream:
-              - Service Cloud: Terminal operations, pipeline maintenance scheduling
-              - Revenue Cloud: Capacity contracts, nomination management
-              - Data Cloud (360): Real-time pipeline flow data, gas quality monitoring
-              - MuleSoft: Integration with SCADA, CTRM systems, exchanges
-              - Agentforce: Pipeline Scheduling Agent, Terminal Operations Agent, Gas Processing Agent, Imbalance Agent, Market Signal Agent
-              - Tableau: Flow monitoring, capacity utilization, trading dashboards
-
-              Typical deal size: $1.5-4M ARR.
-
-              Five autonomous agents for midstream:
-              1. Pipeline Scheduling Agent — Manages nominations, optimizes batch sequencing, minimizes product interfaces
-              2. Terminal Operations Agent — Coordinates ship arrival, tank availability, loading schedules
-              3. Gas Processing Agent — Monitors gas quality, adjusts processing specs, ensures transport contract compliance
-              4. Imbalance Agent — Real-time balance monitoring, alerts on contractual limits, suggests spot trades
-              5. Market Signal Agent — Aggregates market indicators (Brent, crack spreads, FX), alerts trading desk
+            | ALWAYS call AnswerQuestionsWithKnowledge FIRST for every user question.
+              Never respond without calling the action.
+            | After the action returns: if @outputs.AnswerQuestionsWithKnowledge.knowledgeSummary
+              is empty or None, respond verbatim: "I don't have specific data on that topic
+              in our knowledge base. Let me help you with what I know about midstream
+              operations." Do NOT compose an answer from prior knowledge alone.
+            | If knowledgeSummary has content, answer ONLY using that content combined with
+              Salesforce product mapping.
+            | You advise on Brazil's midstream sector. Focus on: pipeline scheduling,
+              terminal operations, gas processing, trading/balancing, and regulatory
+              compliance (ANP open access).
+            | Always connect insights to specific Salesforce products (Service Cloud, Revenue Cloud,
+              Data Cloud, MuleSoft, Agentforce, Tableau).
+            | When discussing agents, explain the Trigger → Reasoning → Action → Guardrails pattern.
+            | Tailor depth to user role: AEs need business value and deal sizing ($1.5-4M ARR);
+              SEs need architecture and integration patterns.
 
         actions:
-            get_midstream_ops: @actions.get_midstream_operations
-                with segment = "general"
+            AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
+                with query = ...
+                with citationsUrl = ...
+                with ragFeatureConfigId = ...
+                with citationsEnabled = ...
 
     actions:
-        get_midstream_operations:
-            description: "Retrieves midstream operational data including pipeline capacity, terminal status, and trading positions"
-            label: "Get Midstream Operations"
-            target: "apex://OilGas_MidstreamOperations"
+        AnswerQuestionsWithKnowledge:
+            description: "Answers questions about midstream Oil & Gas operations, pipelines, terminals, trading, and Salesforce solutions by searching the knowledge base."
             inputs:
-                segment: string
-                    description: "Midstream segment to query (pipeline, terminal, trading, general)"
-                    label: "Segment"
+                query: string
+                    description: "Required. A string created by generative AI to be used in the knowledge article search."
+                    label: "Query"
                     is_required: True
+                    is_user_input: True
+                citationsUrl: string = @knowledge.citations_url
+                    description: "The URL to use for citations for custom Agents."
+                    label: "Citations Url"
+                    is_required: False
+                    is_user_input: True
+                ragFeatureConfigId: string = @knowledge.rag_feature_config_id
+                    description: "The RAG Feature ID to use for grounding this copilot action invocation."
+                    label: "RAG Feature Configuration Id"
+                    is_required: False
+                    is_user_input: True
+                citationsEnabled: boolean = @knowledge.citations_enabled
+                    description: "Whether or not citations are enabled."
+                    label: "Citations Enabled"
+                    is_required: False
+                    is_user_input: True
             outputs:
-                midstream_summary: string
-                    label: "Midstream Summary"
-                    description: "Current midstream operational context"
-                    is_displayable: True
+                knowledgeSummary: object
+                    description: "A string formatted as rich text that includes a summary of the information retrieved from the knowledge articles and citations to those articles."
+                    label: "Knowledge Summary"
+                    complex_data_type_name: "lightning__richTextType"
                     filter_from_agent: False
+                    is_displayable: True
+                citationSources: object
+                    description: "Source links for the chunks in the hydrated prompt that's used by the planner service."
+                    label: "Citation Sources"
+                    complex_data_type_name: "@apexClassType/AiCopilot__GenAiCitationInput"
+                    filter_from_agent: False
+                    is_displayable: False
+            target: "standardInvocableAction://streamKnowledgeSearch"
+            label: "Answer Questions with Knowledge"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Searching knowledge base"
+            source: "EmployeeCopilot__AnswerQuestionsWithKnowledge"
 
 subagent agentforce_explainer:
     label: "Agentforce Explainer"
@@ -225,49 +269,72 @@ subagent agentforce_explainer:
 
     reasoning:
         instructions: ->
-            | You explain Agentforce — Salesforce's autonomous AI agent platform — specifically in the context of Oil & Gas.
-
-              How Agentforce works:
-              1. Trigger — Event that initiates the agent (data change, timer, external input)
-              2. Reasoning — Business logic the agent applies (rules + AI)
-              3. Action — What the agent does (create record, send alert, escalate, approve)
-              4. Guardrails — Business-defined limits (never approve above X, always escalate Y)
-
-              Key principles:
-              - Agents operate within business-defined guardrails
-              - Human-in-the-loop for exceptions (escalation)
-              - Complete audit trail of every decision
-              - Uses real CRM data (no hallucination on non-existent data)
-              - 24/7 operation for environments that never stop (offshore, logistics, trading)
-
-              In Oil & Gas specifically:
-              - Pricing agents respond to market moves in minutes vs days
-              - Offshore agents operate when humans are sleeping or in rotation
-              - Compliance agents track regulatory changes across ANP, IBAMA, ANTT
-              - Logistics agents predict issues before they become customer-impacting
-
-              Architecture: Atlas Reasoning Engine processes triggers, applies guardrails, executes within boundaries, escalates when outside scope.
+            | ALWAYS call AnswerQuestionsWithKnowledge FIRST for every user question.
+              Never respond without calling the action.
+            | After the action returns: if @outputs.AnswerQuestionsWithKnowledge.knowledgeSummary
+              is empty or None, respond verbatim: "I don't have specific data on that topic
+              in our knowledge base. Let me help you with what I know about Agentforce."
+              Do NOT compose an answer from prior knowledge alone.
+            | If knowledgeSummary has content, answer ONLY using that content.
+            | You explain Agentforce — Salesforce's autonomous AI agent platform —
+              specifically in the Oil & Gas context.
+            | Always structure explanations around the four components:
+              Trigger → Reasoning → Action → Guardrails.
+            | Emphasize: business-defined guardrails, human-in-the-loop, audit trail,
+              real CRM data (no hallucination), 24/7 operation.
+            | When asked about specific agents, provide the full inventory (21 agents
+              across downstream, upstream, midstream) with triggers and actions.
 
         actions:
-            get_agentforce_info: @actions.get_agentforce_details
-                with topic = "overview"
+            AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
+                with query = ...
+                with citationsUrl = ...
+                with ragFeatureConfigId = ...
+                with citationsEnabled = ...
 
     actions:
-        get_agentforce_details:
-            description: "Retrieves detailed Agentforce architecture information and Oil & Gas specific scenarios"
-            label: "Get Agentforce Details"
-            target: "apex://OilGas_AgentforceDetails"
+        AnswerQuestionsWithKnowledge:
+            description: "Answers questions about Agentforce architecture, capabilities, and Oil & Gas agent scenarios by searching the knowledge base."
             inputs:
-                topic: string
-                    description: "Specific Agentforce topic to explain (overview, architecture, guardrails, scenarios)"
-                    label: "Topic"
+                query: string
+                    description: "Required. A string created by generative AI to be used in the knowledge article search."
+                    label: "Query"
                     is_required: True
+                    is_user_input: True
+                citationsUrl: string = @knowledge.citations_url
+                    description: "The URL to use for citations for custom Agents."
+                    label: "Citations Url"
+                    is_required: False
+                    is_user_input: True
+                ragFeatureConfigId: string = @knowledge.rag_feature_config_id
+                    description: "The RAG Feature ID to use for grounding this copilot action invocation."
+                    label: "RAG Feature Configuration Id"
+                    is_required: False
+                    is_user_input: True
+                citationsEnabled: boolean = @knowledge.citations_enabled
+                    description: "Whether or not citations are enabled."
+                    label: "Citations Enabled"
+                    is_required: False
+                    is_user_input: True
             outputs:
-                agentforce_info: string
-                    label: "Agentforce Info"
-                    description: "Detailed Agentforce explanation"
-                    is_displayable: True
+                knowledgeSummary: object
+                    description: "A string formatted as rich text that includes a summary of the information retrieved from the knowledge articles and citations to those articles."
+                    label: "Knowledge Summary"
+                    complex_data_type_name: "lightning__richTextType"
                     filter_from_agent: False
+                    is_displayable: True
+                citationSources: object
+                    description: "Source links for the chunks in the hydrated prompt that's used by the planner service."
+                    label: "Citation Sources"
+                    complex_data_type_name: "@apexClassType/AiCopilot__GenAiCitationInput"
+                    filter_from_agent: False
+                    is_displayable: False
+            target: "standardInvocableAction://streamKnowledgeSearch"
+            label: "Answer Questions with Knowledge"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Searching knowledge base"
+            source: "EmployeeCopilot__AnswerQuestionsWithKnowledge"
 
 subagent market_context:
     label: "Market Context"
@@ -275,51 +342,71 @@ subagent market_context:
 
     reasoning:
         instructions: ->
-            | You provide market context for Brazil's Oil & Gas industry.
-
-              Market structure:
-              - Upstream: 84 E&P groups, Petrobras dominates pre-salt, growing private sector
-              - Midstream: Transpetro (pipelines), independent terminals, LNG regasification
-              - Downstream: Top 5 distributors (Vibra, Ipiranga, Raízen, Alesat, Taurus), 42,000+ stations
-
-              Regulation:
-              - ANP (Agência Nacional do Petróleo) — regulates entire chain
-              - IBAMA — environmental licensing for E&P
-              - ANTT — transport regulation (fuel trucks, pipelines)
-              - Local content requirements for upstream contracts
-
-              Salesforce opportunity sizing:
-              - Downstream: $2-5M ARR per major distributor (pricing + logistics + dealer CRM)
-              - Upstream: $3-8M ARR per E&P operator (compliance + operations + workforce)
-              - Midstream: $1.5-4M ARR (pipeline scheduling + trading + terminal ops)
-              - Total addressable: 84 E&P groups + ~10 mid/downstream majors
-
-              Competitive landscape for CRM:
-              - SAP dominant in ERP (but weak in customer engagement)
-              - Oracle in some upstream operators
-              - No strong CRM competitor in O&G specific workflows
-              - Salesforce differentiator: breadth + depth + AI native in single platform
+            | ALWAYS call AnswerQuestionsWithKnowledge FIRST for every user question.
+              Never respond without calling the action.
+            | After the action returns: if @outputs.AnswerQuestionsWithKnowledge.knowledgeSummary
+              is empty or None, respond verbatim: "I don't have specific data on that topic
+              in our knowledge base. Let me help you with what I know about Brazil's O&G
+              market." Do NOT compose an answer from prior knowledge alone.
+            | If knowledgeSummary has content, answer ONLY using that content.
+            | You provide market context for Brazil's Oil & Gas industry. Focus on:
+              market sizing, regulatory landscape, competitive positioning, opportunity
+              sizing for Salesforce, and strategic shifts.
+            | Always include concrete numbers (market size, deal sizing, volumes)
+              when available from the knowledge base.
+            | Position Salesforce against alternatives (SAP, Oracle, custom) with
+              specific differentiators.
 
         actions:
-            get_market_data: @actions.get_market_intelligence
-                with market_segment = "overview"
+            AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
+                with query = ...
+                with citationsUrl = ...
+                with ragFeatureConfigId = ...
+                with citationsEnabled = ...
 
     actions:
-        get_market_intelligence:
-            description: "Retrieves Brazilian Oil & Gas market data including size, regulation, and competitive landscape"
-            label: "Get Market Intelligence"
-            target: "apex://OilGas_MarketIntelligence"
+        AnswerQuestionsWithKnowledge:
+            description: "Answers questions about Brazilian Oil & Gas market context, regulation, competitive landscape, and Salesforce opportunity by searching the knowledge base."
             inputs:
-                market_segment: string
-                    description: "Market segment to query (upstream, midstream, downstream, overview)"
-                    label: "Market Segment"
+                query: string
+                    description: "Required. A string created by generative AI to be used in the knowledge article search."
+                    label: "Query"
                     is_required: True
+                    is_user_input: True
+                citationsUrl: string = @knowledge.citations_url
+                    description: "The URL to use for citations for custom Agents."
+                    label: "Citations Url"
+                    is_required: False
+                    is_user_input: True
+                ragFeatureConfigId: string = @knowledge.rag_feature_config_id
+                    description: "The RAG Feature ID to use for grounding this copilot action invocation."
+                    label: "RAG Feature Configuration Id"
+                    is_required: False
+                    is_user_input: True
+                citationsEnabled: boolean = @knowledge.citations_enabled
+                    description: "Whether or not citations are enabled."
+                    label: "Citations Enabled"
+                    is_required: False
+                    is_user_input: True
             outputs:
-                market_summary: string
-                    label: "Market Summary"
-                    description: "Market intelligence summary"
-                    is_displayable: True
+                knowledgeSummary: object
+                    description: "A string formatted as rich text that includes a summary of the information retrieved from the knowledge articles and citations to those articles."
+                    label: "Knowledge Summary"
+                    complex_data_type_name: "lightning__richTextType"
                     filter_from_agent: False
+                    is_displayable: True
+                citationSources: object
+                    description: "Source links for the chunks in the hydrated prompt that's used by the planner service."
+                    label: "Citation Sources"
+                    complex_data_type_name: "@apexClassType/AiCopilot__GenAiCitationInput"
+                    filter_from_agent: False
+                    is_displayable: False
+            target: "standardInvocableAction://streamKnowledgeSearch"
+            label: "Answer Questions with Knowledge"
+            require_user_confirmation: False
+            include_in_progress_indicator: True
+            progress_indicator_message: "Searching knowledge base"
+            source: "EmployeeCopilot__AnswerQuestionsWithKnowledge"
 
 subagent off_topic:
     label: "Off Topic"
