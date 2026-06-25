@@ -23,7 +23,15 @@ variables:
     current_vertical: mutable string = ""
         description: "Tracks which vertical the user is asking about (downstream, upstream, midstream)"
     user_role: mutable string = ""
-        description: "Tracks whether user is AE, SE, or other role for tailored responses"
+        description: "User role detected from profile: AE, SE, Manager, or Unknown"
+    account_name: mutable string = ""
+        description: "Account name if user is viewing an Account or related record"
+    account_industry: mutable string = ""
+        description: "Industry classification of the account in context"
+    opportunity_stage: mutable string = ""
+        description: "Opportunity stage if user is on an Opportunity record"
+    context_summary: mutable string = ""
+        description: "Full contextual summary for personalized responses"
 
 language:
     default_locale: "en_US"
@@ -31,8 +39,81 @@ language:
     all_additional_locales: False
 
 start_agent industry_router:
-    description: "Welcome the user and route to the appropriate vertical subagent based on their question"
+    description: "Welcome the user and route to the appropriate vertical subagent based on their question and context"
+
+    actions:
+        get_intelligent_context:
+            description: "Retrieves user role and record context for personalized responses"
+            label: "Get Intelligent Context"
+            target: "apex://OilGas_IntelligentContext"
+            inputs:
+                recordId: string
+                    description: "The ID of the record the user is currently viewing"
+                    label: "Record ID"
+                    is_required: False
+            outputs:
+                user_role: string
+                    label: "User Role"
+                    description: "Detected user role: AE, SE, Manager, or Unknown"
+                    is_displayable: False
+                    filter_from_agent: False
+                detected_vertical: string
+                    label: "Detected Vertical"
+                    description: "Vertical detected from account context"
+                    is_displayable: False
+                    filter_from_agent: False
+                account_name: string
+                    label: "Account Name"
+                    description: "Account name from record context"
+                    is_displayable: False
+                    filter_from_agent: False
+                account_industry: string
+                    label: "Account Industry"
+                    description: "Account industry classification"
+                    is_displayable: False
+                    filter_from_agent: False
+                opportunity_stage: string
+                    label: "Opportunity Stage"
+                    description: "Opportunity stage if on Opportunity record"
+                    is_displayable: False
+                    filter_from_agent: False
+                context_summary: string
+                    label: "Context Summary"
+                    description: "Full contextual summary"
+                    is_displayable: False
+                    filter_from_agent: False
+
+    before_reasoning:
+        run @actions.get_intelligent_context
+            set @variables.user_role = @outputs.user_role
+            set @variables.current_vertical = @outputs.detected_vertical
+            set @variables.account_name = @outputs.account_name
+            set @variables.account_industry = @outputs.account_industry
+            set @variables.opportunity_stage = @outputs.opportunity_stage
+            set @variables.context_summary = @outputs.context_summary
+
+        if @variables.current_vertical == "downstream":
+            transition to @subagent.downstream_advisor
+        if @variables.current_vertical == "upstream":
+            transition to @subagent.upstream_advisor
+        if @variables.current_vertical == "midstream":
+            transition to @subagent.midstream_advisor
+
     reasoning:
+        instructions: ->
+            if @variables.context_summary != "":
+                | CONTEXT: {!@variables.context_summary}
+                | Use this context to personalize your routing decision.
+
+            if @variables.user_role == "AE":
+                | The user is an Account Executive. Prioritize business value,
+                  deal sizing, and competitive positioning in responses.
+            if @variables.user_role == "SE":
+                | The user is a Solution Engineer. Prioritize architecture,
+                  integration patterns, and technical depth in responses.
+
+            | Route the user to the appropriate vertical subagent based on their question.
+
         actions:
             go_to_downstream: @utils.transition to @subagent.downstream_advisor
             go_to_upstream: @utils.transition to @subagent.upstream_advisor
@@ -55,14 +136,31 @@ subagent downstream_advisor:
               fuel distribution." Do NOT compose an answer from prior knowledge alone.
             | If knowledgeSummary has content, answer ONLY using that content combined with
               Salesforce product mapping.
+
+            if @variables.account_name != "":
+                | CONTEXT: The user is working on account "{!@variables.account_name}"
+                  (Industry: {!@variables.account_industry}).
+                  Tailor examples and recommendations to this specific customer.
+
+            if @variables.opportunity_stage != "":
+                | The opportunity is at stage "{!@variables.opportunity_stage}".
+                  Adjust your recommendations accordingly.
+
+            if @variables.user_role == "AE":
+                | This user is an AE. Emphasize: deal sizing ($2-5M ARR for major distributors),
+                  business value (margin protection, churn reduction), competitive positioning
+                  vs SAP/Oracle, and executive-ready talking points.
+            if @variables.user_role == "SE":
+                | This user is an SE. Emphasize: architecture patterns, MuleSoft integration
+                  with SAP/TMS, Data Cloud ingestion flows, Agentforce agent design patterns,
+                  and implementation roadmap phasing.
+
             | You advise on Brazil's downstream fuel distribution market. Focus on:
               pricing intelligence, logistics optimization, dealer management, loyalty,
               commercial operations, and churn prevention.
             | Always connect insights to specific Salesforce products (Revenue Cloud, Data Cloud,
               Field Service, Sales Cloud, Experience Cloud, Agentforce, MuleSoft, Tableau).
             | When discussing agents, explain the Trigger → Reasoning → Action → Guardrails pattern.
-            | Tailor depth to user role: AEs need business value and deal sizing; SEs need
-              architecture and integration patterns.
 
         actions:
             AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
@@ -129,14 +227,31 @@ subagent upstream_advisor:
               operations." Do NOT compose an answer from prior knowledge alone.
             | If knowledgeSummary has content, answer ONLY using that content combined with
               Salesforce product mapping.
+
+            if @variables.account_name != "":
+                | CONTEXT: The user is working on account "{!@variables.account_name}"
+                  (Industry: {!@variables.account_industry}).
+                  Tailor examples and recommendations to this specific operator.
+
+            if @variables.opportunity_stage != "":
+                | The opportunity is at stage "{!@variables.opportunity_stage}".
+                  Adjust your recommendations accordingly.
+
+            if @variables.user_role == "AE":
+                | This user is an AE. Emphasize: deal sizing ($3-8M ARR for E&P operators),
+                  business value (zero undetected anomalies, zero missed deadlines),
+                  competitive positioning, and executive-ready talking points.
+            if @variables.user_role == "SE":
+                | This user is an SE. Emphasize: SCADA/DCS integration via MuleSoft,
+                  IoT data ingestion into Data Cloud, Field Service crew management patterns,
+                  and compliance workflow architecture.
+
             | You advise on Brazil's upstream E&P market. Focus on: offshore operations,
               well integrity, regulatory compliance (ANP, IBAMA), workforce/crew management,
               production allocation, HSE, and ESG reporting.
             | Always connect insights to specific Salesforce products (Service Cloud, Data Cloud,
               Field Service, Experience Cloud, Agentforce, MuleSoft).
             | When discussing agents, explain the Trigger → Reasoning → Action → Guardrails pattern.
-            | Tailor depth to user role: AEs need business value and deal sizing ($3-8M ARR);
-              SEs need architecture and integration patterns.
 
         actions:
             AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
@@ -203,14 +318,31 @@ subagent midstream_advisor:
               operations." Do NOT compose an answer from prior knowledge alone.
             | If knowledgeSummary has content, answer ONLY using that content combined with
               Salesforce product mapping.
+
+            if @variables.account_name != "":
+                | CONTEXT: The user is working on account "{!@variables.account_name}"
+                  (Industry: {!@variables.account_industry}).
+                  Tailor examples and recommendations to this specific operator.
+
+            if @variables.opportunity_stage != "":
+                | The opportunity is at stage "{!@variables.opportunity_stage}".
+                  Adjust your recommendations accordingly.
+
+            if @variables.user_role == "AE":
+                | This user is an AE. Emphasize: deal sizing ($1.5-4M ARR for midstream),
+                  business value (reduced imbalance penalties, optimized capacity),
+                  competitive positioning, and executive-ready talking points.
+            if @variables.user_role == "SE":
+                | This user is an SE. Emphasize: SCADA integration via MuleSoft,
+                  Revenue Cloud for capacity contracts and nominations,
+                  real-time pipeline flow monitoring with Data Cloud, and CTRM integration.
+
             | You advise on Brazil's midstream sector. Focus on: pipeline scheduling,
               terminal operations, gas processing, trading/balancing, and regulatory
               compliance (ANP open access).
             | Always connect insights to specific Salesforce products (Service Cloud, Revenue Cloud,
               Data Cloud, MuleSoft, Agentforce, Tableau).
             | When discussing agents, explain the Trigger → Reasoning → Action → Guardrails pattern.
-            | Tailor depth to user role: AEs need business value and deal sizing ($1.5-4M ARR);
-              SEs need architecture and integration patterns.
 
         actions:
             AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
