@@ -440,6 +440,20 @@ Try asking about any of these topics!`;
         to { opacity: 1; transform: translateY(0); }
       }
 
+      .af-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 14px;
+        background: #5eead4;
+        margin-left: 1px;
+        vertical-align: text-bottom;
+        animation: af-blink 0.6s infinite;
+      }
+      @keyframes af-blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+
       .af-typing {
         align-self: flex-start;
         padding: 10px 14px;
@@ -577,16 +591,50 @@ Try asking about any of these topics!`;
     const closeBtn = panel.querySelector('.af-chat-close');
     const chips = panel.querySelectorAll('.af-chip');
 
-    function addMessage(text, isAgent) {
-      const md = text
+    function formatMarkdown(text) {
+      return text
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:#5eead4;text-decoration:underline;">$1</a>')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\n/g, '<br>');
+    }
+
+    function addMessage(text, isAgent) {
       const div = document.createElement('div');
       div.className = `af-msg ${isAgent ? 'af-msg-agent' : 'af-msg-user'}`;
-      div.innerHTML = md;
+      div.innerHTML = formatMarkdown(text);
       messages.appendChild(div);
       messages.scrollTop = messages.scrollHeight;
+    }
+
+    function streamMessage(text) {
+      return new Promise((resolve) => {
+        const div = document.createElement('div');
+        div.className = 'af-msg af-msg-agent';
+        div.innerHTML = '<span class="af-cursor"></span>';
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+
+        const chars = text.split('');
+        let i = 0;
+        let buffer = '';
+        const speed = Math.max(8, Math.min(20, 2000 / chars.length));
+
+        function tick() {
+          if (i >= chars.length) {
+            div.innerHTML = formatMarkdown(text);
+            messages.scrollTop = messages.scrollHeight;
+            resolve();
+            return;
+          }
+          const chunk = Math.min(i + (Math.random() < 0.3 ? 3 : 1), chars.length);
+          buffer += chars.slice(i, chunk).join('');
+          i = chunk;
+          div.innerHTML = formatMarkdown(buffer) + '<span class="af-cursor"></span>';
+          messages.scrollTop = messages.scrollHeight;
+          setTimeout(tick, speed + (Math.random() * speed * 0.5));
+        }
+        tick();
+      });
     }
 
     function showTyping() {
@@ -613,15 +661,14 @@ Try asking about any of these topics!`;
         const liveReply = await askAgent(text);
         hideTyping();
         if (liveReply) {
-          addMessage(liveReply, true);
+          await streamMessage(liveReply);
         } else {
-          addMessage(respond(text), true);
+          await streamMessage(respond(text));
         }
       } else {
-        setTimeout(() => {
-          hideTyping();
-          addMessage(respond(text), true);
-        }, 600 + Math.random() * 800);
+        await new Promise(r => setTimeout(r, 400 + Math.random() * 400));
+        hideTyping();
+        await streamMessage(respond(text));
       }
     }
 
@@ -631,7 +678,7 @@ Try asking about any of these topics!`;
       input.focus();
       if (!messages.hasChildNodes()) {
         const liveTag = proxyAvailable ? '🟢 **Connected to live Agentforce**' : '🔵 **Demo mode (local knowledge base)**';
-        addMessage(`Hello! I'm **Agentforce**, your AI assistant for Oil & Gas Brazil.\n\n${liveTag}\n\nI can explain how autonomous agents transform operations in **Downstream**, **Upstream**, and **Midstream**. Try the quick chips below or ask your question!`, true);
+        streamMessage(`Hello! I'm **Agentforce**, your AI assistant for Oil & Gas Brazil.\n\n${liveTag}\n\nI can explain how autonomous agents transform operations in **Downstream**, **Upstream**, and **Midstream**. Try the quick chips below or ask your question!`);
       }
     });
 
